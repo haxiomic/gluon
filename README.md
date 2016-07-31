@@ -1,4 +1,4 @@
-# gluon
+# Gluon
 - Abstract-only cross-platform OpenGL layer
 - Dependency free and minimalistic
 

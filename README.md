@@ -3,7 +3,7 @@
 - Dependency free and minimalistic
 
 ### Versions ###
-Gluon aims to run execute with parity across platforms, consequently it's usually bounded by the WebGL feature set (which is _approximately_ a subset of OpenGL ES)
+Gluon aims to execute with parity across platforms, consequently, it's usually bounded by the WebGL feature set (which is _approximately_ a subset of OpenGL ES)
 
 | Gluon     | WebGL     | OpenGL |
 |-----------|-----------|--------|

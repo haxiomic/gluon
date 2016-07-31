@@ -1,4 +1,4 @@
-package gluon;
+package gluon.es;
 
 typedef GLContextAttributes = {
     var alpha:Bool;

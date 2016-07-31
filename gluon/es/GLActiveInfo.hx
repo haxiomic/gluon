@@ -1,4 +1,4 @@
-package gluon;
+package gluon.es;
 
 import gluon.GLContext;
 

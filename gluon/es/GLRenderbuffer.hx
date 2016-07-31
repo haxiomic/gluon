@@ -1,4 +1,4 @@
-package gluon;
+package gluon.es;
 
 private typedef InternalGLRenderbuffer =
 	#if js

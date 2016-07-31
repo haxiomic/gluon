@@ -1,0 +1,11 @@
+{
+  "name": "gluon",
+  "url" : "https://github.com/haxiomic/gluon/",
+  "license": "MIT",
+  "tags": ["opengl", "webgl", "opengles"],
+  "description": "Minimal cross-platform layer over OpenGL ES with typed enums",
+  "version": "0.0.1",
+  "releasenote": "Initial WebGL-only implementation",
+  "contributors": ["Haxiomic"],
+  "dependencies": {}
+}

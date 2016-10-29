@@ -1,8 +1,12 @@
 # Gluon
-- Abstract-only cross-platform OpenGL layer
+- Haxe OpenGL interface, enabling unified OpenGL API for haxe targets
+- Abstracts only (so no runtime overhead)
+- Abstract enums are used to improve OpenGL API typing
+
+### Design Goals
 - Dependency free and minimalistic
 
-### Versions ###
+### Versions
 Gluon aims to execute with parity across platforms, consequently, it's usually bounded by the WebGL feature set (which is _approximately_ a subset of OpenGL ES)
 
 | Gluon     | WebGL     | OpenGL |

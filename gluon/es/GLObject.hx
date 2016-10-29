@@ -27,7 +27,7 @@ abstract GLObject<InternalType>(InternalType){
 		#if js
 		return untyped v;
 		#else if cpp
-		return v != 0 ? untyped v : null;
+		return (v != 0) ? untyped v : null;
 		#else
 		#end
 	}

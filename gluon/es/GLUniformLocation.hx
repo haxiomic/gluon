@@ -24,7 +24,7 @@ abstract GLUniformLocation(InternalGLUniformLocation){
 		#if js
 		return untyped v;
 		#else if cpp
-		return v != -1 ? untyped v : null;
+		return (v != -1) ? untyped v : null;
 		#else
 		#end
 	}

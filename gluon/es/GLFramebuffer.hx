@@ -7,5 +7,4 @@ private typedef InternalGLFramebuffer =
 		GLuint;
 	#end
 
-@:forward
-abstract GLFramebuffer(GLObject<InternalGLFramebuffer>) to GLObject<InternalGLFramebuffer> from GLObject<InternalGLFramebuffer>{}
+typedef GLFramebuffer = GLObject<InternalGLFramebuffer>;

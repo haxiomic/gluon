@@ -493,8 +493,8 @@ abstract HintTarget(GLenum) to GLenum from GLenum{
 
 @:enum
 abstract TextureTarget(GLenum) to GLenum from GLenum{
-	var TEXTURE_2D                  = InternalGLContext.TEXTURE_2D;
 	var TEXTURE                     = InternalGLContext.TEXTURE;
+	var TEXTURE_2D                  = InternalGLContext.TEXTURE_2D;
 	var TEXTURE_CUBE_MAP            = InternalGLContext.TEXTURE_CUBE_MAP;
 	var TEXTURE_CUBE_MAP_POSITIVE_X = InternalGLContext.TEXTURE_CUBE_MAP_POSITIVE_X;
 	var TEXTURE_CUBE_MAP_NEGATIVE_X = InternalGLContext.TEXTURE_CUBE_MAP_NEGATIVE_X;
@@ -579,6 +579,8 @@ abstract TextureMagFilter(GLenum) to GLenum from GLenum{
 
 @:enum
 abstract TextureMinFilter(GLenum) to GLenum from GLenum{
+	var NEAREST                = InternalGLContext.NEAREST;
+	var LINEAR                 = InternalGLContext.LINEAR;
 	var NEAREST_MIPMAP_NEAREST = InternalGLContext.NEAREST_MIPMAP_NEAREST;
 	var LINEAR_MIPMAP_NEAREST  = InternalGLContext.LINEAR_MIPMAP_NEAREST;
 	var NEAREST_MIPMAP_LINEAR  = InternalGLContext.NEAREST_MIPMAP_LINEAR;

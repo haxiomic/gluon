@@ -1,6 +1,6 @@
 package gluon.es;
 
-import gluon.GLContext;
+import gluon.es.GLContext;
 
 typedef GLShaderPrecisionFormat = {
     var rangeMin(default, null):GLint;

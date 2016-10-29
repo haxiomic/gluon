@@ -7,5 +7,4 @@ private typedef InternalGLShader =
 		GLuint;
 	#end
 
-@:forward
-abstract GLShader(GLObject<InternalGLShader>) to GLObject<InternalGLShader> from GLObject<InternalGLShader>{}
+typedef GLShader = GLObject<InternalGLShader>;

@@ -1,6 +1,6 @@
 package gluon.es;
 
-import gluon.GLContext;
+import gluon.es.GLContext;
 
 typedef GLActiveInfo = {
 	var size(default, null):GLint;

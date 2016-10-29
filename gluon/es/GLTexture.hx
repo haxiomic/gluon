@@ -7,5 +7,4 @@ private typedef InternalGLTexture =
 		GLuint;
 	#end
 
-@:forward
-abstract GLTexture(GLObject<InternalGLTexture>) to GLObject<InternalGLTexture> from GLObject<InternalGLTexture>{}
+typedef GLTexture = GLObject<InternalGLTexture>;

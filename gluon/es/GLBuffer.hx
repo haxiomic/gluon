@@ -7,5 +7,4 @@ private typedef InternalGLBuffer =
 		GLuint;
 	#end
 
-@:forward
-abstract GLBuffer(GLObject<InternalGLBuffer>) to GLObject<InternalGLBuffer> from GLObject<InternalGLBuffer>{}
+typedef GLBuffer = GLObject<InternalGLBuffer>;

@@ -7,5 +7,4 @@ private typedef InternalGLProgram =
 		GLuint;
 	#end
 
-@:forward
-abstract GLProgram(GLObject<InternalGLProgram>) to GLObject<InternalGLProgram> from GLObject<InternalGLProgram>{}
+typedef GLProgram = GLObject<InternalGLProgram>;

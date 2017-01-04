@@ -32,7 +32,7 @@ abstract TexImageSource(Dynamic)
 
 private typedef InternalGLContext = 
 	#if js
-		js.html.webgl.RenderingContext
+		js.html.webgl.RenderingContext;
 	#else
 	#end
 

@@ -1,4 +1,4 @@
-package gluon.es;
+package gluon.es2;
 
 #if js
 typedef GLenum = UInt;
@@ -278,7 +278,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T
 		return this.getVertexAttrib(index, pname);
 
-	public inline function getVertexAttribOffset(index:GLuint, pname:VertexAttributePointer):GLintptr
+	public inline function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr
 		return this.getVertexAttribOffset(index, pname);
 
 	public inline function hint(target:HintTarget, mode:HintMode)
@@ -851,7 +851,7 @@ abstract VertexAttributeParameter<T>(GLenum) to GLenum from GLenum{
 }
 
 @:enum
-abstract VertexAttributePointer(GLenum) to GLenum from GLenum{
+abstract VertexAttributeOffsetParameter(GLenum) to GLenum from GLenum{
 	var VERTEX_ATTRIB_ARRAY_POINTER = InternalGLContext.VERTEX_ATTRIB_ARRAY_POINTER;
 }
 

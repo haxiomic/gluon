@@ -1,4 +1,4 @@
-package gluon.es;
+package gluon.es2;
 
 private typedef InternalGLProgram =
 	#if js

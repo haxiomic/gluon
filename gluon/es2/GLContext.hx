@@ -813,7 +813,7 @@ abstract ProgramParameter<T>(GLenum) to GLenum from GLenum{
 
 @:enum
 abstract ShaderParameter<T>(GLenum) to GLenum from GLenum{
-	var SHADER_TYPE:ShaderParameter<GLenum>  = InternalGLContext.SHADER_TYPE;
+	var SHADER_TYPE:ShaderParameter<ShaderType>  = InternalGLContext.SHADER_TYPE;
 	var DELETE_STATUS:ShaderParameter<Bool>  = InternalGLContext.DELETE_STATUS;
 	var COMPILE_STATUS:ShaderParameter<Bool> = InternalGLContext.COMPILE_STATUS;
 }

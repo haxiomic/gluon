@@ -1,33 +1,46 @@
 package gluon.es2;
 
 #if js
-typedef GLenum = UInt;
+typedef GLenum     = UInt;
 typedef GLbitfield = UInt;
-typedef GLbyte = Int;
-typedef GLshort = Int;
-typedef GLint = Int;
-typedef GLsizei = Int;
-typedef GLintptr = Int;
+typedef GLbyte     = Int;
+typedef GLshort    = Int;
+typedef GLint      = Int;
+typedef GLsizei    = Int;
+typedef GLintptr   = Int;
 typedef GLsizeiptr = Int;
-typedef GLubyte = UInt;
-typedef GLushort = UInt;
-typedef GLuint = UInt;
-typedef GLfloat = Float;
-typedef GLclampf = Float;
+typedef GLubyte    = UInt;
+typedef GLushort   = UInt;
+typedef GLuint     = UInt;
+typedef GLfloat    = Float;
+typedef GLclampf   = Float;
+
+typedef GLArrayBuffer       = js.html.ArrayBuffer;
+typedef GLArrayBufferView   = js.html.ArrayBufferView;
+typedef GLInt8Array         = js.html.Int8Array;
+typedef GLUint8Array        = js.html.Uint8Array;
+typedef GLUint8ClampedArray = js.html.Uint8ClampedArray;
+typedef GLInt16Array        = js.html.Int16Array;
+typedef GLUint16Array       = js.html.Uint16Array;
+typedef GLInt32Array        = js.html.Int32Array;
+typedef GLUint32Array       = js.html.Uint32Array;
+typedef GLFloat32Array      = js.html.Float32Array;
+typedef GLFloat64Array      = js.html.Float64Array;
 #else
 #end
 
+
 abstract BufferDataSource(Dynamic)
-	from haxe.io.ArrayBufferView to haxe.io.ArrayBufferView
-	from haxe.io.ArrayBufferView.ArrayBufferViewData to haxe.io.ArrayBufferView.ArrayBufferViewData {}
+	from GLArrayBuffer     to GLArrayBuffer
+	from GLArrayBufferView to GLArrayBufferView {}
 
 #if js
 abstract TexImageSource(Dynamic)
-	from js.html.ImageBitmap to js.html.ImageBitmap
-	from js.html.ImageData to js.html.ImageData
-	from js.html.ImageElement to js.html.ImageElement
+	from js.html.ImageBitmap   to js.html.ImageBitmap
+	from js.html.ImageData     to js.html.ImageData
+	from js.html.ImageElement  to js.html.ImageElement
 	from js.html.CanvasElement to js.html.CanvasElement
-	from js.html.VideoElement to js.html.VideoElement {}
+	from js.html.VideoElement  to js.html.VideoElement {}
 #end
 
 private typedef InternalGLContext = 
@@ -122,11 +135,11 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function compileShader(shader:GLShader)
 		this.compileShader(shader);
 
-	public inline function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, imageSize:GLsizei, data:haxe.io.ArrayBufferView)
-		this.compressedTexImage2D(target, level, internalformat, width, height, border, data.getData());
+	public inline function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, imageSize:GLsizei, data:GLArrayBufferView)
+		this.compressedTexImage2D(target, level, internalformat, width, height, border, data);
 
-	public inline function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:haxe.io.ArrayBufferView)
-		this.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.getData());
+	public inline function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView)
+		this.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data);
 
 	public inline function copyTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, x:GLint, y:GLint, width:GLsizei, height:GLsizei, border:GLint)
 		this.copyTexImage2D(target, level, internalformat, x, y, width, height, border);
@@ -317,8 +330,8 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function polygonOffset(factor:GLfloat, units:GLfloat)
 		this.polygonOffset(factor, units);
 
-	public inline function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelType, pixels:haxe.io.ArrayBufferView)
-		this.readPixels(x, y, width, height, format, type, pixels.getData());
+	public inline function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelType, pixels:GLArrayBufferView)
+		this.readPixels(x, y, width, height, format, type, pixels);
 
 	public inline function renderbufferStorage(target:RenderbufferTarget, internalformat:RenderbufferFormat, width:GLsizei, height:GLsizei)
 		this.renderbufferStorage(target, internalformat, width, height);
@@ -350,8 +363,8 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function stencilOpSeparate(face:CullFaceMode, fail:Operation, zfail:Operation, zpass:Operation)
 		this.stencilOpSeparate(face, fail, zfail, zpass);
 
-	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelType, pixels:haxe.io.ArrayBufferView)
-		this.texImage2D(target, level, internalformat, width, height, border, format, type, pixels.getData());
+	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelType, pixels:GLArrayBufferView)
+		this.texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
 	#if js
 	public inline function texImage2DSource(target:TextureTarget, level:GLint, internalformat:GLint, format:PixelFormat, type:PixelType, source:TexImageSource)
@@ -364,8 +377,8 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function texParameteri<T:GLint>(target:TextureTarget, pname:TextureParameter<T>, param:T)
 		this.texParameteri(target, pname, param);
 
-	public inline function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelType, pixels:haxe.io.ArrayBufferView)
-		this.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels.getData());
+	public inline function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelType, pixels:GLArrayBufferView)
+		this.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
 	#if js
 	public inline function texSubImage2DSource(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, format:PixelFormat, type:PixelType, source:TexImageSource)
@@ -375,59 +388,59 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function uniform1f(location:GLUniformLocation, x:GLfloat)
 		this.uniform1f(location, x);
 
-	public inline function uniform1fv(location:GLUniformLocation, v:haxe.io.Float32Array)
-		this.uniform1fv(location, v.getData());
+	public inline function uniform1fv(location:GLUniformLocation, v:GLFloat32Array)
+		this.uniform1fv(location, v);
 
 	public inline function uniform1i(location:GLUniformLocation, x:GLint)
 		this.uniform1i(location, x);
 
-	public inline function uniform1iv(location:GLUniformLocation, v:haxe.io.Int32Array)
-		this.uniform1iv(location, v.getData());
+	public inline function uniform1iv(location:GLUniformLocation, v:GLInt32Array)
+		this.uniform1iv(location, v);
 
 	public inline function uniform2f(location:GLUniformLocation, x:GLfloat, y:GLfloat)
 		this.uniform2f(location, x, y);
 
-	public inline function uniform2fv(location:GLUniformLocation, v:haxe.io.Float32Array)
-		this.uniform2fv(location, v.getData());
+	public inline function uniform2fv(location:GLUniformLocation, v:GLFloat32Array)
+		this.uniform2fv(location, v);
 
 	public inline function uniform2i(location:GLUniformLocation, x:GLint, y:GLint)
 		this.uniform2i(location, x, y);
 
-	public inline function uniform2iv(location:GLUniformLocation, v:haxe.io.Int32Array)
-		this.uniform2iv(location, v.getData());
+	public inline function uniform2iv(location:GLUniformLocation, v:GLInt32Array)
+		this.uniform2iv(location, v);
 
 	public inline function uniform3f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat)
 		this.uniform3f(location, x, y, z);
 
-	public inline function uniform3fv(location:GLUniformLocation, v:haxe.io.Float32Array)
-		this.uniform3fv(location, v.getData());
+	public inline function uniform3fv(location:GLUniformLocation, v:GLFloat32Array)
+		this.uniform3fv(location, v);
 
 	public inline function uniform3i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint)
 		this.uniform3i(location, x, y, z);
 
-	public inline function uniform3iv(location:GLUniformLocation, v:haxe.io.Int32Array)
-		this.uniform3iv(location, v.getData());
+	public inline function uniform3iv(location:GLUniformLocation, v:GLInt32Array)
+		this.uniform3iv(location, v);
 
 	public inline function uniform4f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat)
 		this.uniform4f(location, x, y, z, w);
 
-	public inline function uniform4fv(location:GLUniformLocation, v:haxe.io.Float32Array)
-		this.uniform4fv(location, v.getData());
+	public inline function uniform4fv(location:GLUniformLocation, v:GLFloat32Array)
+		this.uniform4fv(location, v);
 
 	public inline function uniform4i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint, w:GLint)
 		this.uniform4i(location, x, y, z, w);
 
-	public inline function uniform4iv(location:GLUniformLocation, v:haxe.io.Int32Array)
-		this.uniform4iv(location, v.getData());
+	public inline function uniform4iv(location:GLUniformLocation, v:GLInt32Array)
+		this.uniform4iv(location, v);
 
-	public inline function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:haxe.io.Float32Array)
-		this.uniformMatrix2fv(location, transpose, value.getData());
+	public inline function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
+		this.uniformMatrix2fv(location, transpose, value);
 
-	public inline function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:haxe.io.Float32Array)
-		this.uniformMatrix3fv(location, transpose, value.getData());
+	public inline function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
+		this.uniformMatrix3fv(location, transpose, value);
 
-	public inline function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:haxe.io.Float32Array)
-		this.uniformMatrix4fv(location, transpose, value.getData());
+	public inline function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
+		this.uniformMatrix4fv(location, transpose, value);
 
 	public inline function useProgram(program:GLProgram)
 		this.useProgram(program);
@@ -438,26 +451,26 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function vertexAttrib1f(index:GLuint, x:GLfloat)
 		this.vertexAttrib1f(index, x);
 
-	public inline function vertexAttrib1fv(index:GLuint, values:haxe.io.Float32Array)
-		this.vertexAttrib1fv(index, values.getData());
+	public inline function vertexAttrib1fv(index:GLuint, values:GLFloat32Array)
+		this.vertexAttrib1fv(index, values);
 
 	public inline function vertexAttrib2f(index:GLuint, x:GLfloat, y:GLfloat)
 		this.vertexAttrib2f(index, x, y);
 
-	public inline function vertexAttrib2fv(index:GLuint, values:haxe.io.Float32Array)
-		this.vertexAttrib2fv(index, values.getData());
+	public inline function vertexAttrib2fv(index:GLuint, values:GLFloat32Array)
+		this.vertexAttrib2fv(index, values);
 
 	public inline function vertexAttrib3f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat)
 		this.vertexAttrib3f(index, x, y, z);
 
-	public inline function vertexAttrib3fv(index:GLuint, values:haxe.io.Float32Array)
-		this.vertexAttrib3fv(index, values.getData());
+	public inline function vertexAttrib3fv(index:GLuint, values:GLFloat32Array)
+		this.vertexAttrib3fv(index, values);
 
 	public inline function vertexAttrib4f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat)
 		this.vertexAttrib4f(index, x, y, z, w);
 
-	public inline function vertexAttrib4fv(index:GLuint, values:haxe.io.Float32Array)
-		this.vertexAttrib4fv(index, values.getData());
+	public inline function vertexAttrib4fv(index:GLuint, values:GLFloat32Array)
+		this.vertexAttrib4fv(index, values);
 
 	public inline function vertexAttribPointer(index:GLuint, size:GLint, type:DataType, normalized:Bool, stride:GLsizei, offset:GLintptr)
 		this.vertexAttribPointer(index, size, type, normalized, stride, offset);
@@ -847,7 +860,7 @@ abstract VertexAttributeParameter<T>(GLenum) to GLenum from GLenum{
 	var VERTEX_ATTRIB_ARRAY_STRIDE:VertexAttributeParameter<GLint>            = InternalGLContext.VERTEX_ATTRIB_ARRAY_STRIDE;
 	var VERTEX_ATTRIB_ARRAY_TYPE:VertexAttributeParameter<DataType>           = InternalGLContext.VERTEX_ATTRIB_ARRAY_TYPE;
 	var VERTEX_ATTRIB_ARRAY_NORMALIZED:VertexAttributeParameter<Bool>         = InternalGLContext.VERTEX_ATTRIB_ARRAY_NORMALIZED;
-	var CURRENT_VERTEX_ATTRIB:VertexAttributeParameter<haxe.io.Float32Array>  = InternalGLContext.CURRENT_VERTEX_ATTRIB; //(with 4 elements)
+	var CURRENT_VERTEX_ATTRIB:VertexAttributeParameter<GLFloat32Array>        = InternalGLContext.CURRENT_VERTEX_ATTRIB; //(with 4 elements)
 }
 
 @:enum
@@ -871,12 +884,12 @@ abstract PixelStoreParameter<T>(GLenum) to GLenum from GLenum{
 @:enum
 abstract Parameter<T>(GLenum) to GLenum from GLenum{
 	var ACTIVE_TEXTURE:Parameter<TextureUnit>                                   = InternalGLContext.ACTIVE_TEXTURE;
-	var ALIASED_LINE_WIDTH_RANGE:Parameter<haxe.io.Float32Array>                = InternalGLContext.ALIASED_LINE_WIDTH_RANGE; //(with 2 elements)
-	var ALIASED_POINT_SIZE_RANGE:Parameter<haxe.io.Float32Array>                = InternalGLContext.ALIASED_POINT_SIZE_RANGE; //(with 2 elements)
+	var ALIASED_LINE_WIDTH_RANGE:Parameter<GLFloat32Array>                      = InternalGLContext.ALIASED_LINE_WIDTH_RANGE; //(with 2 elements)
+	var ALIASED_POINT_SIZE_RANGE:Parameter<GLFloat32Array>                      = InternalGLContext.ALIASED_POINT_SIZE_RANGE; //(with 2 elements)
 	var ALPHA_BITS:Parameter<GLint>                                             = InternalGLContext.ALPHA_BITS;
 	var ARRAY_BUFFER_BINDING:Parameter<GLBuffer>                                = InternalGLContext.ARRAY_BUFFER_BINDING;
 	var BLEND:Parameter<Bool>                                                   = InternalGLContext.BLEND;
-	var BLEND_COLOR:Parameter<haxe.io.Float32Array>                             = InternalGLContext.BLEND_COLOR; //(with 4 values)
+	var BLEND_COLOR:Parameter<GLFloat32Array>                                   = InternalGLContext.BLEND_COLOR; //(with 4 values)
 	var BLEND_DST_ALPHA:Parameter<BlendFactor>                                  = InternalGLContext.BLEND_DST_ALPHA;
 	var BLEND_DST_RGB:Parameter<BlendFactor>                                    = InternalGLContext.BLEND_DST_RGB;
 	var BLEND_EQUATION_ALPHA:Parameter<BlendEquation>                           = InternalGLContext.BLEND_EQUATION_ALPHA;
@@ -884,16 +897,16 @@ abstract Parameter<T>(GLenum) to GLenum from GLenum{
 	var BLEND_SRC_ALPHA:Parameter<BlendFactor>                                  = InternalGLContext.BLEND_SRC_ALPHA;
 	var BLEND_SRC_RGB:Parameter<BlendFactor>                                    = InternalGLContext.BLEND_SRC_RGB;
 	var BLUE_BITS:Parameter<GLint>                                              = InternalGLContext.BLUE_BITS;
-	var COLOR_CLEAR_VALUE:Parameter<haxe.io.Float32Array>                       = InternalGLContext.COLOR_CLEAR_VALUE; //(with 4 values)
+	var COLOR_CLEAR_VALUE:Parameter<GLFloat32Array>                             = InternalGLContext.COLOR_CLEAR_VALUE; //(with 4 values)
 	var COLOR_WRITEMASK:Parameter<Array<Bool>>                                  = InternalGLContext.COLOR_WRITEMASK; //(with 4 values)
-	var COMPRESSED_TEXTURE_FORMATS:Parameter<haxe.io.UInt32Array>               = InternalGLContext.COMPRESSED_TEXTURE_FORMATS;
+	var COMPRESSED_TEXTURE_FORMATS:Parameter<GLUint32Array>                     = InternalGLContext.COMPRESSED_TEXTURE_FORMATS;
 	var CULL_FACE:Parameter<Bool>                                               = InternalGLContext.CULL_FACE;
 	var CULL_FACE_MODE:Parameter<CullFaceMode>                                  = InternalGLContext.CULL_FACE_MODE;
 	var CURRENT_PROGRAM:Parameter<GLProgram>                                    = InternalGLContext.CURRENT_PROGRAM;
 	var DEPTH_BITS:Parameter<GLint>                                             = InternalGLContext.DEPTH_BITS;
 	var DEPTH_CLEAR_VALUE:Parameter<GLfloat>                                    = InternalGLContext.DEPTH_CLEAR_VALUE;
 	var DEPTH_FUNC:Parameter<ComparisonFunction>                                = InternalGLContext.DEPTH_FUNC;
-	var DEPTH_RANGE:Parameter<haxe.io.Float32Array>                             = InternalGLContext.DEPTH_RANGE; //(with 2 elements)
+	var DEPTH_RANGE:Parameter<GLFloat32Array>                                   = InternalGLContext.DEPTH_RANGE; //(with 2 elements)
 	var DEPTH_TEST:Parameter<Bool>                                              = InternalGLContext.DEPTH_TEST;
 	var DEPTH_WRITEMASK:Parameter<Bool>                                         = InternalGLContext.DEPTH_WRITEMASK;
 	var DITHER:Parameter<Bool>                                                  = InternalGLContext.DITHER;
@@ -915,7 +928,7 @@ abstract Parameter<T>(GLenum) to GLenum from GLenum{
 	var MAX_VERTEX_ATTRIBS:Parameter<GLint>                                     = InternalGLContext.MAX_VERTEX_ATTRIBS;
 	var MAX_VERTEX_TEXTURE_IMAGE_UNITS:Parameter<GLint>                         = InternalGLContext.MAX_VERTEX_TEXTURE_IMAGE_UNITS;
 	var MAX_VERTEX_UNIFORM_VECTORS:Parameter<GLint>                             = InternalGLContext.MAX_VERTEX_UNIFORM_VECTORS;
-	var MAX_VIEWPORT_DIMS:Parameter<haxe.io.Int32Array>                         = InternalGLContext.MAX_VIEWPORT_DIMS; //(with 2 elements)
+	var MAX_VIEWPORT_DIMS:Parameter<GLInt32Array>                               = InternalGLContext.MAX_VIEWPORT_DIMS; //(with 2 elements)
 	var PACK_ALIGNMENT:Parameter<GLint>                                         = InternalGLContext.PACK_ALIGNMENT;
 	var POLYGON_OFFSET_FACTOR:Parameter<GLfloat>                                = InternalGLContext.POLYGON_OFFSET_FACTOR;
 	var POLYGON_OFFSET_FILL:Parameter<Bool>                                     = InternalGLContext.POLYGON_OFFSET_FILL;
@@ -927,7 +940,7 @@ abstract Parameter<T>(GLenum) to GLenum from GLenum{
 	var SAMPLE_COVERAGE_INVERT:Parameter<Bool>                                  = InternalGLContext.SAMPLE_COVERAGE_INVERT;
 	var SAMPLE_COVERAGE_VALUE:Parameter<GLfloat>                                = InternalGLContext.SAMPLE_COVERAGE_VALUE;
 	var SAMPLES:Parameter<GLint>                                                = InternalGLContext.SAMPLES;
-	var SCISSOR_BOX:Parameter<haxe.io.Int32Array>                               = InternalGLContext.SCISSOR_BOX; //(with 4 elements)
+	var SCISSOR_BOX:Parameter<GLInt32Array>                                     = InternalGLContext.SCISSOR_BOX; //(with 4 elements)
 	var SCISSOR_TEST:Parameter<Bool>                                            = InternalGLContext.SCISSOR_TEST;
 	var SHADING_LANGUAGE_VERSION:Parameter<String>                              = InternalGLContext.SHADING_LANGUAGE_VERSION;
 	var STENCIL_BACK_FAIL:Parameter<Operation>                                  = InternalGLContext.STENCIL_BACK_FAIL;
@@ -961,7 +974,7 @@ abstract Parameter<T>(GLenum) to GLenum from GLenum{
 
 	var VENDOR:Parameter<String>                                                = InternalGLContext.VENDOR;
 	var VERSION:Parameter<String>                                               = InternalGLContext.VERSION;
-	var VIEWPORT:Parameter<haxe.io.Int32Array>                                  = InternalGLContext.VIEWPORT; //(with 4 elements)
+	var VIEWPORT:Parameter<GLInt32Array>                                        = InternalGLContext.VIEWPORT; //(with 4 elements)
 }
 
 //WebGL specific

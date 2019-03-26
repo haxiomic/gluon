@@ -15,17 +15,17 @@ typedef GLuint     = UInt;
 typedef GLfloat    = Float;
 typedef GLclampf   = Float;
 
-typedef GLArrayBuffer       = js.html.ArrayBuffer;
-typedef GLArrayBufferView   = js.html.ArrayBufferView;
-typedef GLInt8Array         = js.html.Int8Array;
-typedef GLUint8Array        = js.html.Uint8Array;
-typedef GLUint8ClampedArray = js.html.Uint8ClampedArray;
-typedef GLInt16Array        = js.html.Int16Array;
-typedef GLUint16Array       = js.html.Uint16Array;
-typedef GLInt32Array        = js.html.Int32Array;
-typedef GLUint32Array       = js.html.Uint32Array;
-typedef GLFloat32Array      = js.html.Float32Array;
-typedef GLFloat64Array      = js.html.Float64Array;
+typedef GLArrayBuffer       = typedarray.ArrayBuffer;
+typedef GLArrayBufferView   = typedarray.ArrayBufferView;
+typedef GLInt8Array         = typedarray.Int8Array;
+typedef GLUint8Array        = typedarray.Uint8Array;
+typedef GLUint8ClampedArray = typedarray.Uint8ClampedArray;
+typedef GLInt16Array        = typedarray.Int16Array;
+typedef GLUint16Array       = typedarray.Uint16Array;
+typedef GLInt32Array        = typedarray.Int32Array;
+typedef GLUint32Array       = typedarray.Uint32Array;
+typedef GLFloat32Array      = typedarray.Float32Array;
+typedef GLFloat64Array      = typedarray.Float64Array;
 #else
 #end
 
@@ -40,7 +40,15 @@ abstract TexImageSource(Dynamic)
 	from js.html.ImageData     to js.html.ImageData
 	from js.html.ImageElement  to js.html.ImageElement
 	from js.html.CanvasElement to js.html.CanvasElement
-	from js.html.VideoElement  to js.html.VideoElement {}
+	from js.html.VideoElement  to js.html.VideoElement {
+		public var width (get, set): Int;
+		public var height (get, set): Int;
+
+		inline function get_width() return this.width;
+		inline function set_width(v: Int) return this.width = v;
+		inline function get_height() return this.height;
+		inline function set_height(v: Int) return this.height = v;
+	}
 #end
 
 private typedef InternalGLContext = 
@@ -53,7 +61,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 
 	public inline function getContextAttributes():GLContextAttributes{
 		#if js
-			return this.getContextAttributes();
+			return untyped this.getContextAttributes();
 		#else
 		#end
 	}
@@ -65,9 +73,9 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		#end
 	}
 
-	public inline function getExtension(name:String):Dynamic{
+	public inline function getExtension<T>(name: Extension<T>):T{
 		#if js
-			return this.getExtension(name);
+			return this.getExtension((name: String));
 		#else
 		#end
 	}
@@ -110,6 +118,9 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 
 	public inline function bufferData(target:BufferTarget, data:BufferDataSource, usage:BufferUsage)
 		this.bufferData(target, data, usage);
+	
+	public inline function bufferDataSize(target:BufferTarget, size:Int, usage:BufferUsage)
+		this.bufferData(target, size, usage);
 
 	public inline function bufferSubData(target:BufferTarget, offset:GLintptr, data:BufferDataSource)
 		this.bufferSubData(target, offset, data);
@@ -367,7 +378,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
 	#if js
-	public inline function texImage2DSource(target:TextureTarget, level:GLint, internalformat:GLint, format:PixelFormat, type:PixelType, source:TexImageSource)
+	public inline function texImage2DDOM(target:TextureTarget, level:GLint, internalformat:GLint, format:PixelFormat, type:PixelType, source:TexImageSource)
 		this.texImage2D(target, level, internalformat, format, type, source);
 	#end
 
@@ -381,7 +392,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
 	#if js
-	public inline function texSubImage2DSource(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, format:PixelFormat, type:PixelType, source:TexImageSource)
+	public inline function texSubImage2DDOM(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, format:PixelFormat, type:PixelType, source:TexImageSource)
 		this.texSubImage2D(target, level, xoffset, yoffset, format, type, source);
 	#end
 
@@ -684,13 +695,13 @@ abstract RenderbufferFormat(GLenum) to GLenum from GLenum{
 	var RGB5_A1           = InternalGLContext.RGB5_A1;
 	var RGB565            = InternalGLContext.RGB565;
 	var DEPTH_COMPONENT16 = InternalGLContext.DEPTH_COMPONENT16;
-	var STENCIL_INDEX     = InternalGLContext.STENCIL_INDEX;
 	var STENCIL_INDEX8    = InternalGLContext.STENCIL_INDEX8;
 	var DEPTH_STENCIL     = InternalGLContext.DEPTH_STENCIL;
 }
 
 @:enum
 abstract UniformType(GLenum) to GLenum from GLenum{
+	var FLOAT        = InternalGLContext.FLOAT;
 	var FLOAT_VEC2   = InternalGLContext.FLOAT_VEC2;
 	var FLOAT_VEC3   = InternalGLContext.FLOAT_VEC3;
 	var FLOAT_VEC4   = InternalGLContext.FLOAT_VEC4;

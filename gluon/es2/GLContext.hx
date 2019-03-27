@@ -47,7 +47,7 @@ abstract TexImageSource(Dynamic)
 
 private typedef InternalGLContext = 
 	#if lime_webgl
-		lime.graphics.WebGLRenderContext;
+		lime.graphics.WebGL2RenderContext;
 	#elseif lime_opengl
 		lime.graphics.OpenGLRenderContext;
 	#elseif lime_opengles
@@ -59,7 +59,7 @@ private typedef InternalGLContext =
 	#end
 
 private typedef InternalConstGLContext =
-	#if lime
+	#if (lime_opengl || lime_opengles)
 		lime.graphics.opengl.GL;
 	#elseif js
 		js.html.webgl.RenderingContext;
@@ -125,7 +125,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 
 	public inline function bufferData(target:BufferTarget, data:BufferSource, usage:BufferUsage) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.bufferData(target, data.byteLength, data, usage);
 		#else
 		this.bufferData(target, data, usage);
@@ -133,7 +133,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	}
 	
 	public inline function bufferDataOfSize(target:BufferTarget, size:Int, usage:BufferUsage) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 			#if (lime_cffi && !js)
 				this.bufferData(target, size, 0, usage);
 			#else
@@ -145,7 +145,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	}
 
 	public inline function bufferSubData(target:BufferTarget, offset:GLintptr, data:BufferSource) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.bufferSubData(target, offset, data.byteLength, data);
 		#else
 		this.bufferSubData(target, offset, data);
@@ -162,7 +162,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.clearColor(red, green, blue, alpha);
 
 	public inline function clearDepth(depth:GLclampf) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.clearDepthf(depth);
 		#else
 		this.clearDepth(depth);
@@ -179,7 +179,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.compileShader(shader);
 
 	public inline function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.compressedTexImage2D(target, level, internalformat, width, height, border, data.byteLength, data);
 		#else
 		this.compressedTexImage2D(target, level, internalformat, width, height, border, data);
@@ -187,7 +187,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	}
 
 	public inline function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.byteLength, data);
 		#else
 		this.compressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data);
@@ -246,7 +246,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.depthMask(flag);
 
 	public inline function depthRange(zNear:GLclampf, zFar:GLclampf):Void {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.depthRangef(zNear, zFar);
 		#else
 		this.depthRange(zNear, zFar);
@@ -350,7 +350,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		return this.getVertexAttrib(index, pname);
 
 	public inline function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 			#if js
 				return this.getVertexAttribPointerv(index, pname).toValue();
 			#else
@@ -456,7 +456,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.uniform1f(location, x);
 
 	public inline function uniform1fv(location:GLUniformLocation, v:GLFloat32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniform1fv(location, v.length, v);
 		#else
 		this.uniform1fv(location, v);
@@ -467,7 +467,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.uniform1i(location, x);
 
 	public inline function uniform1iv(location:GLUniformLocation, v:GLInt32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniform1iv(location, v.length, v);
 		#else
 		this.uniform1iv(location, v);
@@ -478,7 +478,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.uniform2f(location, x, y);
 
 	public inline function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniform2fv(location, Std.int(v.length / 2), v);
 		#else
 		this.uniform2fv(location, v);
@@ -489,7 +489,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.uniform2i(location, x, y);
 
 	public inline function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniform2iv(location, Std.int(v.length / 2), v);
 		#else
 		this.uniform2iv(location, v);
@@ -500,7 +500,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.uniform3f(location, x, y, z);
 
 	public inline function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniform3fv(location, Std.int(v.length / 3), v);
 		#else
 		this.uniform3fv(location, v);
@@ -511,7 +511,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.uniform3i(location, x, y, z);
 
 	public inline function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniform3iv(location, Std.int(v.length / 3), v);
 		#else
 		this.uniform3iv(location, v);
@@ -522,7 +522,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.uniform4f(location, x, y, z, w);
 
 	public inline function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniform4fv(location, Std.int(v.length / 4), v);
 		#else
 		this.uniform4fv(location, v);
@@ -533,7 +533,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 		this.uniform4i(location, x, y, z, w);
 
 	public inline function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniform4iv(location, Std.int(v.length / 4), v);
 		#else
 		this.uniform4iv(location, v);
@@ -541,7 +541,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	}
 
 	public inline function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniformMatrix2fv(location, Std.int(value.length / 4), transpose, value);
 		#else
 		this.uniformMatrix2fv(location, transpose, value);
@@ -549,14 +549,14 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	}
 
 	public inline function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniformMatrix3fv(location, Std.int(value.length / 9), transpose, value);
 		#else
 		this.uniformMatrix3fv(location, transpose, value);
 		#end
 
 	public inline function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
-		#if lime
+		#if (lime_opengl || lime_opengles)
 		this.uniformMatrix4fv(location, Std.int(value.length / 16), transpose, value);
 		#else
 		this.uniformMatrix4fv(location, transpose, value);

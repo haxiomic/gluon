@@ -15,7 +15,7 @@ abstract BufferSource(ArrayBuffer) to ArrayBuffer from ArrayBuffer {
 	}
 
 	private inline function get_byteLength() {
-		#if lime
+		#if (lime && !js)
 		return this.length;
 		#else
 		return this.byteLength;

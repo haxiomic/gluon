@@ -549,10 +549,18 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	}
 
 	public inline function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
+		#if lime
 		this.uniformMatrix3fv(location, Std.int(value.length / 9), transpose, value);
+		#else
+		this.uniformMatrix3fv(location, transpose, value);
+		#end
 
 	public inline function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
+		#if lime
 		this.uniformMatrix4fv(location, Std.int(value.length / 16), transpose, value);
+		#else
+		this.uniformMatrix4fv(location, transpose, value);
+		#end
 
 	public inline function useProgram(program:GLProgram)
 		this.useProgram(program);

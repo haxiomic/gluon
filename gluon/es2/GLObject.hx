@@ -1,6 +1,9 @@
 package gluon.es2;
 
-abstract GLObject<InternalType>(InternalType){
+/**
+	Platform consistent wrapper, so that objects can be compared with null (natively these are Ints and 0 means null)
+**/
+abstract GLObject<InternalType>(Null<InternalType>) from InternalType to InternalType {
 
 	public var invalidated(get, never):Bool;
 
@@ -11,25 +14,28 @@ abstract GLObject<InternalType>(InternalType){
 		return false;
 		#end
 	}
-	
-	@:to
-	inline function toInternal():InternalType{
-		#if js
-		return this;
-		#else if cpp
-		return this != null ? this : untyped 0;
-		#else
-		#end
+
+	#if !js
+	static inline var nullValue = 0;
+
+	@:op(A == B)
+	static function eq(lhs: GLObject<Any>, rhs: GLObject<Any>): Bool;
+
+	@:op(A == B)
+	static inline function eqA<T>(lhs: GLObject<T>, rhs: Any) {
+		var lhsInternal: Null<T> = cast lhs; 
+		if (lhsInternal == (cast nullValue) && rhs == null) return true;
+		if (lhsInternal == null && rhs == nullValue) return true;
+		return lhsInternal == rhs;
 	}
 
-	@:from
-	static inline function fromInternal<InternalType>(v:InternalType):GLObject<InternalType>{
-		#if js
-		return untyped v;
-		#else if cpp
-		return (untyped v != 0) ? untyped v : null;
-		#else
-		#end
+	@:op(A == B)
+	static inline function eqB<T>(lhs: Any, rhs: GLObject<T>) {
+		var rhsInternal: Null<T> = cast rhs; 
+		if (rhsInternal == (cast nullValue) && lhs == null) return true;
+		if (rhsInternal == null && lhs == nullValue) return true;
+		return rhsInternal == lhs;
 	}
+	#end
 
 }

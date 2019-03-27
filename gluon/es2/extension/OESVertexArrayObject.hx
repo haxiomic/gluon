@@ -1,8 +1,7 @@
 package gluon.es2.extension;
 
-#if js
-typedef OESVertexArrayObject = js.html.webgl.extension.OESVertexArrayObject;
-#else
-@:deprecated("@! typed extensions not yet complete for this target")
-typedef OESVertexArrayObject = Any;
+#if lime
+typedef OESVertexArrayObject = lime.graphics.opengl.ext.OES_vertex_array_object;
+#elseif js
+typedef OESVertexArrayObject = js.html.webgl.extension.EXTTextureFilterAnisotropic;
 #end

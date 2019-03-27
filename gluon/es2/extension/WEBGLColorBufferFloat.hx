@@ -1,8 +1,9 @@
 package gluon.es2.extension;
 
-#if js
+#if (lime && js)
+typedef WEBGLColorBufferFloat = lime.graphics.opengl.ext.WEBGL_color_buffer_float;
+#elseif js
 typedef WEBGLColorBufferFloat = js.html.webgl.extension.WEBGLColorBufferFloat;
 #else
-@:deprecated("@! typed extensions not yet complete for this target")
 typedef WEBGLColorBufferFloat = Any;
 #end

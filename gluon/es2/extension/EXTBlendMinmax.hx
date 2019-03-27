@@ -1,8 +1,7 @@
 package gluon.es2.extension;
 
-#if js
+#if lime
+typedef EXTBlendMinmax = lime.graphics.opengl.ext.EXT_blend_minmax;
+#elseif js
 typedef EXTBlendMinmax = js.html.webgl.extension.EXTBlendMinmax;
-#else
-@:deprecated("@! typed extensions not yet complete for this target")
-typedef EXTBlendMinmax = Any;
 #end

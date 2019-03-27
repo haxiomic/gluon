@@ -1,10 +1,12 @@
 package gluon.es2;
 
 private typedef InternalGLProgram =
-	#if js
+	#if lime
+		lime.graphics.opengl.GLProgram;
+	#elseif js
 		js.html.webgl.Program;
-	#else if cpp
-		GLuint;
+	#else
+		GLContext.GLuint;
 	#end
 
 typedef GLProgram = GLObject<InternalGLProgram>;

@@ -1,8 +1,7 @@
 package gluon.es2.extension;
 
-#if js
+#if lime
+typedef OESTextureFloat = lime.graphics.opengl.ext.OES_texture_float;
+#elseif js
 typedef OESTextureFloat = js.html.webgl.extension.OESTextureFloat;
-#else
-@:deprecated("@! typed extensions not yet complete for this target")
-typedef OESTextureFloat = Any;
 #end

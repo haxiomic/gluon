@@ -1,10 +1,12 @@
 package gluon.es2;
 
 private typedef InternalGLRenderbuffer =
-	#if js
+	#if lime
+		lime.graphics.opengl.GLRenderbuffer;
+	#elseif js
 		js.html.webgl.Renderbuffer;
-	#else if cpp
-		GLuint;
+	#else
+		GLContext.GLuint;
 	#end
 
 typedef GLRenderbuffer = GLObject<InternalGLRenderbuffer>;

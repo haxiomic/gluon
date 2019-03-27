@@ -1,8 +1,7 @@
 package gluon.es2.extension;
 
-#if js
+#if lime
+typedef OESStandardDerivatives = lime.graphics.opengl.ext.OES_standard_derivatives;
+#elseif js
 typedef OESStandardDerivatives = js.html.webgl.extension.OESStandardDerivatives;
-#else
-@:deprecated("@! typed extensions not yet complete for this target")
-typedef OESStandardDerivatives = Any;
 #end

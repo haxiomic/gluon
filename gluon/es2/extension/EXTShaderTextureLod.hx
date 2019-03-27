@@ -1,8 +1,7 @@
 package gluon.es2.extension;
 
-#if js
+#if lime
+typedef EXTShaderTextureLod = lime.graphics.opengl.ext.EXT_shader_texture_lod;
+#elseif js
 typedef EXTShaderTextureLod = js.html.webgl.extension.EXTShaderTextureLod;
-#else
-@:deprecated("@! typed extensions not yet complete for this target")
-typedef EXTShaderTextureLod = Any;
 #end

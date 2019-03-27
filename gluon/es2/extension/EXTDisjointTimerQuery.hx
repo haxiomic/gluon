@@ -1,8 +1,9 @@
 package gluon.es2.extension;
 
-#if js
+#if (lime && js)
+typedef EXTDisjointTimerQuery = lime.graphics.opengl.ext.EXT_disjoint_timer_query;
+#elseif js
 typedef EXTDisjointTimerQuery = js.html.webgl.extension.EXTDisjointTimerQuery;
 #else
-@:deprecated("@! typed extensions not yet complete for this target")
-typedef EXTDisjointTimerQuery = Any;
+typedef EXTDisjointTimerQuery = Dynamic;
 #end

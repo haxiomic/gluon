@@ -1,8 +1,7 @@
 package gluon.es2.extension;
 
-#if js
+#if lime
+typedef OESElementIndexUint = lime.graphics.opengl.ext.OES_element_index_uint;
+#elseif js
 typedef OESElementIndexUint = js.html.webgl.extension.OESElementIndexUint;
-#else
-@:deprecated("@! typed extensions not yet complete for this target")
-typedef OESElementIndexUint = Any;
 #end

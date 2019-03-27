@@ -1,8 +1,7 @@
 package gluon.es2.extension;
 
-#if js
+#if lime
+typedef EXTColorBufferHalfFloat = lime.graphics.opengl.ext.EXT_color_buffer_half_float;
+#elseif js
 typedef EXTColorBufferHalfFloat = js.html.webgl.extension.EXTColorBufferHalfFloat;
-#else
-@:deprecated("@! typed extensions not yet complete for this target")
-typedef EXTColorBufferHalfFloat = Any;
 #end

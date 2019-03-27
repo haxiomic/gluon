@@ -1,10 +1,12 @@
 package gluon.es2;
 
 private typedef InternalGLShader =
-	#if js
+	#if lime
+		lime.graphics.opengl.GLShader;
+	#elseif js
 		js.html.webgl.Shader;
-	#else if cpp
-		GLuint;
+	#else
+		GLContext.GLuint;
 	#end
 
 typedef GLShader = GLObject<InternalGLShader>;

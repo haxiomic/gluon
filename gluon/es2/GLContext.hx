@@ -833,6 +833,17 @@ abstract UniformType(GLenum) to GLenum from GLenum{
 }
 
 @:enum
+abstract AttributeType(GLenum) to GLenum from GLenum{
+	var FLOAT      = InternalConstGLContext.FLOAT;
+	var FLOAT_VEC2 = InternalConstGLContext.FLOAT_VEC2;
+	var FLOAT_VEC3 = InternalConstGLContext.FLOAT_VEC3;
+	var FLOAT_VEC4 = InternalConstGLContext.FLOAT_VEC4;
+	var FLOAT_MAT2 = InternalConstGLContext.FLOAT_MAT2;
+	var FLOAT_MAT3 = InternalConstGLContext.FLOAT_MAT3;
+	var FLOAT_MAT4 = InternalConstGLContext.FLOAT_MAT4;
+}
+
+@:enum
 abstract ComparisonFunction(GLenum) to GLenum from GLenum{
 	var NEVER    = InternalConstGLContext.NEVER;
 	var LESS     = InternalConstGLContext.LESS;

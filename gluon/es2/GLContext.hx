@@ -397,7 +397,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function polygonOffset(factor:GLfloat, units:GLfloat)
 		this.polygonOffset(factor, units);
 
-	public inline function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelType, pixels:GLArrayBufferView)
+	public inline function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView)
 		this.readPixels(x, y, width, height, format, type, pixels);
 
 	public inline function renderbufferStorage(target:RenderbufferTarget, internalformat:RenderbufferFormat, width:GLsizei, height:GLsizei)
@@ -430,11 +430,11 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function stencilOpSeparate(face:CullFaceMode, fail:Operation, zfail:Operation, zpass:Operation)
 		this.stencilOpSeparate(face, fail, zfail, zpass);
 
-	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelType, pixels:GLArrayBufferView)
+	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView)
 		this.texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
 	#if js
-	public inline function texImage2DDOM(target:TextureTarget, level:GLint, internalformat:GLint, format:PixelFormat, type:PixelType, source:TexImageSource)
+	public inline function texImage2DDOM(target:TextureTarget, level:GLint, internalformat:GLint, format:PixelFormat, type:PixelDataType, source:TexImageSource)
 		this.texImage2D(target, level, internalformat, format, type, source);
 	#end
 
@@ -444,11 +444,11 @@ abstract GLContext(InternalGLContext) from InternalGLContext{
 	public inline function texParameteri<T:GLint>(target:TextureTarget, pname:TextureParameter<T>, param:T)
 		this.texParameteri(target, pname, param);
 
-	public inline function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelType, pixels:GLArrayBufferView)
+	public inline function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView)
 		this.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
 	#if js
-	public inline function texSubImage2DDOM(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, format:PixelFormat, type:PixelType, source:TexImageSource)
+	public inline function texSubImage2DDOM(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, format:PixelFormat, type:PixelDataType, source:TexImageSource)
 		this.texSubImage2D(target, level, xoffset, yoffset, format, type, source);
 	#end
 
@@ -781,7 +781,7 @@ abstract DataType(GLenum) to GLenum from GLenum{
 }
 
 @:enum
-abstract PixelType(GLenum) to GLenum from GLenum{
+abstract PixelDataType(GLenum) to GLenum from GLenum{
 	var UNSIGNED_BYTE          = InternalConstGLContext.UNSIGNED_BYTE;
 	var UNSIGNED_SHORT_4_4_4_4 = InternalConstGLContext.UNSIGNED_SHORT_4_4_4_4;
 	var UNSIGNED_SHORT_5_5_5_1 = InternalConstGLContext.UNSIGNED_SHORT_5_5_5_1;
@@ -1036,7 +1036,7 @@ abstract Parameter<T>(GLenum) to GLenum from GLenum{
 	var GENERATE_MIPMAP_HINT:Parameter<HintMode>                                = InternalConstGLContext.GENERATE_MIPMAP_HINT;
 	var GREEN_BITS:Parameter<GLint>                                             = InternalConstGLContext.GREEN_BITS;
 	var IMPLEMENTATION_COLOR_READ_FORMAT:Parameter<PixelFormat>                 = InternalConstGLContext.IMPLEMENTATION_COLOR_READ_FORMAT;
-	var IMPLEMENTATION_COLOR_READ_TYPE:Parameter<PixelType>                     = InternalConstGLContext.IMPLEMENTATION_COLOR_READ_TYPE;
+	var IMPLEMENTATION_COLOR_READ_TYPE:Parameter<PixelDataType>                 = InternalConstGLContext.IMPLEMENTATION_COLOR_READ_TYPE;
 	var LINE_WIDTH:Parameter<GLfloat>                                           = InternalConstGLContext.LINE_WIDTH;
 	var MAX_COMBINED_TEXTURE_IMAGE_UNITS:Parameter<GLint>                       = InternalConstGLContext.MAX_COMBINED_TEXTURE_IMAGE_UNITS;
 	var MAX_CUBE_MAP_TEXTURE_SIZE:Parameter<GLint>                              = InternalConstGLContext.MAX_CUBE_MAP_TEXTURE_SIZE;

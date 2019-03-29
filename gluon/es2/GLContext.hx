@@ -786,6 +786,10 @@ abstract PixelDataType(GLenum) to GLenum from GLenum{
 	var UNSIGNED_SHORT_4_4_4_4 = InternalConstGLContext.UNSIGNED_SHORT_4_4_4_4;
 	var UNSIGNED_SHORT_5_5_5_1 = InternalConstGLContext.UNSIGNED_SHORT_5_5_5_1;
 	var UNSIGNED_SHORT_5_6_5   = InternalConstGLContext.UNSIGNED_SHORT_5_6_5;
+	/** requires enabling floating point texture extension, OES_texture_float **/
+	var FLOAT                  = InternalConstGLContext.FLOAT;
+	/** requires enabling half-floating point texture extension, OES_texture_half_float **/
+	var HALF_FLOAT             = InternalConstGLContext.HALF_FLOAT;
 }
 
 @:enum

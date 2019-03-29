@@ -65,7 +65,7 @@ private typedef InternalConstGLContext =
 		js.html.webgl.RenderingContext;
 	#end
 
-abstract GLContext(InternalGLContext) from InternalGLContext{
+abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContext {
 
 	public inline function getContextAttributes():GLContextAttributes{
 		#if (js || lime)

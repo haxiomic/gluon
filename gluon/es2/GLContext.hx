@@ -789,7 +789,7 @@ abstract PixelDataType(GLenum) to GLenum from GLenum{
 	/** requires enabling floating point texture extension, OES_texture_float **/
 	var FLOAT                  = InternalConstGLContext.FLOAT;
 	/** requires enabling half-floating point texture extension, OES_texture_half_float **/
-	var HALF_FLOAT             = InternalConstGLContext.HALF_FLOAT;
+	var HALF_FLOAT             = 0x8D61;
 }
 
 @:enum

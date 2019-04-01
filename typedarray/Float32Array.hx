@@ -1,6 +1,5 @@
 package typedarray;
 
-import haxe.io.Bytes;
 #if lime
 
 typedef Float32Array = lime.utils.Float32Array;

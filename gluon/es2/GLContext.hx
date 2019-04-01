@@ -54,8 +54,8 @@ private typedef InternalGLContext =
 		lime.graphics.OpenGLES3RenderContext;
 	#elseif js
 		js.html.webgl.RenderingContext;
-	#else
-		Dynamic;
+	#elseif cpp
+		gluon.es2.impl.GLES2Context;
 	#end
 
 private typedef InternalConstGLContext =
@@ -63,6 +63,8 @@ private typedef InternalConstGLContext =
 		lime.graphics.opengl.GL;
 	#elseif js
 		js.html.webgl.RenderingContext;
+	#elseif cpp
+		gluon.es2.impl.GLES2Context;
 	#end
 
 abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContext {

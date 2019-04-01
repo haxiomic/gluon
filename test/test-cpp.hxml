@@ -1,0 +1,7 @@
+-main Main
+-cpp bin
+-p ../
+-D no-debug
+-debug
+-dce full
+-cmd ./bin/main-debug

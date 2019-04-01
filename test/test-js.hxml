@@ -1,0 +1,4 @@
+-main Main
+-js bin/main.js
+-p ../
+-cmd node bin/main.js

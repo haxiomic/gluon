@@ -11,15 +11,18 @@ class Main {
         trace('-- JS --');
         #elseif cpp
         trace('-- C++ --');
+        #elseif eval
+        trace('-- Eval --');
         #end
 
         // tests
-        // testArrayBuffer();
-        // testFloat32Array();
+        testArrayBuffer();
+        testFloat32Array();
         testUint8Array();
     }
 
     static function testFloat32Array() {
+        trace('> testFloat32Array');
         var numbersString = '1|2|3|42|99';
 
         var x = Float32Array.from(numbersString.split('|').map(n -> Std.parseFloat(n)));
@@ -46,6 +49,9 @@ class Main {
         test(sub.join('*') == '88*12*4');
         y[2] = 99;
         test(sub.join('*') == '99*12*4');
+
+        // test sub with offset
+        test(sub.subarray(1).join('*') == '12*4');
         
         // test fill
         y.fill(103, -2);
@@ -59,9 +65,19 @@ class Main {
         z.set(new Float32Array([3,3,3]), 3);
         z.set([9]);
         test(z.join(',') == '9,8,3,3,3,3,5');
+
+        // convert uint8 to float
+        #if !js
+        test({
+            var u8 = new Uint8Array([1,2,3,42,99]);
+            var f32 = new Float32Array(u8);
+            (u8.join(',') == f32.join(','));
+        });
+        #end
     }
 
     static function testUint8Array() {
+        trace('> testUint8Array');
         var numbersString = '1|2|3|42|99';
 
         var x = Uint8Array.from(numbersString.split('|').map(n -> Std.parseInt(n)));
@@ -80,21 +96,25 @@ class Main {
         test(ArrayBuffer.isView(new Uint8Array(0)) == true);
         
         // validate byte-length
-        test((new Uint8Array(3)).byteLength == 12);
+        test((new Uint8Array(3)).byteLength == 3);
 
         // test subarray
-        var y = new Uint8Array([-1,6,88,12,4]);
+        var y = new Uint8Array([0,6,88,12,4]);
         var sub = y.subarray(2);
+        trace('???', sub);
         test(sub.join('*') == '88*12*4');
         y[2] = 99;
         test(sub.join('*') == '99*12*4');
+
+        // test sub with offset
+        test(sub.subarray(1).join('*') == '12*4');
         
         // test fill
         y.fill(103, -2);
         test(sub.join('*') == '99*103*103');
 
         // test indexOf
-        var z = new Uint8Array([7,8,3,2,-1,8,5]);
+        var z = new Uint8Array([7,8,3,2,0,8,5]);
         test(z.indexOf(8, 2) == 5);
 
         // test set
@@ -104,6 +124,7 @@ class Main {
     }
 
     static function testArrayBuffer() {
+        trace('> testArrayBuffer');
         var x = new ArrayBuffer(5);
         test(ArrayBuffer.isView(x) == false);
         // 0 1 2 3 4
@@ -114,6 +135,12 @@ class Main {
         test(x.slice(0, -1).byteLength == 4);
         test(x.slice(0).byteLength == 5);
         test(x.slice(-2).byteLength == 2);
+
+        var u = new Uint8Array([32,56,99,21,8]);
+        var a = u.buffer;
+        var a2 = a.slice(1, -1);
+        var u2 = new Uint8Array(a2);
+        test(u2.join(',') == '56,99,21');
     }
 
     #end

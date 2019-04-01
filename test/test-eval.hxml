@@ -1,0 +1,6 @@
+-main Main
+-p ../
+-D no-debug
+-debug
+-dce full
+--interp

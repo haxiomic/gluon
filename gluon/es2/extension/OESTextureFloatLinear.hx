@@ -4,4 +4,6 @@ package gluon.es2.extension;
 typedef OESTextureFloatLinear = lime.graphics.opengl.ext.OES_texture_float_linear;
 #elseif js
 typedef OESTextureFloatLinear = js.html.webgl.extension.OESTextureFloatLinear;
+#else
+typedef OESTextureFloatLinear = Dynamic;
 #end

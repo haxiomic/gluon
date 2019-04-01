@@ -4,4 +4,6 @@ package gluon.es2.extension;
 typedef EXTColorBufferHalfFloat = lime.graphics.opengl.ext.EXT_color_buffer_half_float;
 #elseif js
 typedef EXTColorBufferHalfFloat = js.html.webgl.extension.EXTColorBufferHalfFloat;
+#else
+typedef EXTColorBufferHalfFloat = Dynamic;
 #end

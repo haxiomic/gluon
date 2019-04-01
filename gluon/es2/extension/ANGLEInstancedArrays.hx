@@ -4,4 +4,6 @@ package gluon.es2.extension;
 typedef ANGLEInstancedArrays = lime.graphics.opengl.ext.ANGLE_instanced_arrays;
 #elseif js
 typedef ANGLEInstancedArrays = js.html.webgl.extension.ANGLEInstancedArrays;
+#else
+typedef ANGLEInstancedArrays = Any;
 #end

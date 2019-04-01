@@ -4,4 +4,6 @@ package gluon.es2.extension;
 typedef EXTTextureFilterAnisotropic = lime.graphics.opengl.ext.EXT_texture_filter_anisotropic;
 #elseif js
 typedef EXTTextureFilterAnisotropic = js.html.webgl.extension.EXTTextureFilterAnisotropic;
+#else
+typedef EXTTextureFilterAnisotropic = Dynamic;
 #end

@@ -70,24 +70,15 @@ private typedef InternalConstGLContext =
 abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContext {
 
 	public inline function getContextAttributes():GLContextAttributes{
-		#if (js || lime)
-			return untyped this.getContextAttributes();
-		#else
-		#end
+		return this.getContextAttributes();
 	}
 
 	public inline function getSupportedExtensions():Array<String>{
-		#if (js || lime)
-			return this.getSupportedExtensions();
-		#else
-		#end
+		return this.getSupportedExtensions();
 	}
 
 	public inline function getExtension<T>(name: Extension<T>):T{
-		#if (js || lime)
-			return this.getExtension((name: String));
-		#else
-		#end
+		return this.getExtension((name: String));
 	}
 
 	public inline function activeTexture(unit:TextureUnit)

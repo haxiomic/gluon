@@ -1,10 +1,9 @@
 package typedarray;
 
-typedef ArrayBuffer =
-	#if lime
-	lime.utils.ArrayBuffer;
-	#elseif js
-	js.lib.ArrayBuffer;
-	#else
-	// todo
-	#end
+#if lime
+typedef ArrayBuffer = lime.utils.ArrayBuffer;
+#elseif js
+typedef ArrayBuffer = js.lib.ArrayBuffer;
+#elseif cpp
+// todo
+#end

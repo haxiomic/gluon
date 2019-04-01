@@ -8,7 +8,7 @@ typedef ArrayBuffer = lime.utils.ArrayBuffer;
 
 typedef ArrayBuffer = js.lib.ArrayBuffer;
 
-#elseif cpp
+#else
 
 @:nullSafety
 abstract ArrayBuffer(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
@@ -21,31 +21,23 @@ abstract ArrayBuffer(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
 	}
 
 	/**
-		Returns a new ArrayBuffer whose contents are a copy of this ArrayBuffer's bytes from begin, inclusive, up to end, exclusive. If either begin or end is negative, it refers to an index from the end of the array, as opposed to from the beginning.
+		Returns a new ArrayBuffer whose contents are a copy of this ArrayBuffer's bytes from start, inclusive, up to end, exclusive. If either begin or end is negative, it refers to an index from the end of the array, as opposed to from the beginning.
 	**/
 	@:pure
-	public function slice(begin: Int, ?end: Int): ArrayBuffer {
+	public function slice(start: Int, ?end: Int): ArrayBuffer {
 		final lastIndex = this.length - 1;
 
-		if (end == null) {
-			end = this.length;
-		}
-
-		if (begin < 0) {
-			begin = this.length + begin;
-		}
-
-		if (end < 0) {
-			end = this.length + end;
-		}
+		if (end == null) end = this.length;
+		if (start < 0) start = this.length + start;
+		if (end < 0) end = this.length + end;
 
 		end = imin(imax(end, 0), this.length);
-		begin = imin(imax(begin, 0), lastIndex);
+		start = imin(imax(start, 0), lastIndex);
 
-		var copyLength = imax(end - begin, 0);
+		var copyLength = imax(end - start, 0);
 
 		var copy: haxe.io.Bytes = new ArrayBuffer(copyLength);
-		copy.blit(0, this, begin, copyLength);
+		copy.blit(0, this, start, copyLength);
 
 		return copy;
 	}

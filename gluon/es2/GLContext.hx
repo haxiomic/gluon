@@ -2,6 +2,21 @@ package gluon.es2;
 
 import typedarray.BufferSource;
 
+#if cpp
+typedef GLenum     = gluon.es2.impl.CppGLContext.GLenum;
+typedef GLbitfield = gluon.es2.impl.CppGLContext.GLbitfield;
+typedef GLbyte     = gluon.es2.impl.CppGLContext.GLbyte;
+typedef GLshort    = gluon.es2.impl.CppGLContext.GLshort;
+typedef GLint      = gluon.es2.impl.CppGLContext.GLint;
+typedef GLsizei    = gluon.es2.impl.CppGLContext.GLsizei;
+typedef GLintptr   = gluon.es2.impl.CppGLContext.GLintptr;
+typedef GLsizeiptr = gluon.es2.impl.CppGLContext.GLsizeiptr;
+typedef GLubyte    = gluon.es2.impl.CppGLContext.GLubyte;
+typedef GLushort   = gluon.es2.impl.CppGLContext.GLushort;
+typedef GLuint     = gluon.es2.impl.CppGLContext.GLuint;
+typedef GLfloat    = gluon.es2.impl.CppGLContext.GLfloat;
+typedef GLclampf   = gluon.es2.impl.CppGLContext.GLclampf;
+#else
 typedef GLenum     = UInt;
 typedef GLbitfield = UInt;
 typedef GLbyte     = Int;
@@ -15,6 +30,8 @@ typedef GLushort   = UInt;
 typedef GLuint     = UInt;
 typedef GLfloat    = Float;
 typedef GLclampf   = Float;
+#end
+
 
 typedef GLArrayBuffer       = typedarray.ArrayBuffer;
 typedef GLArrayBufferView   = typedarray.ArrayBufferView;
@@ -474,7 +491,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 
 	public inline function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
 		#if (lime_opengl || lime_opengles)
-		this.uniform2fv(location, Std.int(v.length / 2), v);
+		this.uniform2fv(location, cpp.NativeMath.idiv(v.length, 2), v);
 		#else
 		this.uniform2fv(location, v);
 		#end
@@ -485,7 +502,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 
 	public inline function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
 		#if (lime_opengl || lime_opengles)
-		this.uniform2iv(location, Std.int(v.length / 2), v);
+		this.uniform2iv(location, cpp.NativeMath.idiv(v.length, 2), v);
 		#else
 		this.uniform2iv(location, v);
 		#end
@@ -496,7 +513,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 
 	public inline function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
 		#if (lime_opengl || lime_opengles)
-		this.uniform3fv(location, Std.int(v.length / 3), v);
+		this.uniform3fv(location, cpp.NativeMath.idiv(v.length, 3), v);
 		#else
 		this.uniform3fv(location, v);
 		#end
@@ -507,7 +524,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 
 	public inline function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
 		#if (lime_opengl || lime_opengles)
-		this.uniform3iv(location, Std.int(v.length / 3), v);
+		this.uniform3iv(location, cpp.NativeMath.idiv(v.length, 3), v);
 		#else
 		this.uniform3iv(location, v);
 		#end
@@ -518,7 +535,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 
 	public inline function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
 		#if (lime_opengl || lime_opengles)
-		this.uniform4fv(location, Std.int(v.length / 4), v);
+		this.uniform4fv(location, cpp.NativeMath.idiv(v.length, 4), v);
 		#else
 		this.uniform4fv(location, v);
 		#end
@@ -529,7 +546,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 
 	public inline function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
 		#if (lime_opengl || lime_opengles)
-		this.uniform4iv(location, Std.int(v.length / 4), v);
+		this.uniform4iv(location, cpp.NativeMath.idiv(v.length, 4), v);
 		#else
 		this.uniform4iv(location, v);
 		#end
@@ -537,7 +554,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 
 	public inline function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
 		#if (lime_opengl || lime_opengles)
-		this.uniformMatrix2fv(location, Std.int(value.length / 4), transpose, value);
+		this.uniformMatrix2fv(location, cpp.NativeMath.idiv(value.length, 4), transpose, value);
 		#else
 		this.uniformMatrix2fv(location, transpose, value);
 		#end
@@ -545,14 +562,14 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 
 	public inline function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
 		#if (lime_opengl || lime_opengles)
-		this.uniformMatrix3fv(location, Std.int(value.length / 9), transpose, value);
+		this.uniformMatrix3fv(location, cpp.NativeMath.idiv(value.length, 9), transpose, value);
 		#else
 		this.uniformMatrix3fv(location, transpose, value);
 		#end
 
 	public inline function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
 		#if (lime_opengl || lime_opengles)
-		this.uniformMatrix4fv(location, Std.int(value.length / 16), transpose, value);
+		this.uniformMatrix4fv(location, cpp.NativeMath.idiv(value.length, 16), transpose, value);
 		#else
 		this.uniformMatrix4fv(location, transpose, value);
 		#end
@@ -980,6 +997,9 @@ abstract TextureParameter<T>(GLenum) to GLenum from GLenum{
 	var TEXTURE_MIN_FILTER:TextureParameter<TextureMinFilter> = InternalConstGLContext.TEXTURE_MIN_FILTER;
 	var TEXTURE_WRAP_S:TextureParameter<TextureWrapMode>      = InternalConstGLContext.TEXTURE_WRAP_S;
 	var TEXTURE_WRAP_T:TextureParameter<TextureWrapMode>      = InternalConstGLContext.TEXTURE_WRAP_T;
+
+	// extensions
+	var TEXTURE_MAX_ANISOTROPY_EXT:TextureParameter<GLfloat>  = 0x84FE;
 }
 
 @:enum

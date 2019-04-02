@@ -1,5 +1,5 @@
 -main Main
--p ../
+-p ../../
 -D no-debug
 -debug
 -dce full

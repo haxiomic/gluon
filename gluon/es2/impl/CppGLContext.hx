@@ -1,556 +1,561 @@
 package gluon.es2.impl;
 
+import gluon.es2.impl.GL2Header;
 import gluon.es2.GLContext.*;
 import gluon.es2.GLContext;
 import typedarray.BufferSource;
 
 // context acts on global-scope so it's only an class instance for convenience
-class GLES2Context {
+@:cppFileCode('
+#define GL_GLEXT_PROTOTYPES
+#include <gluon/es2/impl/GL2Header.h>
+')
+class CppGLContext {
 
-	public inline function new() {}
+	public function new() {}
 
-	public inline function getContextAttributes():GLContextAttributes {
-
+	public function getContextAttributes():GLContextAttributes {
+		throw 'todo'; // we can probably get this from the EGL api
 	}
-
-	public inline function getSupportedExtensions():Array<String> {
 
+	public function getSupportedExtensions():Array<String> {
+		throw 'todo';
 	}
 
-	public inline function getExtension<T>(name: Extension<T>):T {
-
+	public function getExtension<T>(name: Extension<T>):T {
+		throw 'todo';
 	}
-
-	public inline function activeTexture(unit:TextureUnit) {
 
+	public function activeTexture(unit:TextureUnit) {
+		throw 'todo';
 	}
 
-	public inline function attachShader(program:GLProgram, shader:GLShader) {
-
+	public function attachShader(program:GLProgram, shader:GLShader) {
+		throw 'todo';
 	}
-
-	public inline function bindAttribLocation(program:GLProgram, index:GLuint, name:String) {
 
+	public function bindAttribLocation(program:GLProgram, index:GLuint, name:String) {
+		throw 'todo';
 	}
 
-	public inline function bindBuffer(target:BufferTarget, buffer:GLBuffer) {
-
+	public function bindBuffer(target:BufferTarget, buffer:GLBuffer) {
+		throw 'todo';
 	}
-
-	public inline function bindFramebuffer(target:FramebufferTarget, framebuffer:GLFramebuffer) {
 
+	public function bindFramebuffer(target:FramebufferTarget, framebuffer:GLFramebuffer) {
+		throw 'todo';
 	}
 
-	public inline function bindRenderbuffer(target:RenderbufferTarget, renderbuffer:GLRenderbuffer) {
-
+	public function bindRenderbuffer(target:RenderbufferTarget, renderbuffer:GLRenderbuffer) {
+		throw 'todo';
 	}
-
-	public inline function bindTexture(target:TextureTarget, texture:GLTexture) {
 
+	public function bindTexture(target:TextureTarget, texture:GLTexture) {
+		throw 'todo';
 	}
 
-	public inline function blendColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
-
+	public function blendColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
+		throw 'todo';
 	}
-
-	public inline function blendEquation(mode:BlendEquation) {
 
+	public function blendEquation(mode:BlendEquation) {
+		throw 'todo';
 	}
 
-	public inline function blendEquationSeparate(modeRGB:BlendEquation, modeAlpha:BlendEquation):Void {
-
+	public function blendEquationSeparate(modeRGB:BlendEquation, modeAlpha:BlendEquation):Void {
+		throw 'todo';
 	}
-
-	public inline function blendFunc(sfactor:BlendFactor, dfactor:BlendFactor):Void {
 
+	public function blendFunc(sfactor:BlendFactor, dfactor:BlendFactor):Void {
+		throw 'todo';
 	}
 
-	public inline function blendFuncSeparate(srcRGB:BlendFactor, dstRGB:BlendFactor, srcAlpha:BlendFactor, dstAlpha:BlendFactor):Void {
-
+	public function blendFuncSeparate(srcRGB:BlendFactor, dstRGB:BlendFactor, srcAlpha:BlendFactor, dstAlpha:BlendFactor):Void {
+		throw 'todo';
 	}
 
-	public inline function bufferData(target:BufferTarget, data:BufferSource, usage:BufferUsage) {
-
+	public function bufferData(target:BufferTarget, data:BufferSource, usage:BufferUsage) {
+		throw 'todo';
 	}
-
-	public inline function bufferDataOfSize(target:BufferTarget, size:Int, usage:BufferUsage) {
 
+	public function bufferDataOfSize(target:BufferTarget, size:Int, usage:BufferUsage) {
+		throw 'todo';
 	}
 
-	public inline function bufferSubData(target:BufferTarget, offset:GLintptr, data:BufferSource) {
-
+	public function bufferSubData(target:BufferTarget, offset:GLintptr, data:BufferSource) {
+		throw 'todo';
 	}
-
-	public inline function checkFramebufferStatus(target:FramebufferTarget):FramebufferStatus {
 
+	public function checkFramebufferStatus(target:FramebufferTarget):FramebufferStatus {
+		throw 'todo';
 	}
 
-	public inline function clear(mask:ClearBufferMask) {
-
+	public function clear(mask:ClearBufferMask) {
+		throw 'todo';
 	}
-
-	public inline function clearColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
 
+	public function clearColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
+		throw 'todo';
 	}
 
-	public inline function clearDepth(depth:GLclampf) {
-
+	public function clearDepth(depth:GLclampf) {
+		throw 'todo';
 	}
-
-	public inline function clearStencil(s:GLint) {
 
+	public function clearStencil(s:GLint) {
+		throw 'todo';
 	}
 
-	public inline function colorMask(red:Bool, green:Bool, blue:Bool, alpha:Bool) {
-
+	public function colorMask(red:Bool, green:Bool, blue:Bool, alpha:Bool) {
+		throw 'todo';
 	}
-
-	public inline function compileShader(shader:GLShader) {
 
+	public function compileShader(shader:GLShader) {
+		throw 'todo';
 	}
 
-	public inline function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
-
+	public function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
+		throw 'todo';
 	}
-
-	public inline function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView) {
 
+	public function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView) {
+		throw 'todo';
 	}
 
-	public inline function copyTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, x:GLint, y:GLint, width:GLsizei, height:GLsizei, border:GLint) {
-
+	public function copyTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, x:GLint, y:GLint, width:GLsizei, height:GLsizei, border:GLint) {
+		throw 'todo';
 	}
-
-	public inline function copyTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
 
+	public function copyTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
+		throw 'todo';
 	}
 
-	public inline function createBuffer():GLBuffer {
-
+	public function createBuffer():GLBuffer {
+		throw 'todo';
 	}
-
-	public inline function createFramebuffer():GLFramebuffer {
 
+	public function createFramebuffer():GLFramebuffer {
+		throw 'todo';
 	}
 
-	public inline function createProgram():GLProgram {
-
+	public function createProgram():GLProgram {
+		throw 'todo';
 	}
 
-	public inline function createRenderbuffer():GLRenderbuffer {
-
+	public function createRenderbuffer():GLRenderbuffer {
+		throw 'todo';
 	}
-
-	public inline function createShader(type:ShaderType):GLShader {
 
+	public function createShader(type:ShaderType):GLShader {
+		throw 'todo';
 	}
 
-	public inline function createTexture():GLTexture {
-
+	public function createTexture():GLTexture {
+		throw 'todo';
 	}
-
-	public inline function cullFace(mode:CullFaceMode) {
 
+	public function cullFace(mode:CullFaceMode) {
+		throw 'todo';
 	}
 
-	public inline function deleteBuffer(buffer:GLBuffer) {
-
+	public function deleteBuffer(buffer:GLBuffer) {
+		throw 'todo';
 	}
-
-	public inline function deleteFramebuffer(framebuffer:GLFramebuffer) {
 
+	public function deleteFramebuffer(framebuffer:GLFramebuffer) {
+		throw 'todo';
 	}
 
-	public inline function deleteProgram(program:GLProgram) {
-
+	public function deleteProgram(program:GLProgram) {
+		throw 'todo';
 	}
-
-	public inline function deleteRenderbuffer(renderbuffer:GLRenderbuffer) {
 
+	public function deleteRenderbuffer(renderbuffer:GLRenderbuffer) {
+		throw 'todo';
 	}
 
-	public inline function deleteShader(shader:GLShader) {
-
+	public function deleteShader(shader:GLShader) {
+		throw 'todo';
 	}
-
-	public inline function deleteTexture(texture:GLTexture) {
 
+	public function deleteTexture(texture:GLTexture) {
+		throw 'todo';
 	}
 
-	public inline function depthFunc(func:ComparisonFunction):Void {
-
+	public function depthFunc(func:ComparisonFunction):Void {
+		throw 'todo';
 	}
-
-	public inline function depthMask(flag:Bool):Void {
 
+	public function depthMask(flag:Bool):Void {
+		throw 'todo';
 	}
 
-	public inline function depthRange(zNear:GLclampf, zFar:GLclampf):Void {
-
+	public function depthRange(zNear:GLclampf, zFar:GLclampf):Void {
+		throw 'todo';
 	}
-
-	public inline function detachShader(program:GLProgram, shader:GLShader) {
 
+	public function detachShader(program:GLProgram, shader:GLShader) {
+		throw 'todo';
 	}
 
-	public inline function disable(cap:Capability) {
-
+	public function disable(cap:Capability) {
+		throw 'todo';
 	}
-
-	public inline function disableVertexAttribArray(index:GLuint) {
 
+	public function disableVertexAttribArray(index:GLuint) {
+		throw 'todo';
 	}
 
-	public inline function drawArrays(mode:DrawMode, first:GLint, count:GLsizei) {
-
+	public function drawArrays(mode:DrawMode, first:GLint, count:GLsizei) {
+		throw 'todo';
 	}
 
-	public inline function drawElements(mode:DrawMode, count:GLsizei, type:DataType, offset:GLintptr) {
-
+	public function drawElements(mode:DrawMode, count:GLsizei, type:DataType, offset:GLintptr) {
+		throw 'todo';
 	}
-
-	public inline function enable(cap:Capability) {
 
+	public function enable(cap:Capability) {
+		throw 'todo';
 	}
 
-	public inline function enableVertexAttribArray(index:GLuint) {
-
+	public function enableVertexAttribArray(index:GLuint) {
+		throw 'todo';
 	}
-
-	public inline function finish() {
 
+	public function finish() {
+		throw 'todo';
 	}
 
-	public inline function flush() {
-
+	public function flush() {
+		throw 'todo';
 	}
-
-	public inline function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, renderbuffer:GLRenderbuffer) {
 
+	public function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, renderbuffer:GLRenderbuffer) {
+		throw 'todo';
 	}
 
-	public inline function framebufferTexture2D(target:FramebufferTarget, attachment:FramebufferAttachement, textarget:TextureTarget, texture:GLTexture, level:GLint) {
-
+	public function framebufferTexture2D(target:FramebufferTarget, attachment:FramebufferAttachement, textarget:TextureTarget, texture:GLTexture, level:GLint) {
+		throw 'todo';
 	}
-
-	public inline function frontFace(mode:FrontFaceDirection) {
 
+	public function frontFace(mode:FrontFaceDirection) {
+		throw 'todo';
 	}
 
-	public inline function generateMipmap(target:TextureTarget) {
-
+	public function generateMipmap(target:TextureTarget) {
+		throw 'todo';
 	}
-
-	public inline function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
 
+	public function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
+		throw 'todo';
 	}
 
-	public inline function getActiveUniform(program:GLProgram, index:GLuint):GLActiveInfo {
-
+	public function getActiveUniform(program:GLProgram, index:GLuint):GLActiveInfo {
+		throw 'todo';
 	}
-
-	public inline function getAttachedShaders(program:GLProgram):Array<GLShader> {
 
+	public function getAttachedShaders(program:GLProgram):Array<GLShader> {
+		throw 'todo';
 	}
 
-	public inline function getAttribLocation(program:GLProgram, name:String):GLint {
-
+	public function getAttribLocation(program:GLProgram, name:String):GLint {
+		throw 'todo';
 	}
-
-	public inline function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T {
 
+	public function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T {
+		throw 'todo';
 	}
 
-	public inline function getParameter<T>(pname:Parameter<T>):T {
-
+	public function getParameter<T>(pname:Parameter<T>):T {
+		throw 'todo';
 	}
-
-	public inline function getError():ErrorCode {
 
+	public function getError():ErrorCode {
+		throw 'todo';
 	}
 
-	public inline function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>):T {
-
+	public function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>):T {
+		throw 'todo';
 	}
 
-	public inline function getProgramParameter<T>(program:GLProgram, pname:ProgramParameter<T>):T {
-
+	public function getProgramParameter<T>(program:GLProgram, pname:ProgramParameter<T>):T {
+		throw 'todo';
 	}
-
-	public inline function getProgramInfoLog(program:GLProgram):String {
 
+	public function getProgramInfoLog(program:GLProgram):String {
+		throw 'todo';
 	}
 
-	public inline function getRenderbufferParameter<T>(target:RenderbufferTarget, pname:RenderbufferParameter<T>):T {
-
+	public function getRenderbufferParameter<T>(target:RenderbufferTarget, pname:RenderbufferParameter<T>):T {
+		throw 'todo';
 	}
-
-	public inline function getShaderParameter<T>(shader:GLShader, pname:ShaderParameter<T>):T {
 
+	public function getShaderParameter<T>(shader:GLShader, pname:ShaderParameter<T>):T {
+		throw 'todo';
 	}
 
-	public inline function getShaderPrecisionFormat(shadertype:ShaderType, precisiontype:PrecisionType):GLShaderPrecisionFormat {
-
+	public function getShaderPrecisionFormat(shadertype:ShaderType, precisiontype:PrecisionType):GLShaderPrecisionFormat {
+		throw 'todo';
 	}
-
-	public inline function getShaderInfoLog(shader:GLShader):String {
 
+	public function getShaderInfoLog(shader:GLShader):String {
+		throw 'todo';
 	}
 
-	public inline function getShaderSource(shader:GLShader):String {
-
+	public function getShaderSource(shader:GLShader):String {
+		throw 'todo';
 	}
-
-	public inline function getTexParameter<T>(target:TextureTarget, pname:TextureParameter<T>):T {
 
+	public function getTexParameter<T>(target:TextureTarget, pname:TextureParameter<T>):T {
+		throw 'todo';
 	}
 
-	public inline function getUniform(program:GLProgram, location:GLUniformLocation):Dynamic {
-
+	public function getUniform(program:GLProgram, location:GLUniformLocation):Dynamic {
+		throw 'todo';
 	}
-
-	public inline function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
 
+	public function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
+		throw 'todo';
 	}
 
-	public inline function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T {
-
+	public function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T {
+		throw 'todo';
 	}
-
-	public inline function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr {
 
+	public function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr {
+		throw 'todo';
 	}
 
-	public inline function hint(target:HintTarget, mode:HintMode) {
-
+	public function hint(target:HintTarget, mode:HintMode) {
+		throw 'todo';
 	}
-
-	public inline function isBuffer(buffer:GLBuffer):Bool {
 
+	public function isBuffer(buffer:GLBuffer):Bool {
+		throw 'todo';
 	}
 
-	public inline function isEnabled(cap:Capability):Bool {
-
+	public function isEnabled(cap:Capability):Bool {
+		throw 'todo';
 	}
-
-	public inline function isFramebuffer(framebuffer:GLFramebuffer):Bool {
 
+	public function isFramebuffer(framebuffer:GLFramebuffer):Bool {
+		throw 'todo';
 	}
 
-	public inline function isProgram(program:GLProgram):Bool {
-
+	public function isProgram(program:GLProgram):Bool {
+		throw 'todo';
 	}
 
-	public inline function isRenderbuffer(renderbuffer:GLRenderbuffer):Bool {
-
+	public function isRenderbuffer(renderbuffer:GLRenderbuffer):Bool {
+		throw 'todo';
 	}
-
-	public inline function isShader(shader:GLShader):Bool {
 
+	public function isShader(shader:GLShader):Bool {
+		throw 'todo';
 	}
 
-	public inline function isTexture(texture:GLTexture):Bool {
-
+	public function isTexture(texture:GLTexture):Bool {
+		throw 'todo';
 	}
-
-	public inline function lineWidth(width:GLfloat) {
 
+	public function lineWidth(width:GLfloat) {
+		throw 'todo';
 	}
 
-	public inline function linkProgram(program:GLProgram) {
-
+	public function linkProgram(program:GLProgram) {
+		throw 'todo';
 	}
-
-	public inline function pixelStorei<T>(pname:PixelStoreParameter<T>, param:T) {
 
+	public function pixelStorei<T>(pname:PixelStoreParameter<T>, param:T) {
+		throw 'todo';
 	}
 
-	public inline function polygonOffset(factor:GLfloat, units:GLfloat) {
-
+	public function polygonOffset(factor:GLfloat, units:GLfloat) {
+		throw 'todo';
 	}
-
-	public inline function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 
+	public function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
+		throw 'todo';
 	}
 
-	public inline function renderbufferStorage(target:RenderbufferTarget, internalformat:RenderbufferFormat, width:GLsizei, height:GLsizei) {
-
+	public function renderbufferStorage(target:RenderbufferTarget, internalformat:RenderbufferFormat, width:GLsizei, height:GLsizei) {
+		throw 'todo';
 	}
-
-	public inline function sampleCoverage(value:GLclampf, invert:Bool) {
 
+	public function sampleCoverage(value:GLclampf, invert:Bool) {
+		throw 'todo';
 	}
 
-	public inline function scissor(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
-
+	public function scissor(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
+		throw 'todo';
 	}
-
-	public inline function shaderSource(shader:GLShader, source:String) {
 
+	public function shaderSource(shader:GLShader, source:String) {
+		throw 'todo';
 	}
 
-	public inline function stencilFunc(func:ComparisonFunction, ref:GLint, mask:GLuint) {
-
+	public function stencilFunc(func:ComparisonFunction, ref:GLint, mask:GLuint) {
+		throw 'todo';
 	}
-
-	public inline function stencilFuncSeparate(face:CullFaceMode, func:ComparisonFunction, ref:GLint, mask:GLuint) {
 
+	public function stencilFuncSeparate(face:CullFaceMode, func:ComparisonFunction, ref:GLint, mask:GLuint) {
+		throw 'todo';
 	}
 
-	public inline function stencilMask(mask:GLuint) {
-
+	public function stencilMask(mask:GLuint) {
+		throw 'todo';
 	}
-
-	public inline function stencilMaskSeparate(face:CullFaceMode, mask:GLuint) {
 
+	public function stencilMaskSeparate(face:CullFaceMode, mask:GLuint) {
+		throw 'todo';
 	}
 
-	public inline function stencilOp(fail:Operation, zfail:Operation, zpass:Operation) {
-
+	public function stencilOp(fail:Operation, zfail:Operation, zpass:Operation) {
+		throw 'todo';
 	}
 
-	public inline function stencilOpSeparate(face:CullFaceMode, fail:Operation, zfail:Operation, zpass:Operation) {
-
+	public function stencilOpSeparate(face:CullFaceMode, fail:Operation, zfail:Operation, zpass:Operation) {
+		throw 'todo';
 	}
-
-	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 
+	public function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
+		throw 'todo';
 	}
 
-	public inline function texParameterf<T:GLfloat>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
-
+	public function texParameterf<T:GLfloat>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
+		throw 'todo';
 	}
-
-	public inline function texParameteri<T:GLint>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
 
+	public function texParameteri<T:GLint>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
+		throw 'todo';
 	}
 
-	public inline function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-
+	public function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
+		throw 'todo';
 	}
-
-	public inline function uniform1f(location:GLUniformLocation, x:GLfloat) {
 
+	public function uniform1f(location:GLUniformLocation, x:GLfloat) {
+		throw 'todo';
 	}
 
-	public inline function uniform1fv(location:GLUniformLocation, v:GLFloat32Array) {
-
+	public function uniform1fv(location:GLUniformLocation, v:GLFloat32Array) {
+		throw 'todo';
 	}
-
-	public inline function uniform1i(location:GLUniformLocation, x:GLint) {
 
+	public function uniform1i(location:GLUniformLocation, x:GLint) {
+		throw 'todo';
 	}
 
-	public inline function uniform1iv(location:GLUniformLocation, v:GLInt32Array) {
-
+	public function uniform1iv(location:GLUniformLocation, v:GLInt32Array) {
+		throw 'todo';
 	}
-
-	public inline function uniform2f(location:GLUniformLocation, x:GLfloat, y:GLfloat) {
 
+	public function uniform2f(location:GLUniformLocation, x:GLfloat, y:GLfloat) {
+		throw 'todo';
 	}
 
-	public inline function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
-
+	public function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
+		throw 'todo';
 	}
-
-	public inline function uniform2i(location:GLUniformLocation, x:GLint, y:GLint) {
 
+	public function uniform2i(location:GLUniformLocation, x:GLint, y:GLint) {
+		throw 'todo';
 	}
 
-	public inline function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
-
+	public function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
+		throw 'todo';
 	}
-
-	public inline function uniform3f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat) {
 
+	public function uniform3f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat) {
+		throw 'todo';
 	}
 
-	public inline function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
-
+	public function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
+		throw 'todo';
 	}
-
-	public inline function uniform3i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint) {
 
+	public function uniform3i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint) {
+		throw 'todo';
 	}
 
-	public inline function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
-
+	public function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
+		throw 'todo';
 	}
 
-	public inline function uniform4f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
-
+	public function uniform4f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
+		throw 'todo';
 	}
-
-	public inline function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
 
+	public function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
+		throw 'todo';
 	}
 
-	public inline function uniform4i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint, w:GLint) {
-
+	public function uniform4i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint, w:GLint) {
+		throw 'todo';
 	}
-
-	public inline function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
 
+	public function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
+		throw 'todo';
 	}
 
-	public inline function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-
+	public function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
+		throw 'todo';
 	}
-
-	public inline function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
 
+	public function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
+		throw 'todo';
 	}
 
-	public inline function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-
+	public function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
+		throw 'todo';
 	}
-
-	public inline function useProgram(program:GLProgram) {
 
+	public function useProgram(program:GLProgram) {
+		throw 'todo';
 	}
 
-	public inline function validateProgram(program:GLProgram) {
-
+	public function validateProgram(program:GLProgram) {
+		throw 'todo';
 	}
-
-	public inline function vertexAttrib1f(index:GLuint, x:GLfloat) {
 
+	public function vertexAttrib1f(index:GLuint, x:GLfloat) {
+		throw 'todo';
 	}
 
-	public inline function vertexAttrib1fv(index:GLuint, values:GLFloat32Array) {
-
+	public function vertexAttrib1fv(index:GLuint, values:GLFloat32Array) {
+		throw 'todo';
 	}
-
-	public inline function vertexAttrib2f(index:GLuint, x:GLfloat, y:GLfloat) {
 
+	public function vertexAttrib2f(index:GLuint, x:GLfloat, y:GLfloat) {
+		throw 'todo';
 	}
 
-	public inline function vertexAttrib2fv(index:GLuint, values:GLFloat32Array) {
-
+	public function vertexAttrib2fv(index:GLuint, values:GLFloat32Array) {
+		throw 'todo';
 	}
-
-	public inline function vertexAttrib3f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat) {
 
+	public function vertexAttrib3f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat) {
+		throw 'todo';
 	}
 
-	public inline function vertexAttrib3fv(index:GLuint, values:GLFloat32Array) {
-
+	public function vertexAttrib3fv(index:GLuint, values:GLFloat32Array) {
+		throw 'todo';
 	}
-
-	public inline function vertexAttrib4f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
 
+	public function vertexAttrib4f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
+		throw 'todo';
 	}
 
-	public inline function vertexAttrib4fv(index:GLuint, values:GLFloat32Array) {
-
+	public function vertexAttrib4fv(index:GLuint, values:GLFloat32Array) {
+		throw 'todo';
 	}
 
-	public inline function vertexAttribPointer(index:GLuint, size:GLint, type:DataType, normalized:Bool, stride:GLsizei, offset:GLintptr) {
-
+	public function vertexAttribPointer(index:GLuint, size:GLint, type:DataType, normalized:Bool, stride:GLsizei, offset:GLintptr) {
+		throw 'todo';
 	}
-
-	public inline function viewport(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
 
+	public function viewport(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
+		throw 'todo';
 	}
 
 	// constants

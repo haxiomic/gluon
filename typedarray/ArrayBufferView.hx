@@ -286,6 +286,17 @@ class BuildArrayBufferView {
 			}
 		}).fields;
 
+		// add target specific fields
+		if (haxe.macro.Context.getDefines().exists('cpp')) {
+			newFields = newFields.concat((macro class CppFields {
+				@:pure
+				@:access(typedarray.ArrayBufferViewBase)
+				public inline function toCppPointer(): cpp.Pointer<$ArrayTypeT> {
+					return cast cpp.NativeArray.address((cast this.nativeBytes: Array<$ArrayTypeT>), 0);
+				}
+			}).fields);
+		}
+
 		return currentFields.concat(newFields);
 	}
 

@@ -42,6 +42,13 @@ abstract ArrayBuffer(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
 		return copy;
 	}
 
+	#if cpp
+	@:pure
+	public inline function toCppPointer(): cpp.Pointer<cpp.UInt8> {
+		return cpp.NativeArray.address(this.getData(), 0);
+	}
+	#end
+
 	@:pure inline function imax(a: Int, b: Int) return a > b ? a : b;
 	@:pure inline function imin(a: Int, b: Int) return a < b ? a : b;
 

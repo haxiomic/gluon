@@ -14,7 +14,11 @@ import typedarray.ArrayBufferView.ArrayBufferViewBase;
 import typedarray.ArrayBufferView.ArrayLike;
 import typedarray.ArrayBufferView.ArrayBufferViewImplIterator;
 
+#if cpp
+private typedef ArrayType = cpp.Float64;
+#else
 private typedef ArrayType = Float;
+#end
 
 @:nullSafety
 @:forward

@@ -67,7 +67,7 @@ class Int32ArrayImpl extends ArrayBufferViewBase {
 		var p = i * BYTES_PER_ELEMENT + this.byteOffset;
 
 		#if cpp
-		return cpp.NativeArray.unsafeGet(this.nativeBytes, p);
+		return untyped __global__.__hxcpp_memory_get_i32(this.nativeBytes, p);
 		#else
 		return (this.buffer: haxe.io.Bytes).get(p);
 		#end
@@ -84,7 +84,7 @@ class Int32ArrayImpl extends ArrayBufferViewBase {
 		var p = i * BYTES_PER_ELEMENT + this.byteOffset;
 
 		#if cpp
-		cpp.NativeArray.unsafeSet(this.nativeBytes, p, v);
+		untyped __global__.__hxcpp_memory_set_i32(this.nativeBytes, p, v);
 		#else
 		(this.buffer: haxe.io.Bytes).set(p, v);
 		#end

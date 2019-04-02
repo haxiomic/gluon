@@ -55,7 +55,7 @@ private typedef InternalGLContext =
 	#elseif js
 		js.html.webgl.RenderingContext;
 	#elseif cpp
-		gluon.es2.impl.GLES2Context;
+		gluon.es2.impl.CppGLContext;
 	#end
 
 private typedef InternalConstGLContext =
@@ -64,7 +64,7 @@ private typedef InternalConstGLContext =
 	#elseif js
 		js.html.webgl.RenderingContext;
 	#elseif cpp
-		gluon.es2.impl.GLES2Context;
+		gluon.es2.impl.CppGLContext;
 	#end
 
 abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContext {
@@ -132,8 +132,10 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 			#else
 				this.bufferData(target, size, null, usage);
 			#end
-		#else
+		#elseif js
 		this.bufferData(target, size, usage);
+		#else
+		this.bufferDataOfSize(target, size, usage);
 		#end
 	}
 

@@ -1,9 +1,11 @@
 package gluon.es2;
 
+import gluon.es2.GLContext.GLuint;
 /**
 	Platform consistent wrapper, so that objects can be compared with null (natively these are Ints and 0 means null)
 **/
-abstract GLObject<InternalType>(Null<InternalType>) from InternalType to InternalType {
+@:forward
+@:notNull abstract GLObject<InternalType>(GLObjectEnum) from GLObjectEnum to GLObjectEnum {
 
 	public var invalidated(get, never):Bool;
 
@@ -15,27 +17,9 @@ abstract GLObject<InternalType>(Null<InternalType>) from InternalType to Interna
 		#end
 	}
 
-	#if !js
-	static inline var nullValue = 0;
+}
 
-	@:op(A == B)
-	static function eq(lhs: GLObject<Any>, rhs: GLObject<Any>): Bool;
-
-	@:op(A == B)
-	static inline function eqA<T>(lhs: GLObject<T>, rhs: Any) {
-		var lhsInternal: Null<T> = cast lhs; 
-		if (lhsInternal == (cast nullValue) && rhs == null) return true;
-		if (lhsInternal == null && rhs == nullValue) return true;
-		return lhsInternal == rhs;
-	}
-
-	@:op(A == B)
-	static inline function eqB<T>(lhs: Any, rhs: GLObject<T>) {
-		var rhsInternal: Null<T> = cast rhs; 
-		if (rhsInternal == (cast nullValue) && lhs == null) return true;
-		if (rhsInternal == null && lhs == nullValue) return true;
-		return rhsInternal == lhs;
-	}
-	#end
-
+// we use an enum so you can do gl.bindBuffer(..., NONE) or if (texture == NONE)
+private enum abstract GLObjectEnum(GLContext.GLuint) from GLContext.GLuint to GLContext.GLuint {
+	var NONE = #if js null #else 0 #end;
 }

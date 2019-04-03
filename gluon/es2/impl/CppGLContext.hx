@@ -1,5 +1,9 @@
 package gluon.es2.impl;
 
+import typedarray.Uint32Array;
+import typedarray.Int32Array;
+import typedarray.Float32Array;
+import typedarray.Uint8Array;
 import cpp.RawConstPointer;
 import cpp.Native;
 import cpp.NativeArray;
@@ -305,9 +309,105 @@ class CppGLContext {
 	}
 
 	public function getParameter<T>(pname:Parameter<T>):T {
-		// return untyped __global__.glGetParameter(pname);
-		throw 'todo';
+		switch (pname) {
+			case Parameter.RENDERER, Parameter.SHADING_LANGUAGE_VERSION, Parameter.VENDOR, Parameter.VERSION:
+				var result: cpp.RawConstPointer<GLubyte> = untyped __global__.glGetString(pname);
+				var cStr: cpp.ConstCharStar = untyped __cpp__('reinterpret_cast<const char*>({0})', result);
+				return cStr.toString();
+
+			case Parameter.ALIASED_LINE_WIDTH_RANGE, Parameter.ALIASED_POINT_SIZE_RANGE, Parameter.DEPTH_RANGE: 
+				return getFloat32Array(pname, 2);
+
+			case Parameter.BLEND_COLOR, Parameter.COLOR_CLEAR_VALUE:
+				return getFloat32Array(pname, 4);
+
+			case Parameter.BLEND, Parameter.CULL_FACE, Parameter.DEPTH_TEST, Parameter.DEPTH_WRITEMASK, Parameter.DITHER, Parameter.POLYGON_OFFSET_FILL, Parameter.SAMPLE_COVERAGE_INVERT, Parameter.SCISSOR_TEST, Parameter.STENCIL_TEST:
+				return getBool(pname);
+
+			case Parameter.ACTIVE_TEXTURE:
+				return getInt32(pname);
+
+			case Parameter.BLEND_DST_ALPHA, Parameter.BLEND_DST_RGB, Parameter.BLEND_SRC_ALPHA, Parameter.BLEND_SRC_RGB:
+				return getInt32(pname);
+
+			case Parameter.BLEND_EQUATION_ALPHA, Parameter.BLEND_EQUATION_RGB:
+				return getInt32(pname);
+
+			case Parameter.CULL_FACE_MODE:
+				return getInt32(pname);
+
+			case Parameter.DEPTH_FUNC, Parameter.STENCIL_BACK_FUNC, Parameter.STENCIL_FUNC:
+				return getInt32(pname);
+
+			case Parameter.STENCIL_PASS_DEPTH_FAIL, Parameter.STENCIL_PASS_DEPTH_PASS, Parameter.STENCIL_BACK_PASS_DEPTH_FAIL, Parameter.STENCIL_BACK_PASS_DEPTH_PASS, Parameter.STENCIL_FAIL, Parameter.STENCIL_BACK_FAIL:
+				return getInt32(pname);
+
+			case Parameter.FRONT_FACE:
+				return getInt32(pname);
+
+			case Parameter.GENERATE_MIPMAP_HINT:
+				return getInt32(pname);
+
+			case Parameter.IMPLEMENTATION_COLOR_READ_FORMAT:
+				return getInt32(pname);
+
+			case Parameter.IMPLEMENTATION_COLOR_READ_TYPE:
+				return getInt32(pname);
+
+			case Parameter.DEPTH_CLEAR_VALUE, Parameter.LINE_WIDTH, Parameter.POLYGON_OFFSET_FACTOR, Parameter.POLYGON_OFFSET_UNITS, Parameter.SAMPLE_COVERAGE_VALUE:
+				return getFloat32(pname);
+				
+			case Parameter.ALPHA_BITS, Parameter.BLUE_BITS, Parameter.DEPTH_BITS, Parameter.GREEN_BITS, Parameter.MAX_COMBINED_TEXTURE_IMAGE_UNITS, Parameter.MAX_CUBE_MAP_TEXTURE_SIZE, Parameter.MAX_FRAGMENT_UNIFORM_VECTORS, Parameter.MAX_RENDERBUFFER_SIZE, Parameter.MAX_TEXTURE_IMAGE_UNITS, Parameter.MAX_TEXTURE_SIZE, Parameter.MAX_VARYING_VECTORS, Parameter.MAX_VERTEX_ATTRIBS, Parameter.MAX_VERTEX_TEXTURE_IMAGE_UNITS, Parameter.MAX_VERTEX_UNIFORM_VECTORS, Parameter.PACK_ALIGNMENT, Parameter.RED_BITS, Parameter.SAMPLE_BUFFERS, Parameter.SAMPLES, Parameter.STENCIL_BACK_REF, Parameter.STENCIL_BITS, Parameter.STENCIL_CLEAR_VALUE, Parameter.STENCIL_REF, Parameter.SUBPIXEL_BITS, Parameter.UNPACK_ALIGNMENT:
+				return getInt32(pname);
+
+			case Parameter.STENCIL_BACK_VALUE_MASK, Parameter.STENCIL_BACK_WRITEMASK, Parameter.STENCIL_VALUE_MASK, Parameter.STENCIL_WRITEMASK:
+				return getInt32(pname);
+			
+			case Parameter.MAX_VIEWPORT_DIMS:
+				return getInt32Array(pname, 2);
+
+			case Parameter.SCISSOR_BOX, Parameter.VIEWPORT:
+				return getInt32Array(pname, 4);
+
+			case Parameter.COLOR_WRITEMASK:
+				return getBoolArray(pname, 4);
+			
+			case Parameter.COMPRESSED_TEXTURE_FORMATS:
+				//"The core WebGL specification does not define any supported compressed texture formats" (supported via extensions)
+				return new Uint32Array(0);
+
+			case Parameter.ARRAY_BUFFER_BINDING, Parameter.ELEMENT_ARRAY_BUFFER_BINDING:
+				return getInt32(pname);
+
+			case Parameter.FRAMEBUFFER_BINDING:
+				return getInt32(pname);
+
+			case Parameter.CURRENT_PROGRAM:
+				return getInt32(pname);
+
+			case Parameter.RENDERBUFFER_BINDING:
+				return getInt32(pname);
+
+			case Parameter.TEXTURE_BINDING_2D, Parameter.TEXTURE_BINDING_CUBE_MAP:
+				return getInt32(pname);
+
+			// case UNPACK_COLORSPACE_CONVERSION_WEBGL:
+			// 	args.GetReturnValue().Set(args.Holder()->GetHiddenValue(v8::String::NewFromUtf8(isolate, "UNPACK_COLORSPACE_CONVERSION_WEBGL")));
+			// case UNPACK_FLIP_Y_WEBGL:
+				// args.GetReturnValue().Set(args.Holder()->GetHiddenValue(v8::String::NewFromUtf8(isolate, "UNPACK_FLIP_Y_WEBGL")));
+			// case UNPACK_PREMULTIPLY_ALPHA_WEBGL:
+				// args.GetReturnValue().Set(args.Holder()->GetHiddenValue(v8::String::NewFromUtf8(isolate, "UNPACK_PREMULTIPLY_ALPHA_WEBGL")));
+			// extensions
+			// default: //assume pname refers to an extension parameter
+		}
+
+		#if debug
+		trace('Unknown parameter ${StringTools.hex(pname)} in getParameter, assuming Int32 result');
+		#end
+
+		return getInt32(pname);
 	}
+
 
 	public function getError():ErrorCode {
 		return untyped __global__.glGetError();
@@ -358,7 +458,7 @@ class CppGLContext {
 	public function getTexParameter<T>(target:TextureTarget, pname:TextureParameter<T>):T {
 		switch pname {
 			// float parameters
-			case TEXTURE_MAX_ANISOTROPY_EXT:
+			case TextureParameter.TEXTURE_MAX_ANISOTROPY_EXT:
 				var ref: GLfloat = 0;
 				untyped __cpp__('glGetTexParameterfv({0}, {1}, &{2})', target, pname, ref);
 				return (ref: Dynamic);
@@ -624,6 +724,46 @@ class CppGLContext {
 
 	public function viewport(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
 		untyped __global__.glViewport(x, y, width, height);
+	}
+
+	// internal utility methods
+	function getFloat32Array(pname: GLenum, n: Int) {
+		var temp = new Float32Array(n);
+		untyped __global__.glGetFloatv(pname, temp.toCppPointer());
+		return new Float32Array(temp);
+	}
+
+	function getInt32Array(pname: GLenum, n: Int) {
+		var temp = new Int32Array(n);
+		untyped __global__.glGetIntegerv(pname, temp.toCppPointer());
+		return new Int32Array(temp);
+	}
+
+	function getUint8Array(pname: GLenum, n: Int) {
+		var temp = new Uint8Array(n);
+		untyped __global__.glGetBooleanv(pname, temp.toCppPointer());
+		return new Uint8Array(temp);
+	}
+
+	function getBoolArray(pname: GLenum, n: Int) {
+		var u8 = getUint8Array(pname, n);
+		var boolArray = new Array<Bool>();
+		for (i in 0...n) {
+			boolArray[i] = u8[i] == 0 ? false : true;
+		}
+		return boolArray;
+	}
+
+	inline function getInt32<T>(pname: GLenum): T {
+		return cast getInt32Array(pname, 1)[0];
+	}
+
+	inline function getBool(pname: GLenum): Bool {
+		return getUint8Array(pname, 1)[0] == 1 ? true : false;
+	}
+
+	inline function getFloat32(pname: GLenum): GLfloat {
+		return cast getFloat32Array(pname, 1)[0];
 	}
 
 	// constants

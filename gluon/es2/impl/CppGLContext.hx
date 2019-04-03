@@ -300,8 +300,10 @@ class CppGLContext {
 		var nameLength: GLsizei = 0;
 		var size: GLint = 0;
 		var type: GLenum = 0;
+
 		var nameBuffer = new Uint8Array(maxNameLength);
-		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBuffer.toCppPointer().raw);
+		var nameBufferPtr = nameBuffer.toCppPointer().raw;
+		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
 		untyped __global__.glGetActiveAttrib(
 			program,
@@ -329,7 +331,8 @@ class CppGLContext {
 		var size: GLint = 0;
 		var type: GLenum = 0;
 		var nameBuffer = new Uint8Array(maxNameLength);
-		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBuffer.toCppPointer().raw);
+		var nameBufferPtr = nameBuffer.toCppPointer().raw;
+		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
 		untyped __global__.glGetActiveUniform(
 			program,
@@ -481,8 +484,17 @@ class CppGLContext {
 	}
 
 	public function getProgramInfoLog(program:GLProgram):String {
-		// return untyped __global__.glGetProgramInfoLog(program);
-		throw 'todo - getProgramInfoLog';
+		var maxInfoLogLength: GLint = getProgramParameter(program, INFO_LOG_LENGTH);
+		var returnedStringLength: GLsizei = 0;
+
+		var infoLogBuffer = new Uint8Array(maxInfoLogLength);
+		var infoLogBufferPtr = infoLogBuffer.toCppPointer().raw;
+		var infoLogPointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
+
+		untyped __global__.glGetProgramInfoLog(program, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
+
+		var cStr: cpp.ConstCharStar = cast infoLogPointer;
+		return cStr.toString();
 	}
 
 	public function getRenderbufferParameter<T>(target:RenderbufferTarget, pname:RenderbufferParameter<T>):T {
@@ -508,13 +520,31 @@ class CppGLContext {
 	}
 
 	public function getShaderInfoLog(shader:GLShader):String {
-		// return untyped __global__.glGetShaderInfoLog(shader);
-		throw 'todo - getShaderInfoLog';
+		var maxInfoLogLength: GLint = getShaderParameter(shader, INFO_LOG_LENGTH);
+		var returnedStringLength: GLsizei = 0;
+
+		var infoLogBuffer = new Uint8Array(maxInfoLogLength);
+		var infoLogBufferPtr = infoLogBuffer.toCppPointer().raw;
+		var infoLogPointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
+
+		untyped __global__.glGetShaderInfoLog(shader, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
+
+		var cStr: cpp.ConstCharStar = cast infoLogPointer;
+		return cStr.toString();
 	}
 
 	public function getShaderSource(shader:GLShader):String {
-		// return untyped __global__.glGetShaderSource(shader);
-		throw 'todo - getShaderSource';
+		var maxSourceLength: GLint = getShaderParameter(shader, SHADER_SOURCE_LENGTH);
+		var returnedStringLength: GLsizei = 0;
+		
+		var sourceBuffer = new Uint8Array(maxSourceLength);
+		var sourceBufferPtr = sourceBuffer.toCppPointer().raw;
+		var sourcePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', sourceBufferPtr);
+
+		untyped __global__.glGetShaderSource(shader, maxSourceLength, Native.addressOf(returnedStringLength), sourcePointer);
+		
+		var cStr: cpp.ConstCharStar = cast sourcePointer;
+		return cStr.toString();
 	}
 
 	public function getTexParameter<T>(target:TextureTarget, pname:TextureParameter<T>):T {
@@ -532,10 +562,70 @@ class CppGLContext {
 	}
 
 	public function getUniform(program:GLProgram, location:GLUniformLocation):Dynamic {
-		// call getActiveUniform(program, location) to get uniform info, then call glGetUniformfv or glGetUniformiv
-		// return typedarray is uniform is array, otherwise just int/float
-		throw 'todo - getUniform';
-		// return untyped __global__.glGetUniform(program, location);
+		var info = getActiveUniform(program, location);
+
+		inline function getUniformFloat32Array(n: Int) {
+			var temp = new Float32Array(n);
+			untyped __global__.glGetUniformfv(program, location, temp.toCppPointer());
+			return new Float32Array(temp);
+		}
+
+		inline function getUniformInt32Array(n: Int) {
+			var temp = new Int32Array(n);
+			untyped __global__.glGetUniformiv(program, location, temp.toCppPointer());
+			return new Int32Array(temp);
+		}
+
+		// glGetUniform{f,i}v (GLuint program, GLint location, GLfloat *params)
+		switch info.type {
+			case UniformType.FLOAT:
+				return getUniformFloat32Array(1)[0];
+
+			case UniformType.FLOAT_VEC2: 
+				return getUniformFloat32Array(2);
+
+			case UniformType.FLOAT_VEC3:
+				return getUniformFloat32Array(3);
+
+			case UniformType.FLOAT_VEC4: 
+				return getUniformFloat32Array(4);
+
+			case UniformType.FLOAT_MAT2: 
+				return getUniformFloat32Array(4);
+
+			case UniformType.FLOAT_MAT3: 
+				return getUniformFloat32Array(9);
+
+			case UniformType.FLOAT_MAT4: 
+				return getUniformFloat32Array(16);
+
+			case UniformType.INT:
+				return getUniformInt32Array(1)[0];
+
+			case UniformType.INT_VEC2: 
+				return getUniformInt32Array(2);
+
+			case UniformType.INT_VEC3: 
+				return getUniformInt32Array(3);
+
+			case UniformType.INT_VEC4: 
+				return getUniformInt32Array(4);
+
+			case UniformType.BOOL: 
+				return getUniformInt32Array(1)[0] != 0;
+
+			case UniformType.BOOL_VEC2: 
+				return [for (v in getUniformInt32Array(2)) v != 0];
+
+			case UniformType.BOOL_VEC3: 
+				return [for (v in getUniformInt32Array(3)) v != 0];
+
+			case UniformType.BOOL_VEC4: 
+				return [for (v in getUniformInt32Array(4)) v != 0];
+
+			case UniformType.SAMPLER_2D, UniformType.SAMPLER_CUBE:
+				return getUniformInt32Array(1)[0];
+		}
 	}
 
 	public function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
@@ -809,14 +899,14 @@ class CppGLContext {
 		return new Int32Array(temp);
 	}
 
-	function getUint8Array(pname: GLenum, n: Int) {
+	function getGLbooleanArray(pname: GLenum, n: Int) {
 		var temp = new Uint8Array(n);
 		untyped __global__.glGetBooleanv(pname, temp.toCppPointer());
 		return new Uint8Array(temp);
 	}
 
 	function getBoolArray(pname: GLenum, n: Int) {
-		var u8 = getUint8Array(pname, n);
+		var u8 = getGLbooleanArray(pname, n);
 		var boolArray = new Array<Bool>();
 		for (i in 0...n) {
 			boolArray[i] = u8[i] != 0;
@@ -829,7 +919,7 @@ class CppGLContext {
 	}
 
 	inline function getBool(pname: GLenum): Bool {
-		return getUint8Array(pname, 1)[0] != 0;
+		return getGLbooleanArray(pname, 1)[0] != 0;
 	}
 
 	inline function getFloat32(pname: GLenum): GLfloat {

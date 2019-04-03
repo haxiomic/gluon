@@ -586,7 +586,11 @@ class CppGLContext {
 	}
 
 	public function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-		untyped __global__.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels.buffer.toCppPointer());
+		var pixelsPointer: RawConstPointer<cpp.UInt8> = untyped __cpp__('reinterpret_cast<unsigned char*>({0})', 0);
+		if (pixels != null) {
+			pixelsPointer = pixels.buffer.toCppPointer().constRaw;
+		}
+		untyped __global__.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixelsPointer);
 	}
 
 	public function texParameterf<T:GLfloat>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
@@ -598,7 +602,11 @@ class CppGLContext {
 	}
 
 	public function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-		untyped __global__.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels.buffer.toCppPointer());
+		var pixelsPointer: RawConstPointer<cpp.UInt8> = untyped __cpp__('reinterpret_cast<unsigned char*>({0})', 0);
+		if (pixels != null) {
+			pixelsPointer = pixels.buffer.toCppPointer().constRaw;
+		}
+		untyped __global__.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixelsPointer);
 	}
 
 	public function uniform1f(location:GLUniformLocation, x:GLfloat) {

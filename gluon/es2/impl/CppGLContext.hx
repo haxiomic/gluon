@@ -11,6 +11,9 @@ import cpp.Native;
 import cpp.ConstCharStar;
 import cpp.RawPointer;
 
+// this is required
+import gluon.es2.impl.GL2Header;
+
 typedef GLenum     = cpp.UInt32;
 typedef GLbitfield = cpp.UInt32;
 typedef GLbyte     = cpp.Int8;

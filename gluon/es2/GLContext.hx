@@ -832,6 +832,7 @@ abstract UniformType(GLenum) to GLenum from GLenum{
 	var FLOAT_VEC2   = InternalConstGLContext.FLOAT_VEC2;
 	var FLOAT_VEC3   = InternalConstGLContext.FLOAT_VEC3;
 	var FLOAT_VEC4   = InternalConstGLContext.FLOAT_VEC4;
+	var INT          = InternalConstGLContext.INT;
 	var INT_VEC2     = InternalConstGLContext.INT_VEC2;
 	var INT_VEC3     = InternalConstGLContext.INT_VEC3;
 	var INT_VEC4     = InternalConstGLContext.INT_VEC4;

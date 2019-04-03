@@ -183,6 +183,14 @@ class BuildArrayBufferView {
 				}
 			}
 
+			public inline function map(callback: $ArrayTypeT -> Int -> $ThisT -> $ArrayTypeT): $ThisT {
+				var newArray = new $This(this.length);
+				for (i in 0...this.length) {
+					newArray[i] = callback(arrayGet(i), i, this);
+				}
+				return newArray;
+			}
+
 			/*
 
 			# still todo
@@ -191,7 +199,6 @@ class BuildArrayBufferView {
 			function find( predicate : $ArrayTypeT -> Int -> $ThisT -> Bool, ?thisArg : Dynamic ) : Dynamic;
 			function findIndex( predicate : $ArrayTypeT -> Int -> $ThisT -> Bool, ?thisArg : Dynamic ) : Int;
 			function lastIndexOf( searchElement : $ArrayTypeT, ?fromIndex : Int ) : Int;
-			function map( callbackfn : $ArrayTypeT -> Int -> $ThisT -> $ArrayTypeT, ?thisArg : Dynamic ) : $ThisT;
 			@:overload( function( callbackfn : $ArrayTypeT -> $ArrayTypeT -> Int -> $ThisT -> $ArrayTypeT ) : Int {} )
 			function reduce( callbackfn : Dynamic -> $ArrayTypeT -> Int -> $ThisT -> Dynamic, initialValue : Dynamic ) : Dynamic;
 			@:overload( function( callbackfn : $ArrayTypeT -> $ArrayTypeT -> Int -> $ThisT -> $ArrayTypeT ) : Int {} )

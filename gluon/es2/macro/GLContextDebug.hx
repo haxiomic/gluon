@@ -14,9 +14,10 @@ class GLContextDebug {
             switch field.kind {
                 case FFun(func) if (field.name != 'getError'):
                     var hasReturn = if (func.ret != null) {
-                        try
-                            !Context.unify(Context.resolveType(func.ret, field.pos), Context.resolveType(macro :Void, field.pos))
-                        catch (e: Any) true;
+                        switch func.ret {
+                            case macro :Void: false;
+                            default: true;
+                        }
                     } else {
                         false;
                     }

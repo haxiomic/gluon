@@ -84,6 +84,9 @@ private typedef InternalConstGLContext =
 		gluon.es2.impl.CppGLContext;
 	#end
 
+#if debug
+@:build(gluon.es2.macro.GLContextDebug.addErrorChecking())
+#end
 abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContext {
 
 	public inline function getContextAttributes():GLContextAttributes{
@@ -611,7 +614,6 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 		this.viewport(x, y, width, height);
 
 }
-
 
 // Constants
 

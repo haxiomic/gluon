@@ -9,4 +9,6 @@ private typedef InternalGLRenderbuffer =
 		GLContext.GLuint;
 	#end
 
-typedef GLRenderbuffer = GLObject<InternalGLRenderbuffer>;
+@:notNull enum abstract GLRenderbuffer(InternalGLRenderbuffer) from InternalGLRenderbuffer to InternalGLRenderbuffer {
+	var NONE = #if js null #else 0 #end;
+}

@@ -9,4 +9,6 @@ private typedef InternalGLProgram =
 		GLContext.GLuint;
 	#end
 
-typedef GLProgram = GLObject<InternalGLProgram>;
+@:notNull enum abstract GLProgram(InternalGLProgram) from InternalGLProgram to InternalGLProgram {
+	var NONE = #if js null #else 0 #end;
+}

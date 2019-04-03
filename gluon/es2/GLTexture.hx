@@ -9,4 +9,8 @@ private typedef InternalGLTexture =
 		GLContext.GLuint;
 	#end
 
-typedef GLTexture = GLObject<InternalGLTexture>;
+// typedef GLTexture = GLObject<InternalGLTexture>;
+
+@:notNull enum abstract GLTexture(InternalGLTexture) from InternalGLTexture to InternalGLTexture {
+	var NONE = #if js null #else 0 #end;
+}

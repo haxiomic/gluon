@@ -9,4 +9,6 @@ typedef InternalGLBuffer =
 		GLContext.GLuint;
 	#end
 
-typedef GLBuffer = GLObject<InternalGLBuffer>;
+@:notNull enum abstract GLBuffer(InternalGLBuffer) from InternalGLBuffer to InternalGLBuffer {
+	var NONE = #if js null #else 0 #end;
+}

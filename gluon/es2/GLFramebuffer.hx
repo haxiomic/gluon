@@ -9,4 +9,6 @@ private typedef InternalGLFramebuffer =
 		GLContext.GLuint;
 	#end
 
-typedef GLFramebuffer = GLObject<InternalGLFramebuffer>;
+@:notNull enum abstract GLFramebuffer(InternalGLFramebuffer) from InternalGLFramebuffer to InternalGLFramebuffer {
+	var NONE = #if js null #else 0 #end;
+}

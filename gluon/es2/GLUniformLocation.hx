@@ -10,14 +10,10 @@ private typedef InternalGLUniformLocation =
 	#end
 
 /**
-	Platform consistent wrapper, so that uniform locations can be compared with null (natively these are Ints and -1 means null)
+	Platform consistent wrapper, so that uniform locations can be compared with null (natively these are Ints and -1 means null).
+	We use an enum so you can do gl.bindBuffer(..., NONE) or if (texture == NONE).
 **/
-abstract GLUniformLocation(GLUniformLocationEnum) from GLUniformLocationEnum to GLUniformLocationEnum {
 
-
-}
-
-// we use an enum so you can do gl.bindBuffer(..., NONE) or if (texture == NONE)
-private enum abstract GLUniformLocationEnum(GLContext.GLint) from GLContext.GLint to GLContext.GLint {
+@:notNull enum abstract GLUniformLocation(InternalGLUniformLocation) from InternalGLUniformLocation to InternalGLUniformLocation {
 	var NONE = #if js null #else -1 #end;
 }

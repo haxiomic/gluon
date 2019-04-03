@@ -1,17 +1,15 @@
 package gluon.es2.impl;
 
+import gluon.es2.GLContext;
 import typedarray.Uint32Array;
 import typedarray.Int32Array;
 import typedarray.Float32Array;
 import typedarray.Uint8Array;
+import typedarray.BufferSource;
 import cpp.RawConstPointer;
 import cpp.Native;
-import cpp.NativeArray;
 import cpp.ConstCharStar;
-import gluon.es2.impl.GL2Header;
-import gluon.es2.GLContext.*;
-import gluon.es2.GLContext;
-import typedarray.BufferSource;
+import cpp.RawPointer;
 
 typedef GLenum     = cpp.UInt32;
 typedef GLbitfield = cpp.UInt32;
@@ -39,17 +37,27 @@ class CppGLContext {
 	public function new() {}
 
 	public function getContextAttributes():GLContextAttributes {
-		throw 'todo';
+		throw 'todo - getContextAttributes';
 		return untyped __global__.glGetContextAttributes();
 	}
 
+	var _supportedExtensionsCache: Null<Array<String>> = null;
 	public function getSupportedExtensions():Array<String> {
-		throw 'todo';
-		return untyped __global__.glGetSupportedExtensions();
+		if (_supportedExtensionsCache == null) {
+			var extensions = getString(EXTENSIONS);
+			// remove GL_ prefix
+			_supportedExtensionsCache = extensions.split(' ').map(name -> name.substr(3));
+			trace(_supportedExtensionsCache);
+		}
+
+		return _supportedExtensionsCache.copy();
 	}
 
 	public function getExtension<T>(name: Extension<T>):T {
-		throw 'todo';
+		var isSupported = getSupportedExtensions().indexOf(name) != -1;
+		trace('getExtension $name', isSupported);
+		return isSupported ? cast {} : null;
+		throw 'todo - getExtension';
 		return untyped __global__.glGetExtension(name);
 	}
 
@@ -284,18 +292,64 @@ class CppGLContext {
 	}
 
 	public function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
-		// return untyped __global__.glGetActiveAttrib(program, index);
-		throw 'todo';
+		final maxNameLength = this.getProgramParameter(program, ACTIVE_ATTRIBUTE_MAX_LENGTH);
+
+		var nameLength: GLsizei = 0;
+		var size: GLint = 0;
+		var type: GLenum = 0;
+		var nameBuffer = new Uint8Array(maxNameLength);
+		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBuffer.toCppPointer().raw);
+
+		untyped __global__.glGetActiveAttrib(
+			program,
+			index,
+			maxNameLength,
+			Native.addressOf(nameLength),
+			Native.addressOf(size),
+			Native.addressOf(type),
+			namePointer
+		);
+
+		var nameCStr: cpp.ConstCharStar = cast namePointer;
+
+		return {
+			name: nameCStr.toString(),
+			size: size,
+			type: type,
+		};
 	}
 
 	public function getActiveUniform(program:GLProgram, index:GLuint):GLActiveInfo {
-		// return untyped __global__.glGetActiveUniform(program, index);
-		throw 'todo';
+		final maxNameLength = this.getProgramParameter(program, ACTIVE_UNIFORM_MAX_LENGTH);
+
+		var nameLength: GLsizei = 0;
+		var size: GLint = 0;
+		var type: GLenum = 0;
+		var nameBuffer = new Uint8Array(maxNameLength);
+		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBuffer.toCppPointer().raw);
+
+		untyped __global__.glGetActiveUniform(
+			program,
+			index,
+			maxNameLength,
+			Native.addressOf(nameLength),
+			Native.addressOf(size),
+			Native.addressOf(type),
+			namePointer
+		);
+
+		var nameCStr: cpp.ConstCharStar = cast namePointer;
+
+		return {
+			name: nameCStr.toString(),
+			size: size,
+			type: type,
+		};
 	}
 
 	public function getAttachedShaders(program:GLProgram):Array<GLShader> {
 		// return untyped __global__.glGetAttachedShaders(program);
-		throw 'todo';
+		throw 'todo - getAttachedShaders';
 	}
 
 	public function getAttribLocation(program:GLProgram, name:String):GLint {
@@ -305,15 +359,13 @@ class CppGLContext {
 
 	public function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T {
 		// return untyped __global__.glGetBufferParameter(target, pname);
-		throw 'todo';
+		throw 'todo - getBufferParameter';
 	}
 
 	public function getParameter<T>(pname:Parameter<T>):T {
 		switch (pname) {
 			case Parameter.RENDERER, Parameter.SHADING_LANGUAGE_VERSION, Parameter.VENDOR, Parameter.VERSION:
-				var result: cpp.RawConstPointer<GLubyte> = untyped __global__.glGetString(pname);
-				var cStr: cpp.ConstCharStar = untyped __cpp__('reinterpret_cast<const char*>({0})', result);
-				return cStr.toString();
+				return getString(pname);
 
 			case Parameter.ALIASED_LINE_WIDTH_RANGE, Parameter.ALIASED_POINT_SIZE_RANGE, Parameter.DEPTH_RANGE: 
 				return getFloat32Array(pname, 2);
@@ -427,32 +479,39 @@ class CppGLContext {
 
 	public function getProgramInfoLog(program:GLProgram):String {
 		// return untyped __global__.glGetProgramInfoLog(program);
-		throw 'todo';
+		throw 'todo - getProgramInfoLog';
 	}
 
 	public function getRenderbufferParameter<T>(target:RenderbufferTarget, pname:RenderbufferParameter<T>):T {
 		// return untyped __global__.glGetRenderbufferParameter(target, pname);
-		throw 'todo';
+		throw 'todo - getRenderbufferParameter';
 	}
 
 	public function getShaderParameter<T>(shader:GLShader, pname:ShaderParameter<T>):T {
-		// return untyped __global__.glGetShaderParameter(shader, pname);
-		throw 'todo';
+		var result: GLint = 0;
+		switch pname {
+			case ShaderParameter.COMPILE_STATUS, ShaderParameter.DELETE_STATUS:
+				untyped __global__.glGetShaderiv(shader, pname, Native.addressOf(result));
+				return result != 0;
+			case ShaderParameter.SHADER_TYPE:
+				untyped __global__.glGetShaderiv(shader, pname, Native.addressOf(result));
+				return result;
+		}
 	}
 
 	public function getShaderPrecisionFormat(shadertype:ShaderType, precisiontype:PrecisionType):GLShaderPrecisionFormat {
 		// return untyped __global__.glGetShaderPrecisionFormat(shadertype, precisiontype);
-		throw 'todo';
+		throw 'todo - getShaderPrecisionFormat';
 	}
 
 	public function getShaderInfoLog(shader:GLShader):String {
 		// return untyped __global__.glGetShaderInfoLog(shader);
-		throw 'todo';
+		throw 'todo - getShaderInfoLog';
 	}
 
 	public function getShaderSource(shader:GLShader):String {
 		// return untyped __global__.glGetShaderSource(shader);
-		throw 'todo';
+		throw 'todo - getShaderSource';
 	}
 
 	public function getTexParameter<T>(target:TextureTarget, pname:TextureParameter<T>):T {
@@ -472,23 +531,23 @@ class CppGLContext {
 	public function getUniform(program:GLProgram, location:GLUniformLocation):Dynamic {
 		// call getActiveUniform(program, location) to get uniform info, then call glGetUniformfv or glGetUniformiv
 		// return typedarray is uniform is array, otherwise just int/float
-		throw 'todo';
+		throw 'todo - getUniform';
 		// return untyped __global__.glGetUniform(program, location);
 	}
 
 	public function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
-		throw 'todo -- char*?';
-		return untyped __global__.glGetUniformLocation(program, name);
+		var nameCharStar = ConstCharStar.fromString(name);
+		return untyped __global__.glGetUniformLocation(program, nameCharStar);
 	}
 
 	public function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T {
 		// return untyped __global__.glGetVertexAttrib(index, pname);
-		throw 'todo';
+		throw 'todo - getVertexAttrib';
 	}
 
 	public function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr {
 		// return untyped __global__.glGetVertexAttribOffset(index, pname);
-		throw 'todo';
+		throw 'todo - getVertexAttrib';
 	}
 
 	public function hint(target:HintTarget, mode:HintMode) {
@@ -757,7 +816,7 @@ class CppGLContext {
 		var u8 = getUint8Array(pname, n);
 		var boolArray = new Array<Bool>();
 		for (i in 0...n) {
-			boolArray[i] = u8[i] == 0 ? false : true;
+			boolArray[i] = u8[i] != 0;
 		}
 		return boolArray;
 	}
@@ -767,11 +826,17 @@ class CppGLContext {
 	}
 
 	inline function getBool(pname: GLenum): Bool {
-		return getUint8Array(pname, 1)[0] == 1 ? true : false;
+		return getUint8Array(pname, 1)[0] != 0;
 	}
 
 	inline function getFloat32(pname: GLenum): GLfloat {
 		return cast getFloat32Array(pname, 1)[0];
+	}
+
+	inline function getString(pname: GLenum): String {
+		var result: cpp.RawConstPointer<GLubyte> = untyped __global__.glGetString(pname);
+		var cStr: cpp.ConstCharStar = untyped __cpp__('reinterpret_cast<const char*>({0})', result);
+		return cStr.toString();
 	}
 
 	// constants

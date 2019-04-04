@@ -58,10 +58,8 @@ class CppGLContext {
 
 	public function getExtension<T>(name: Extension<T>):T {
 		var isSupported = getSupportedExtensions().indexOf(name) != -1;
-		trace('getExtension $name', isSupported);
+		trace('DEBUG: getExtension $name', isSupported);
 		return isSupported ? cast {} : null;
-		throw 'todo - getExtension';
-		return untyped __global__.glGetExtension(name);
 	}
 
 	public function activeTexture(unit:TextureUnit) {

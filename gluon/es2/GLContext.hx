@@ -73,6 +73,8 @@ private typedef InternalGLContext =
 		js.html.webgl.RenderingContext;
 	#elseif cpp
 		gluon.es2.impl.CppGLContext;
+	#else
+		Dynamic;
 	#end
 
 private typedef InternalConstGLContext =
@@ -82,6 +84,8 @@ private typedef InternalConstGLContext =
 		js.html.webgl.RenderingContext;
 	#elseif cpp
 		gluon.es2.impl.CppGLContext;
+	#else
+		Dynamic;
 	#end
 
 #if debug

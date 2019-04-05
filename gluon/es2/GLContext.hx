@@ -723,7 +723,7 @@ abstract DrawMode(GLenum) to GLenum from GLenum{
 }
 
 @:enum
-abstract TextureMagFilter(GLenum) to GLenum from GLenum{
+abstract TextureMagFilter(GLenum) to GLenum from GLenum to TextureMinFilter {
 	var NEAREST = InternalConstGLContext.NEAREST;
 	var LINEAR  = InternalConstGLContext.LINEAR;
 }
@@ -799,7 +799,7 @@ abstract DataType(GLenum) to GLenum from GLenum{
 }
 
 @:enum
-abstract PixelDataType(GLenum) to GLenum from GLenum{
+abstract PixelDataType(GLenum) to GLenum from GLenum {
 	var UNSIGNED_BYTE          = InternalConstGLContext.UNSIGNED_BYTE;
 	var UNSIGNED_SHORT_4_4_4_4 = InternalConstGLContext.UNSIGNED_SHORT_4_4_4_4;
 	var UNSIGNED_SHORT_5_5_5_1 = InternalConstGLContext.UNSIGNED_SHORT_5_5_5_1;
@@ -852,7 +852,7 @@ abstract UniformType(GLenum) to GLenum from GLenum{
 }
 
 @:enum
-abstract AttributeType(GLenum) to GLenum from GLenum{
+abstract AttributeType(GLenum) to GLenum from GLenum to UniformType {
 	var FLOAT      = InternalConstGLContext.FLOAT;
 	var FLOAT_VEC2 = InternalConstGLContext.FLOAT_VEC2;
 	var FLOAT_VEC3 = InternalConstGLContext.FLOAT_VEC3;

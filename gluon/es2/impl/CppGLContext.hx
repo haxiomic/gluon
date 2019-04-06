@@ -28,6 +28,8 @@ typedef GLuint     = cpp.UInt32;
 typedef GLfloat    = cpp.Float32;
 typedef GLclampf   = cpp.Float32;
 
+// @! consider ${haxelib:gluon} approach! https://haxe.org/manual/target-cpp-build-environment.html
+
 // context acts on global-scope so it's only an class instance for convenience
 // @:keep
 // @:keepSub
@@ -50,7 +52,6 @@ class CppGLContext {
 			var extensions = getString(EXTENSIONS);
 			// remove GL_ prefix
 			_supportedExtensionsCache = extensions.split(' ').map(name -> name.substr(3));
-			trace(_supportedExtensionsCache);
 		}
 
 		return _supportedExtensionsCache.copy();
@@ -58,7 +59,6 @@ class CppGLContext {
 
 	public function getExtension<T>(name: Extension<T>):T {
 		var isSupported = getSupportedExtensions().indexOf(name) != -1;
-		trace('DEBUG: getExtension $name', isSupported);
 		return isSupported ? cast {} : null;
 	}
 

@@ -59,6 +59,7 @@ class GLContextDebug {
             public function reportErrors(fnName: String) {
                 var result: ErrorCode = NO_ERROR;
                 while ((result = getError()) != NO_ERROR) {
+
                     var errorName = switch result {
                         case INVALID_ENUM: 'INVALID_ENUM';
                         case INVALID_VALUE: 'INVALID_VALUE';
@@ -68,7 +69,18 @@ class GLContextDebug {
                         case NO_ERROR: 'NO_ERROR';
                     }
 
-                    var callStackString ='\n\t' + haxe.CallStack.callStack().slice(1).join('\n\t');
+                    function printStackItem(item: haxe.CallStack.StackItem) {
+                        return switch item {
+                            case CFunction: 'CFunction';
+                            case Module(m): 'Module "$$m"';
+                            case LocalFunction(v): 'Local Function $$v';
+                            case Method(className, method): '$${className}.$${method}()';
+                            case FilePos(s, file, line): 
+                                '$$file:$$line' + (s != null ? (' - ' + printStackItem(s)) : '');
+                        }
+                    }
+
+                    var callStackString ='\n\t' + haxe.CallStack.callStack().slice(1).map(printStackItem).join('\n\t');
                     trace('OpenGL Error in "$$fnName": $$errorName', callStackString);
                 }
             }

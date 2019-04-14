@@ -24,7 +24,7 @@ private typedef Int32 = Int;
 @:nullSafety
 @:forward
 #if !macro
-@:build(typedarray.ArrayBufferView.BuildArrayBufferView.build(Int32))
+@:build(typedarray.macro.BuildArrayBufferView.build(Int32))
 #end
 abstract Int32Array(Int32ArrayImpl)
 	to Int32ArrayImpl from Int32ArrayImpl

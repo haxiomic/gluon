@@ -24,7 +24,7 @@ private typedef Int8 = Int;
 @:nullSafety
 @:forward
 #if !macro
-@:build(typedarray.ArrayBufferView.BuildArrayBufferView.build(Int8))
+@:build(typedarray.macro.BuildArrayBufferView.build(Int8))
 #end
 abstract Int8Array(Int8ArrayImpl)
 	to Int8ArrayImpl from Int8ArrayImpl

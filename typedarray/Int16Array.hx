@@ -24,7 +24,7 @@ private typedef Int16 = Int;
 @:nullSafety
 @:forward
 #if !macro
-@:build(typedarray.ArrayBufferView.BuildArrayBufferView.build(Int16))
+@:build(typedarray.macro.BuildArrayBufferView.build(Int16))
 #end
 abstract Int16Array(Int16ArrayImpl)
 	to Int16ArrayImpl from Int16ArrayImpl

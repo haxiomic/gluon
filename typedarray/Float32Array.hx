@@ -23,7 +23,7 @@ private typedef ArrayType = Float;
 @:nullSafety
 @:forward
 #if !macro
-@:build(typedarray.ArrayBufferView.BuildArrayBufferView.build(ArrayType))
+@:build(typedarray.macro.BuildArrayBufferView.build(ArrayType))
 #end
 abstract Float32Array(Float32ArrayImpl)
 	to Float32ArrayImpl from Float32ArrayImpl

@@ -29,6 +29,7 @@ typedef GLfloat    = cpp.Float32;
 typedef GLclampf   = cpp.Float32;
 
 // @! consider ${haxelib:gluon} approach! https://haxe.org/manual/target-cpp-build-environment.html
+// alternatively use cppInclude('./name.h') to include relative to haxe file
 
 // context acts on global-scope so it's only an class instance for convenience
 // @:keep
@@ -315,7 +316,7 @@ class CppGLContext {
 
 		var nameCStr: cpp.ConstCharStar = cast namePointer;
 
-		return {
+		return @:fixed {
 			name: nameCStr.toString(),
 			size: size,
 			type: type,
@@ -344,7 +345,7 @@ class CppGLContext {
 
 		var nameCStr: cpp.ConstCharStar = cast namePointer;
 
-		return {
+		return @:fixed {
 			name: nameCStr.toString(),
 			size: size,
 			type: type,

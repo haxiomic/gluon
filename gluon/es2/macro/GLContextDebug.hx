@@ -1,11 +1,11 @@
 package gluon.es2.macro;
 
+#if macro
 import haxe.macro.Expr.FieldType;
 import haxe.macro.Context;
 
 class GLContextDebug {
 
-    #if macro
     static function addErrorChecking() {
         var fields = Context.getBuildFields();
 
@@ -88,6 +88,6 @@ class GLContextDebug {
 
         return fields;
     }
-    #end
 
 }
+#end

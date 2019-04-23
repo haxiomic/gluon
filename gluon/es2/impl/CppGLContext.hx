@@ -427,7 +427,7 @@ class CppGLContext {
 				return getInt32Array(pname, 4);
 
 			case Parameter.COLOR_WRITEMASK:
-				return getBoolArray(pname, 4);
+				return [for (x in getGLbooleanArray(pname, 4)) x != 0];
 			
 			case Parameter.COMPRESSED_TEXTURE_FORMATS:
 				//"The core WebGL specification does not define any supported compressed texture formats" (supported via extensions)
@@ -472,13 +472,13 @@ class CppGLContext {
 
 	public function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>):T {
 		var ref: GLint = 0;
-		untyped __cpp__('glGetFramebufferAttachmentParameteriv({0}, {1}, {2}, &{3})', target, attachment, pname, ref);
+		untyped __global__.glGetFramebufferAttachmentParameteriv(target, attachment, pname, Native.addressOf(ref));
 		return (ref: Dynamic);
 	}
 
 	public function getProgramParameter<T>(program:GLProgram, pname:ProgramParameter<T>):T {
 		var ref: GLint = 0;
-		untyped __cpp__('glGetProgramiv({0}, {1}, &{2})', program, pname, ref);
+		untyped __global__.glGetProgramiv(program, pname, Native.addressOf(ref));
 		return (ref: Dynamic);
 	}
 
@@ -551,11 +551,11 @@ class CppGLContext {
 			// float parameters
 			case TextureParameter.TEXTURE_MAX_ANISOTROPY_EXT:
 				var ref: GLfloat = 0;
-				untyped __cpp__('glGetTexParameterfv({0}, {1}, &{2})', target, pname, ref);
+				untyped __global__.glGetTexParameterfv(target, pname, Native.addressOf(ref));
 				return (ref: Dynamic);
 			default:
 				var ref: GLint = 0;
-				untyped __cpp__('glGetTexParameteriv({0}, {1}, &{2})', target, pname, ref);
+				untyped __global__.glGetTexParameteriv(target, pname, Native.addressOf(ref));
 				return (ref: Dynamic);
 		}
 	}
@@ -902,15 +902,6 @@ class CppGLContext {
 		var temp = new Uint8Array(n);
 		untyped __global__.glGetBooleanv(pname, temp.toCppPointer());
 		return new Uint8Array(temp);
-	}
-
-	function getBoolArray(pname: GLenum, n: Int) {
-		var u8 = getGLbooleanArray(pname, n);
-		var boolArray = new Array<Bool>();
-		for (i in 0...n) {
-			boolArray[i] = u8[i] != 0;
-		}
-		return boolArray;
 	}
 
 	inline function getInt32<T>(pname: GLenum): T {

@@ -1,5 +1,5 @@
 import gluon.es2.GLContext;
-import gluon.es2.impl.CppGLContext;
+import gluon.es2.impl.ES2Context;
 
 class Example {
 
@@ -11,7 +11,7 @@ class Example {
 
     @:keep
     static public function init() {
-        gl = new CppGLContext();
+        gl = new ES2Context();
     }
 
     @:keep

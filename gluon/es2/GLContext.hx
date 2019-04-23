@@ -3,19 +3,19 @@ package gluon.es2;
 import typedarray.BufferSource;
 
 #if cpp
-typedef GLenum     = gluon.es2.impl.CppGLContext.GLenum;
-typedef GLbitfield = gluon.es2.impl.CppGLContext.GLbitfield;
-typedef GLbyte     = gluon.es2.impl.CppGLContext.GLbyte;
-typedef GLshort    = gluon.es2.impl.CppGLContext.GLshort;
-typedef GLint      = gluon.es2.impl.CppGLContext.GLint;
-typedef GLsizei    = gluon.es2.impl.CppGLContext.GLsizei;
-typedef GLintptr   = gluon.es2.impl.CppGLContext.GLintptr;
-typedef GLsizeiptr = gluon.es2.impl.CppGLContext.GLsizeiptr;
-typedef GLubyte    = gluon.es2.impl.CppGLContext.GLubyte;
-typedef GLushort   = gluon.es2.impl.CppGLContext.GLushort;
-typedef GLuint     = gluon.es2.impl.CppGLContext.GLuint;
-typedef GLfloat    = gluon.es2.impl.CppGLContext.GLfloat;
-typedef GLclampf   = gluon.es2.impl.CppGLContext.GLclampf;
+typedef GLenum     = cpp.UInt32;
+typedef GLbitfield = cpp.UInt32;
+typedef GLbyte     = cpp.Int8;
+typedef GLshort    = cpp.Int16;
+typedef GLint      = cpp.Int32;
+typedef GLsizei    = cpp.Int32;
+typedef GLintptr   = cpp.Int64;
+typedef GLsizeiptr = cpp.Int64;
+typedef GLubyte    = cpp.UInt8;
+typedef GLushort   = cpp.UInt16;
+typedef GLuint     = cpp.UInt32;
+typedef GLfloat    = cpp.Float32;
+typedef GLclampf   = cpp.Float32;
 #else
 typedef GLenum     = UInt;
 typedef GLbitfield = UInt;
@@ -72,7 +72,7 @@ private typedef InternalGLContext =
 	#elseif js
 		js.html.webgl.RenderingContext;
 	#elseif cpp
-		gluon.es2.impl.CppGLContext;
+		gluon.es2.impl.ES2Context;
 	#else
 		Dynamic;
 	#end
@@ -83,7 +83,7 @@ private typedef InternalConstGLContext =
 	#elseif js
 		js.html.webgl.RenderingContext;
 	#elseif cpp
-		gluon.es2.impl.CppGLContext;
+		gluon.es2.impl.ES2Context;
 	#else
 		Dynamic;
 	#end

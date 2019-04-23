@@ -14,20 +14,6 @@ import cpp.RawPointer;
 // this is required
 import gluon.es2.impl.GL2Header;
 
-typedef GLenum     = cpp.UInt32;
-typedef GLbitfield = cpp.UInt32;
-typedef GLbyte     = cpp.Int8;
-typedef GLshort    = cpp.Int16;
-typedef GLint      = cpp.Int32;
-typedef GLsizei    = cpp.Int32;
-typedef GLintptr   = cpp.Int64;
-typedef GLsizeiptr = cpp.Int64;
-typedef GLubyte    = cpp.UInt8;
-typedef GLushort   = cpp.UInt16;
-typedef GLuint     = cpp.UInt32;
-typedef GLfloat    = cpp.Float32;
-typedef GLclampf   = cpp.Float32;
-
 // @! consider ${haxelib:gluon} approach! https://haxe.org/manual/target-cpp-build-environment.html
 // alternatively use cppInclude('./name.h') to include relative to haxe file
 
@@ -38,7 +24,7 @@ typedef GLclampf   = cpp.Float32;
 #define GL_GLEXT_PROTOTYPES
 #include <gluon/es2/impl/GL2Header.h>
 ')
-class CppGLContext {
+class ES2Context {
 
 	public function new() {}
 

@@ -14,6 +14,9 @@ interface ArrayBufferView {
 	var buffer (default, null): ArrayBuffer;
 	var byteOffset (default, null): Int;
 	var byteLength (default, null): Int;
+	#if cpp
+	function toCPointer(): cpp.Star<cpp.UInt8>;
+	#end
 }
 
 // internal implementation and types below
@@ -88,6 +91,13 @@ class ArrayBufferViewBase implements ArrayBufferView {
 		}
 		#end
 	}
+	
+	#if cpp
+	@:pure
+	public inline function toCPointer(): cpp.Star<cpp.UInt8> {
+		return cast cpp.NativeArray.address(this.nativeBytes, this.byteOffset).raw;
+	}
+	#end
 
 	inline function get_nativeBytes() {
 		return (this.buffer: haxe.io.Bytes).getData();

@@ -86,20 +86,20 @@ class ES2Context {
 		untyped __global__.glBlendEquation(mode);
 	}
 
-	public function blendEquationSeparate(modeRGB:BlendEquation, modeAlpha:BlendEquation):Void {
+	public function blendEquationSeparate(modeRGB:BlendEquation, modeAlpha:BlendEquation) {
 		untyped __global__.glBlendEquationSeparate(modeRGB, modeAlpha);
 	}
 
-	public function blendFunc(sfactor:BlendFactor, dfactor:BlendFactor):Void {
+	public function blendFunc(sfactor:BlendFactor, dfactor:BlendFactor) {
 		untyped __global__.glBlendFunc(sfactor, dfactor);
 	}
 
-	public function blendFuncSeparate(srcRGB:BlendFactor, dstRGB:BlendFactor, srcAlpha:BlendFactor, dstAlpha:BlendFactor):Void {
+	public function blendFuncSeparate(srcRGB:BlendFactor, dstRGB:BlendFactor, srcAlpha:BlendFactor, dstAlpha:BlendFactor) {
 		untyped __global__.glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 	}
 
 	public function bufferData(target:BufferTarget, data:BufferSource, usage:BufferUsage) {
-		untyped __global__.glBufferData(target, data.byteLength, data.toCppPointer(), usage);
+		untyped __global__.glBufferData(target, data.byteLength, data.toCPointer(), usage);
 	}
 
 	public function bufferDataOfSize(target:BufferTarget, size:Int, usage:BufferUsage) {
@@ -107,7 +107,7 @@ class ES2Context {
 	}
 
 	public function bufferSubData(target:BufferTarget, offset:GLintptr, data:BufferSource) {
-		untyped __global__.glBufferSubData(target, offset, data.byteLength, data.toCppPointer());
+		untyped __global__.glBufferSubData(target, offset, data.byteLength, data.toCPointer());
 	}
 
 	public function checkFramebufferStatus(target:FramebufferTarget):FramebufferStatus {
@@ -139,11 +139,13 @@ class ES2Context {
 	}
 
 	public function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
-		untyped __global__.glCompressedTexImage2D(target, level, internalformat, width, height, border, data.byteLength, data);
+		var ptr: cpp.Star<cpp.UInt8> = data != null ? data.toCPointer() : null;
+		untyped __global__.glCompressedTexImage2D(target, level, internalformat, width, height, border, data.byteLength, ptr);
 	}
 
 	public function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView) {
-		untyped __global__.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.byteLength, data);
+		var ptr: cpp.Star<cpp.UInt8> = data != null ? data.toCPointer() : null;
+		untyped __global__.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.byteLength, ptr);
 	}
 
 	public function copyTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, x:GLint, y:GLint, width:GLsizei, height:GLsizei, border:GLint) {
@@ -214,16 +216,16 @@ class ES2Context {
 		untyped __global__.glDeleteTextures(1, Native.addressOf(texture));
 	}
 
-	public function depthFunc(func:ComparisonFunction):Void {
-		return untyped __global__.glDepthFunc(func);
+	public function depthFunc(func:ComparisonFunction) {
+		untyped __global__.glDepthFunc(func);
 	}
 
-	public function depthMask(flag:Bool):Void {
-		return untyped __global__.glDepthMask(flag);
+	public function depthMask(flag:Bool) {
+		untyped __global__.glDepthMask(flag);
 	}
 
-	public function depthRange(zNear:GLclampf, zFar:GLclampf):Void {
-		return untyped __global__.glDepthRangef(zNear, zFar);
+	public function depthRange(zNear:GLclampf, zFar:GLclampf) {
+		untyped __global__.glDepthRangef(zNear, zFar);
 	}
 
 	public function detachShader(program:GLProgram, shader:GLShader) {
@@ -287,7 +289,7 @@ class ES2Context {
 		var type: GLenum = 0;
 
 		var nameBuffer = new Uint8Array(maxNameLength);
-		var nameBufferPtr = nameBuffer.toCppPointer().raw;
+		var nameBufferPtr = nameBuffer.toCPointer();
 		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
 		untyped __global__.glGetActiveAttrib(
@@ -316,7 +318,7 @@ class ES2Context {
 		var size: GLint = 0;
 		var type: GLenum = 0;
 		var nameBuffer = new Uint8Array(maxNameLength);
-		var nameBufferPtr = nameBuffer.toCppPointer().raw;
+		var nameBufferPtr = nameBuffer.toCPointer();
 		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
 		untyped __global__.glGetActiveUniform(
@@ -473,7 +475,7 @@ class ES2Context {
 		var returnedStringLength: GLsizei = 0;
 
 		var infoLogBuffer = new Uint8Array(maxInfoLogLength);
-		var infoLogBufferPtr = infoLogBuffer.toCppPointer().raw;
+		var infoLogBufferPtr = infoLogBuffer.toCPointer();
 		var infoLogPointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
 
 		untyped __global__.glGetProgramInfoLog(program, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
@@ -509,7 +511,7 @@ class ES2Context {
 		var returnedStringLength: GLsizei = 0;
 
 		var infoLogBuffer = new Uint8Array(maxInfoLogLength);
-		var infoLogBufferPtr = infoLogBuffer.toCppPointer().raw;
+		var infoLogBufferPtr = infoLogBuffer.toCPointer();
 		var infoLogPointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
 
 		untyped __global__.glGetShaderInfoLog(shader, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
@@ -523,7 +525,7 @@ class ES2Context {
 		var returnedStringLength: GLsizei = 0;
 		
 		var sourceBuffer = new Uint8Array(maxSourceLength);
-		var sourceBufferPtr = sourceBuffer.toCppPointer().raw;
+		var sourceBufferPtr = sourceBuffer.toCPointer();
 		var sourcePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', sourceBufferPtr);
 
 		untyped __global__.glGetShaderSource(shader, maxSourceLength, Native.addressOf(returnedStringLength), sourcePointer);
@@ -551,13 +553,13 @@ class ES2Context {
 
 		inline function getUniformFloat32Array(n: Int) {
 			var temp = new Float32Array(n);
-			untyped __global__.glGetUniformfv(program, location, temp.toCppPointer());
+			untyped __global__.glGetUniformfv(program, location, temp.toCPointer());
 			return new Float32Array(temp);
 		}
 
 		inline function getUniformInt32Array(n: Int) {
 			var temp = new Int32Array(n);
-			untyped __global__.glGetUniformiv(program, location, temp.toCppPointer());
+			untyped __global__.glGetUniformiv(program, location, temp.toCPointer());
 			return new Int32Array(temp);
 		}
 
@@ -677,7 +679,8 @@ class ES2Context {
 	}
 
 	public function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-		untyped __global__.glReadPixels(x, y, width, height, format, type, pixels);
+		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
+		untyped __global__.glReadPixels(x, y, width, height, format, type, ptr);
 	}
 
 	public function renderbufferStorage(target:RenderbufferTarget, internalformat:RenderbufferFormat, width:GLsizei, height:GLsizei) {
@@ -723,11 +726,8 @@ class ES2Context {
 	}
 
 	public function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-		var pixelsPointer: RawConstPointer<cpp.UInt8> = untyped __cpp__('reinterpret_cast<unsigned char*>({0})', 0);
-		if (pixels != null) {
-			pixelsPointer = pixels.buffer.toCppPointer().constRaw;
-		}
-		untyped __global__.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixelsPointer);
+		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
+		untyped __global__.glTexImage2D(target, level, internalformat, width, height, border, format, type, ptr);
 	}
 
 	public function texParameterf<T:GLfloat>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
@@ -739,11 +739,8 @@ class ES2Context {
 	}
 
 	public function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-		var pixelsPointer: RawConstPointer<cpp.UInt8> = untyped __cpp__('reinterpret_cast<unsigned char*>({0})', 0);
-		if (pixels != null) {
-			pixelsPointer = pixels.buffer.toCppPointer().constRaw;
-		}
-		untyped __global__.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixelsPointer);
+		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
+		untyped __global__.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, ptr);
 	}
 
 	public function uniform1f(location:GLUniformLocation, x:GLfloat) {
@@ -751,7 +748,7 @@ class ES2Context {
 	}
 
 	public function uniform1fv(location:GLUniformLocation, v:GLFloat32Array) {
-		untyped __global__.glUniform1fv(location, v.length, v.toCppPointer());
+		untyped __global__.glUniform1fv(location, v.length, v.toCPointer());
 	}
 
 	public function uniform1i(location:GLUniformLocation, x:GLint) {
@@ -759,7 +756,7 @@ class ES2Context {
 	}
 
 	public function uniform1iv(location:GLUniformLocation, v:GLInt32Array) {
-		untyped __global__.glUniform1iv(location, v.length, v.toCppPointer());
+		untyped __global__.glUniform1iv(location, v.length, v.toCPointer());
 	}
 
 	public function uniform2f(location:GLUniformLocation, x:GLfloat, y:GLfloat) {
@@ -767,7 +764,7 @@ class ES2Context {
 	}
 
 	public function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
-		untyped __global__.glUniform2fv(location, cpp.NativeMath.idiv(v.length, 2), v.toCppPointer());
+		untyped __global__.glUniform2fv(location, cpp.NativeMath.idiv(v.length, 2), v.toCPointer());
 	}
 
 	public function uniform2i(location:GLUniformLocation, x:GLint, y:GLint) {
@@ -775,7 +772,7 @@ class ES2Context {
 	}
 
 	public function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
-		untyped __global__.glUniform2iv(location, cpp.NativeMath.idiv(v.length, 2), v.toCppPointer());
+		untyped __global__.glUniform2iv(location, cpp.NativeMath.idiv(v.length, 2), v.toCPointer());
 	}
 
 	public function uniform3f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat) {
@@ -783,7 +780,7 @@ class ES2Context {
 	}
 
 	public function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
-		untyped __global__.glUniform3fv(location, cpp.NativeMath.idiv(v.length, 3), v.toCppPointer());
+		untyped __global__.glUniform3fv(location, cpp.NativeMath.idiv(v.length, 3), v.toCPointer());
 	}
 
 	public function uniform3i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint) {
@@ -791,7 +788,7 @@ class ES2Context {
 	}
 
 	public function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
-		untyped __global__.glUniform3iv(location, cpp.NativeMath.idiv(v.length, 3), v.toCppPointer());
+		untyped __global__.glUniform3iv(location, cpp.NativeMath.idiv(v.length, 3), v.toCPointer());
 	}
 
 	public function uniform4f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
@@ -799,7 +796,7 @@ class ES2Context {
 	}
 
 	public function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
-		untyped __global__.glUniform4fv(location, cpp.NativeMath.idiv(v.length, 4), v.toCppPointer());
+		untyped __global__.glUniform4fv(location, cpp.NativeMath.idiv(v.length, 4), v.toCPointer());
 	}
 
 	public function uniform4i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint, w:GLint) {
@@ -807,19 +804,19 @@ class ES2Context {
 	}
 
 	public function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
-		untyped __global__.glUniform4iv(location, cpp.NativeMath.idiv(v.length, 4), v.toCppPointer());
+		untyped __global__.glUniform4iv(location, cpp.NativeMath.idiv(v.length, 4), v.toCPointer());
 	}
 
 	public function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		untyped __global__.glUniformMatrix2fv(location, cpp.NativeMath.idiv(value.length, 4), transpose, value.toCppPointer());
+		untyped __global__.glUniformMatrix2fv(location, cpp.NativeMath.idiv(value.length, 4), transpose, value.toCPointer());
 	}
 
 	public function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		untyped __global__.glUniformMatrix3fv(location, cpp.NativeMath.idiv(value.length, 9), transpose, value.toCppPointer());
+		untyped __global__.glUniformMatrix3fv(location, cpp.NativeMath.idiv(value.length, 9), transpose, value.toCPointer());
 	}
 
 	public function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		untyped __global__.glUniformMatrix4fv(location, cpp.NativeMath.idiv(value.length, 16), transpose, value.toCppPointer());
+		untyped __global__.glUniformMatrix4fv(location, cpp.NativeMath.idiv(value.length, 16), transpose, value.toCPointer());
 	}
 
 	public function useProgram(program:GLProgram) {
@@ -835,7 +832,7 @@ class ES2Context {
 	}
 
 	public function vertexAttrib1fv(index:GLuint, values:GLFloat32Array) {
-		untyped __global__.glVertexAttrib1fv(index, values.toCppPointer());
+		untyped __global__.glVertexAttrib1fv(index, values.toCPointer());
 	}
 
 	public function vertexAttrib2f(index:GLuint, x:GLfloat, y:GLfloat) {
@@ -843,7 +840,7 @@ class ES2Context {
 	}
 
 	public function vertexAttrib2fv(index:GLuint, values:GLFloat32Array) {
-		untyped __global__.glVertexAttrib2fv(index, values.toCppPointer());
+		untyped __global__.glVertexAttrib2fv(index, values.toCPointer());
 	}
 
 	public function vertexAttrib3f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat) {
@@ -851,7 +848,7 @@ class ES2Context {
 	}
 
 	public function vertexAttrib3fv(index:GLuint, values:GLFloat32Array) {
-		untyped __global__.glVertexAttrib3fv(index, values.toCppPointer());
+		untyped __global__.glVertexAttrib3fv(index, values.toCPointer());
 	}
 
 	public function vertexAttrib4f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
@@ -859,7 +856,7 @@ class ES2Context {
 	}
 
 	public function vertexAttrib4fv(index:GLuint, values:GLFloat32Array) {
-		untyped __global__.glVertexAttrib4fv(index, values.toCppPointer());
+		untyped __global__.glVertexAttrib4fv(index, values.toCPointer());
 	}
 
 	public function vertexAttribPointer(index:GLuint, size:GLint, type:DataType, normalized:Bool, stride:GLsizei, offset:GLintptr) {
@@ -874,19 +871,19 @@ class ES2Context {
 	// internal utility methods
 	function getFloat32Array(pname: GLenum, n: Int) {
 		var temp = new Float32Array(n);
-		untyped __global__.glGetFloatv(pname, temp.toCppPointer());
+		untyped __global__.glGetFloatv(pname, temp.toCPointer());
 		return new Float32Array(temp);
 	}
 
 	function getInt32Array(pname: GLenum, n: Int) {
 		var temp = new Int32Array(n);
-		untyped __global__.glGetIntegerv(pname, temp.toCppPointer());
+		untyped __global__.glGetIntegerv(pname, temp.toCPointer());
 		return new Int32Array(temp);
 	}
 
 	function getGLbooleanArray(pname: GLenum, n: Int) {
 		var temp = new Uint8Array(n);
-		untyped __global__.glGetBooleanv(pname, temp.toCppPointer());
+		untyped __global__.glGetBooleanv(pname, temp.toCPointer());
 		return new Uint8Array(temp);
 	}
 

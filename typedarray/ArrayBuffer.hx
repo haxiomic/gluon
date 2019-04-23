@@ -44,8 +44,8 @@ abstract ArrayBuffer(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
 
 	#if cpp
 	@:pure
-	public inline function toCppPointer(): cpp.Pointer<cpp.UInt8> {
-		return cpp.NativeArray.address(this.getData(), 0);
+	public inline function toCPointer(): cpp.Star<cpp.UInt8> {
+		return cast cpp.NativeArray.address(this.getData(), 0).raw;
 	}
 	#end
 

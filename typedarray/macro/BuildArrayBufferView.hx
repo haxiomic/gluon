@@ -179,8 +179,9 @@ class BuildArrayBufferView {
 			newFields = newFields.concat((macro class CppFields {
 				@:pure
 				@:access(typedarray.ArrayBufferViewBase)
-				public inline function toCppPointer(): cpp.Pointer<$ArrayTypeT> {
-					return cast cpp.NativeArray.address((cast this.nativeBytes: Array<$ArrayTypeT>), 0);
+				public inline function toCPointer(): cpp.Star<$ArrayTypeT> {
+					var address = cpp.NativeArray.address(this.nativeBytes, this.byteOffset).raw;
+					return cast address;
 				}
 			}).fields);
 		}

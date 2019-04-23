@@ -18,8 +18,6 @@ import gluon.es2.impl.GL2Header;
 // alternatively use cppInclude('./name.h') to include relative to haxe file
 
 // context acts on global-scope so it's only an class instance for convenience
-// @:keep
-// @:keepSub
 @:cppFileCode('
 #define GL_GLEXT_PROTOTYPES
 #include <gluon/es2/impl/GL2Header.h>

@@ -1,5 +1,7 @@
 package gluon.es2.impl;
 
+#if !macro
+
 import gluon.es2.GLContext;
 import typedarray.Uint32Array;
 import typedarray.Int32Array;
@@ -11,17 +13,35 @@ import cpp.Native;
 import cpp.ConstCharStar;
 import cpp.RawPointer;
 
-// this is required
-import gluon.es2.impl.GL2Header;
-
 // @! consider ${haxelib:gluon} approach! https://haxe.org/manual/target-cpp-build-environment.html
 // alternatively use cppInclude('./name.h') to include relative to haxe file
 
 // context acts on global-scope so it's only an class instance for convenience
-@:cppFileCode('
+#if desktop_opengl
+
+@:cppFileCode("
+#if defined(__APPLE__)
+
+#include <OpenGL/gl3.h>
+#include <OpenGL/gl3ext.h>
+
+#else 
+
+#include <GL/gl.h>
+#include <GL/glext.h>
+
+#endif
+")
+
+#else
+
+@:cppFileCode("
 #define GL_GLEXT_PROTOTYPES
-#include <gluon/es2/impl/GL2Header.h>
-')
+#include <GLES2/gl2.h>
+")
+#end
+
+@:build(gluon.es2.impl.ES2Context.Macro.addIncludeDirectory())
 class ES2Context {
 
 	public function new() {}
@@ -1212,3 +1232,46 @@ class ES2Context {
 	static public inline final DEPTH_STENCIL_ATTACHMENT = 0x821A;
 
 }
+
+#else
+// macro
+
+import haxe.macro.Context;
+import haxe.io.Path;
+
+class Macro {
+
+	static function addIncludeDirectory() {
+		var classPosInfo = Context.getPosInfos(Context.currentPos());
+		var classFilePath = Path.isAbsolute(classPosInfo.file) ? classPosInfo.file : Path.join([Sys.getCwd(), classPosInfo.file]);
+		var classDir = Path.directory(classFilePath);
+
+		var buildXml = '
+		<target id="haxe">
+			<section if="mac">
+				<vflag name="-framework" value="OpenGL" />
+			</section>
+			<section if="windows">
+				<lib name="opengl32.lib" />
+			</section>
+			<section if="linux">
+				<lib name="-lGL" />
+			</section>
+			<section if="android">
+				<lib name="-lGLESv2"/>
+			</section>
+		</target>
+		<files id="haxe">
+			<compilerflag value="-I$classDir/include" />
+		</files>
+		';
+		
+		// add @:buildXml
+		Context.getLocalClass().get().meta.add(':buildXml', [macro $v{buildXml}], Context.currentPos());
+
+		return Context.getBuildFields();
+	}
+
+}
+
+#end

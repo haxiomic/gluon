@@ -89,7 +89,9 @@ private typedef InternalConstGLContext =
 	#end
 
 #if debug
-@:build(gluon.es2.macro.GLContextDebug.addErrorChecking())
+#if !display
+@:build(gluon.es2.GLContextDebug.addErrorChecking())
+#end
 #end
 abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContext {
 
@@ -807,7 +809,7 @@ abstract PixelDataType(GLenum) to GLenum from GLenum {
 	/** requires enabling floating point texture extension, OES_texture_float **/
 	var FLOAT                  = InternalConstGLContext.FLOAT;
 	/** requires enabling half-floating point texture extension, OES_texture_half_float **/
-	var HALF_FLOAT             = 0x8D61;
+	var HALF_FLOAT_OES         = 0x8D61;
 }
 
 @:enum

@@ -13,24 +13,18 @@ import cpp.Native;
 import cpp.ConstCharStar;
 import cpp.RawPointer;
 
-// @! consider ${haxelib:gluon} approach! https://haxe.org/manual/target-cpp-build-environment.html
-// alternatively use cppInclude('./name.h') to include relative to haxe file
-
-// context acts on global-scope so it's only an class instance for convenience
-#if desktop_opengl
+#if windows
 
 @:cppFileCode("
-#if defined(__APPLE__)
-
-#include <OpenGL/gl3.h>
-#include <OpenGL/gl3ext.h>
-
-#else 
-
 #define GLEW_STATIC
 #include <GL/glew.h>
+")
 
-#endif
+#elseif mac
+
+@:cppFileCode("
+#include <OpenGL/gl3.h>
+#include <OpenGL/gl3ext.h>
 ")
 
 #else
@@ -39,11 +33,14 @@ import cpp.RawPointer;
 #define GL_GLEXT_PROTOTYPES
 #include <GLES2/gl2.h>
 ")
-#end
 
+#end
 @:build(gluon.es2.impl.ES2Context.Macro.addBuildConfig())
 class ES2Context {
 
+	#if windows
+	
+	// initialize GLEW on platforms that require it
 	static var glewInitialized = false;
 	static function initGlew(): Bool {
 		var success: Bool = false;
@@ -62,6 +59,12 @@ class ES2Context {
 			}
 		}
 	}
+
+	#else
+
+	public function new() { }
+
+	#end
 
 	public function getContextAttributes():GLContextAttributes {
 		throw 'todo - getContextAttributes';
@@ -1251,7 +1254,7 @@ class ES2Context {
 }
 
 #else
-// macro
+// #macro
 
 import haxe.macro.Context;
 import haxe.io.Path;
@@ -1278,6 +1281,7 @@ class Macro {
 				<lib name="-lGLESv2"/>
 			</section>
 		</target>
+
 		<files id="haxe">
 			<compilerflag value="-I$classDir/include" />
 

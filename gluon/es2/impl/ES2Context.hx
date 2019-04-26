@@ -27,8 +27,8 @@ import cpp.RawPointer;
 
 #else 
 
-#include <GL/gl.h>
-#include <GL/glext.h>
+#define GLEW_STATIC
+#include <GL/glew.h>
 
 #endif
 ")
@@ -41,10 +41,27 @@ import cpp.RawPointer;
 ")
 #end
 
-@:build(gluon.es2.impl.ES2Context.Macro.addIncludeDirectory())
+@:build(gluon.es2.impl.ES2Context.Macro.addBuildConfig())
 class ES2Context {
 
-	public function new() {}
+	static var glewInitialized = false;
+	static function initGlew(): Bool {
+		var success: Bool = false;
+		untyped __cpp__('
+			glewExperimental = GL_TRUE;
+			{0} = glewInit() == GLEW_OK; 
+		', success);
+		return success;
+	}
+
+	public function new() {
+		if (!glewInitialized) {
+			glewInitialized = initGlew();
+			if (!glewInitialized) {
+				trace("Failed to initialize GLEW");
+			}
+		}
+	}
 
 	public function getContextAttributes():GLContextAttributes {
 		throw 'todo - getContextAttributes';
@@ -1241,7 +1258,7 @@ import haxe.io.Path;
 
 class Macro {
 
-	static function addIncludeDirectory() {
+	static function addBuildConfig() {
 		var classPosInfo = Context.getPosInfos(Context.currentPos());
 		var classFilePath = Path.isAbsolute(classPosInfo.file) ? classPosInfo.file : Path.join([Sys.getCwd(), classPosInfo.file]);
 		var classDir = Path.directory(classFilePath);
@@ -1263,6 +1280,10 @@ class Macro {
 		</target>
 		<files id="haxe">
 			<compilerflag value="-I$classDir/include" />
+
+			<file name="$classDir/glew.c" if="windows">
+				<depend name="$classDir/include/GL/glew.h"/>
+			</file>
 		</files>
 		';
 		

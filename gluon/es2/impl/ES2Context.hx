@@ -16,7 +16,6 @@ import cpp.RawPointer;
 #if windows
 
 @:cppFileCode("
-#define GLEW_STATIC
 #include <GL/glew.h>
 ")
 
@@ -1285,6 +1284,7 @@ class Macro {
 		<files id="haxe">
 			<compilerflag value="-I$classDir/include" />
 
+			<compilerflag value="-DGLEW_STATIC" />
 			<file name="$classDir/glew.c" if="windows">
 				<depend name="$classDir/include/GL/glew.h"/>
 			</file>

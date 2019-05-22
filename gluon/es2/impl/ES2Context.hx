@@ -35,6 +35,7 @@ import cpp.RawPointer;
 
 #end
 @:build(gluon.es2.impl.ES2Context.Macro.addBuildConfig())
+@:unreflective
 class ES2Context {
 
 	#if windows
@@ -765,6 +766,10 @@ class ES2Context {
 	public function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
 		untyped __global__.glTexImage2D(target, level, internalformat, width, height, border, format, type, ptr);
+	}
+
+	public function texImage2DPtr(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:cpp.RawConstPointer<cpp.Void>) {
+		untyped __global__.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 	}
 
 	public function texParameterf<T:GLfloat>(target:TextureTarget, pname:TextureParameter<T>, param:T) {

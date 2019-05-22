@@ -454,6 +454,11 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView)
 		this.texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
+	#if cpp
+	public inline function texImage2DPtr(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:cpp.RawConstPointer<cpp.Void>)
+		this.texImage2DPtr(target, level, internalformat, width, height, border, format, type, pixels);
+	#end
+
 	#if js
 	public inline function texImage2DDOM(target:TextureTarget, level:GLint, internalformat:GLint, format:PixelFormat, type:PixelDataType, source:TexImageSource)
 		this.texImage2D(target, level, internalformat, format, type, source);

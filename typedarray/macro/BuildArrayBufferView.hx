@@ -97,7 +97,7 @@ class BuildArrayBufferView {
 				}
 			}
 
-			public inline function join(?separator: String): String {
+			public inline function join(separator: String = ""): String {
 				return [for (v in this) v].join(separator);
 			}
 

@@ -5,15 +5,12 @@ package typedarray;
 
 	https://heycam.github.io/webidl/#BufferSource
 **/
+
 @:forward
 abstract BufferSource(ArrayBuffer) to ArrayBuffer from ArrayBuffer {
-
+	
+	// handle lime-specific byteLength...
 	public var byteLength(get, never): Int;
-
-	private inline function new(arrayBuffer: ArrayBuffer) {
-		this = arrayBuffer;
-	}
-
 	private inline function get_byteLength() {
 		#if (lime && !js)
 		return this.length;
@@ -22,10 +19,8 @@ abstract BufferSource(ArrayBuffer) to ArrayBuffer from ArrayBuffer {
 		#end
 	}
 
-	@:from static public inline function fromView(view: {
-		var buffer (default, null): ArrayBuffer;
-	}) {
-		return new BufferSource(view.buffer);
+	@:from public static inline function fromBufferView(view: ArrayBufferView) {
+		return cast view.buffer;
 	}
 
 }

@@ -1282,7 +1282,7 @@ class Macro {
 				<lib name="-lGL" />
 			</section>
 			<section if="android">
-				<lib name="-lGLESv2"/>
+				<lib name="-lGLESv2" unless="static_link" />
 			</section>
 		</target>
 

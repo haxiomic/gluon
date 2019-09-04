@@ -1,8 +1,6 @@
 # Gluon
-**This library is under active development and changing a lot, not yet ready to use in your codebase**
 
 - Haxe OpenGL interface, enabling unified OpenGL API for haxe targets
-- It currently supports the js target out of the box and C++ target via lime. The aim to support eventually support cpp and hl out of the box
 - Abstracts only (so no runtime overhead)
 - Abstract enums are used to improve OpenGL API typing, for example:
 	`enable(cap:GLenum)`

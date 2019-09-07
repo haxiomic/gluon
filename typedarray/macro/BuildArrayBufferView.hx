@@ -90,7 +90,7 @@ class BuildArrayBufferView {
 			function sort( ?compareFn : $ArrayTypeT -> $ArrayTypeT -> Int ) : $ThisT;
 			*/
 
-			public inline function set(copyFromArray: ArrayLike<$ArrayTypeT>, ?offset: Int = 0): Void {
+			public inline function set(copyFromArray: ArrayLike<$ArrayTypeT>, offset: Int = 0): Void {
 				var i = 0;
 				for (v in copyFromArray) {
 					arraySet(offset + i++, v);
@@ -101,7 +101,7 @@ class BuildArrayBufferView {
 				return [for (v in this) v].join(separator);
 			}
 
-			public inline function indexOf(searchElement: $ArrayTypeT, ?fromIndex: Int = 0) : Int {
+			public inline function indexOf(searchElement: $ArrayTypeT, fromIndex: Int = 0) : Int {
 				if (fromIndex < 0) fromIndex = this.length + fromIndex;
 				var result = -1;
 				for (i in fromIndex...this.length) {
@@ -120,7 +120,7 @@ class BuildArrayBufferView {
 				return new $This(this.buffer, start * BYTES_PER_ELEMENT + this.byteOffset, (end - start) * BYTES_PER_ELEMENT);
 			}
 
-			public inline function fill(value: $ArrayTypeT, ?start: Int = 0, ?end: Int) {
+			public inline function fill(value: $ArrayTypeT, start: Int = 0, ?end: Int) {
 				if (end == null) end = this.length;
 				if (start < 0) start = this.length + start;
 				if (end < 0) end = this.length + end;

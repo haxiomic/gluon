@@ -19,7 +19,7 @@ import cpp.RawPointer;
 #include <GL/glew.h>
 ")
 
-#elseif mac
+#elseif macos
 
 @:cppFileCode("
 #include <OpenGL/gl3.h>
@@ -1272,7 +1272,7 @@ class Macro {
 
 		var buildXml = '
 		<target id="haxe">
-			<section if="mac">
+			<section if="macos">
 				<vflag name="-framework" value="OpenGL" />
 			</section>
 			<section if="windows">

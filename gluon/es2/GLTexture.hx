@@ -1,9 +1,7 @@
 package gluon.es2;
 
 private typedef InternalGLTexture =
-	#if lime
-		lime.graphics.opengl.GLTexture;
-	#elseif js
+	#if js
 		js.html.webgl.Texture;
 	#else
 		GLContext.GLuint;

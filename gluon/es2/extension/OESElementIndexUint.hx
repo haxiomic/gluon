@@ -1,8 +1,6 @@
 package gluon.es2.extension;
 
-#if lime
-typedef OESElementIndexUint = lime.graphics.opengl.ext.OES_element_index_uint;
-#elseif js
+#if js
 typedef OESElementIndexUint = js.html.webgl.extension.OESElementIndexUint;
 #else
 typedef OESElementIndexUint = Dynamic;

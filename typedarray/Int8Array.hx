@@ -1,10 +1,6 @@
 package typedarray;
 
-#if lime
-
-typedef Int8Array = lime.utils.Int8Array;
-
-#elseif js
+#if js
 
 typedef Int8Array = js.lib.Int8Array;
 

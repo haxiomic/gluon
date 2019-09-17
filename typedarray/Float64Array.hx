@@ -1,10 +1,6 @@
 package typedarray;
 
-#if lime
-
-typedef Float64Array = lime.utils.Float64Array;
-
-#elseif js
+#if js
 
 typedef Float64Array = js.lib.Float64Array;
 

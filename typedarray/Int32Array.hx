@@ -1,10 +1,6 @@
 package typedarray;
 
-#if lime
-
-typedef Int32Array = lime.utils.Int32Array;
-
-#elseif js
+#if js
 
 typedef Int32Array = js.lib.Int32Array;
 

@@ -1,9 +1,7 @@
 package gluon.es2;
 
 private typedef InternalGLUniformLocation =
-	#if lime
-		lime.graphics.opengl.GLUniformLocation;
-	#elseif js
+	#if js
 		js.html.webgl.UniformLocation;
 	#else
 		GLContext.GLint;

@@ -1,9 +1,7 @@
 package typedarray;
 
 typedef DataView =
-	#if lime
-	lime.utils.DataView;
-	#elseif js
+	#if js
 	js.lib.DataView;
 	#else
 	// todo

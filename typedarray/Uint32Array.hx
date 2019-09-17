@@ -1,10 +1,6 @@
 package typedarray;
 
-#if lime
-
-typedef Uint32Array = lime.utils.UInt32Array;
-
-#elseif js
+#if js
 
 typedef Uint32Array = js.lib.Uint32Array;
 

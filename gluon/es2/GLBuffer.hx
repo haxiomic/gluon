@@ -1,9 +1,7 @@
 package gluon.es2;
 
 typedef InternalGLBuffer =
-	#if lime
-		lime.graphics.opengl.GLBuffer;
-	#elseif js
+	#if js
 		js.html.webgl.Buffer;
 	#else
 		GLContext.GLuint;

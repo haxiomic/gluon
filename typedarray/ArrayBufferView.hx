@@ -1,10 +1,6 @@
 package typedarray;
 
-#if lime
-
-typedef ArrayBufferView = lime.utils.ArrayBufferView;
-
-#elseif js
+#if js
 
 typedef ArrayBufferView = js.lib.ArrayBufferView;
 

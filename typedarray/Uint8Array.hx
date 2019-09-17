@@ -1,10 +1,6 @@
 package typedarray;
 
-#if lime
-
-typedef Uint8Array = lime.utils.UInt8Array;
-
-#elseif js
+#if js
 
 typedef Uint8Array = js.lib.Uint8Array;
 

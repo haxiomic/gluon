@@ -8,16 +8,6 @@ package typedarray;
 
 @:forward
 abstract BufferSource(ArrayBuffer) to ArrayBuffer from ArrayBuffer {
-	
-	// handle lime-specific byteLength...
-	public var byteLength(get, never): Int;
-	private inline function get_byteLength() {
-		#if (lime && !js)
-		return this.length;
-		#else
-		return this.byteLength;
-		#end
-	}
 
 	@:from public static inline function fromBufferView(view: ArrayBufferView) {
 		return cast view.buffer;

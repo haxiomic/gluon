@@ -9,6 +9,11 @@
 	and the compiler can autocomplete valid constants.
 
 	Which means fewer trips to the OpenGL specification :)
+- A TypedArray implementaton designed for partiy with JavaScript's TypedArrays
+
+### State
+
+- This project is ready to use and is used in production projects, however a small number of GL reflection methods are not yet implemented
 
 ### Design Goals
 - Dependency free and minimalistic

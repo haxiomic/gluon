@@ -1,6 +1,6 @@
 # Gluon
 
-- Haxe OpenGL interface, enabling unified OpenGL API for haxe targets
+- Haxe OpenGL interface, enabling unified OpenGL API for haxe targets (currently js and hxcpp)
 - Abstracts only (so no runtime overhead)
 - Abstract enums are used to improve OpenGL API typing, for example:
 	`enable(cap:GLenum)`
@@ -13,7 +13,7 @@
 
 ### State
 
-- This project is ready to use and is used in production projects, however a small number of GL reflection methods are not yet implemented
+- This project is ready to use with the js and hxcpp targets and is used in production projects, however a small number of GL reflection methods are not yet implemented
 
 ### Design Goals
 - Dependency free and minimalistic

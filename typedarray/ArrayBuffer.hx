@@ -56,6 +56,11 @@ abstract ArrayBuffer(haxe.io.Bytes) from haxe.io.Bytes to haxe.io.Bytes {
 		return Std.is(value, ArrayBufferView.ArrayBufferViewBase);
 	}
 
+	@:from
+	static public inline function ofData(bytesData: haxe.io.BytesData): ArrayBuffer {
+		return haxe.io.Bytes.ofData(bytesData);
+	}
+
 }
 
 #end

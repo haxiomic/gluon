@@ -11,7 +11,7 @@
 	and the compiler can autocomplete valid constants.
 
 	Which means fewer trips to the OpenGL specification :)
-- A TypedArray implementaton designed for partiy with JavaScript's TypedArrays
+- A TypedArray implementation designed for parity with JavaScript's TypedArrays
 
 ### State
 

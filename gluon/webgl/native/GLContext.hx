@@ -1,16 +1,12 @@
 package gluon.webgl.native;
 
+import cpp.*;
 import gluon.webgl.GLContext;
 import typedarray.Uint32Array;
 import typedarray.Int32Array;
 import typedarray.Float32Array;
 import typedarray.Uint8Array;
 import typedarray.BufferSource;
-import cpp.RawConstPointer;
-import cpp.Native;
-import cpp.ConstCharStar;
-import cpp.CastCharStar;
-import cpp.RawPointer;
 import gluon.webgl.native.ES2Context.*;
 
 class GLContext {
@@ -168,12 +164,12 @@ class GLContext {
 	}
 
 	public function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
-		var ptr: cpp.Star<cpp.UInt8> = data != null ? data.toCPointer() : null;
+		var ptr: Star<UInt8> = data != null ? data.toCPointer() : null;
 		glCompressedTexImage2D(target, level, internalformat, width, height, border, data.byteLength, cast ptr);
 	}
 
 	public function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView) {
-		var ptr: cpp.Star<cpp.UInt8> = data != null ? data.toCPointer() : null;
+		var ptr: Star<UInt8> = data != null ? data.toCPointer() : null;
 		glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.byteLength, cast ptr);
 	}
 
@@ -288,7 +284,7 @@ class GLContext {
 	}
 
 	public function drawElements(mode:DrawMode, count:GLsizei, type:DataType, offset:GLintptr) {
-		var offsetAsPointer: cpp.ConstStar<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
+		var offsetAsPointer: ConstStar<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
 		glDrawElements(mode, count, type, offsetAsPointer);
 	}
 
@@ -335,7 +331,7 @@ class GLContext {
 
 		var nameBuffer = new Uint8Array(maxNameLength);
 		var nameBufferPtr = nameBuffer.toCPointer();
-		var namePointer: cpp.CastCharStar = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
+		var namePointer: CastCharStar = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
 		glGetActiveAttrib(
 			program.handle,
@@ -347,7 +343,7 @@ class GLContext {
 			namePointer
 		);
 
-		var nameCStr: cpp.ConstCharStar = cast namePointer;
+		var nameCStr: ConstCharStar = cast namePointer;
 
 		return @:fixed {
 			name: nameCStr.toString(),
@@ -376,7 +372,7 @@ class GLContext {
 			namePointer
 		);
 
-		var nameCStr: cpp.ConstCharStar = cast namePointer;
+		var nameCStr: ConstCharStar = cast namePointer;
 
 		return @:fixed {
 			name: nameCStr.toString(),
@@ -545,7 +541,7 @@ class GLContext {
 
 		glGetProgramInfoLog(program.handle, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
 
-		var cStr: cpp.ConstCharStar = cast infoLogPointer;
+		var cStr: ConstCharStar = cast infoLogPointer;
 		return cStr.toString();
 	}
 
@@ -581,7 +577,7 @@ class GLContext {
 
 		glGetShaderInfoLog(shader.handle, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
 
-		var cStr: cpp.ConstCharStar = cast infoLogPointer;
+		var cStr: ConstCharStar = cast infoLogPointer;
 		return cStr.toString();
 	}
 
@@ -595,7 +591,7 @@ class GLContext {
 
 		glGetShaderSource(shader.handle, maxSourceLength, Native.addressOf(returnedStringLength), sourcePointer);
 		
-		var cStr: cpp.ConstCharStar = cast sourcePointer;
+		var cStr: ConstCharStar = cast sourcePointer;
 		return cStr.toString();
 	}
 
@@ -744,7 +740,7 @@ class GLContext {
 	}
 
 	public function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
+		var ptr: Star<UInt8> = pixels != null ? pixels.toCPointer() : null;
 		glReadPixels(x, y, width, height, format, type, cast ptr);
 	}
 
@@ -791,11 +787,11 @@ class GLContext {
 	}
 
 	public function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
+		var ptr: Star<UInt8> = pixels != null ? pixels.toCPointer() : null;
 		glTexImage2D(target, level, internalformat, width, height, border, format, type, cast ptr);
 	}
 
-	public function texImage2DPtr(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:cpp.RawConstPointer<cpp.Void>) {
+	public function texImage2DPtr(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:RawConstPointer<cpp.Void>) {
 		glTexImage2D(target, level, internalformat, width, height, border, format, type, cast pixels);
 	}
 
@@ -808,7 +804,7 @@ class GLContext {
 	}
 
 	public function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
-		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
+		var ptr: Star<UInt8> = pixels != null ? pixels.toCPointer() : null;
 		glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, cast ptr);
 	}
 
@@ -833,7 +829,7 @@ class GLContext {
 	}
 
 	public function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
-		glUniform2fv(location, cpp.NativeMath.idiv(v.length, 2), v.toCPointer());
+		glUniform2fv(location, NativeMath.idiv(v.length, 2), v.toCPointer());
 	}
 
 	public function uniform2i(location:GLUniformLocation, x:GLint, y:GLint) {
@@ -841,7 +837,7 @@ class GLContext {
 	}
 
 	public function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
-		glUniform2iv(location, cpp.NativeMath.idiv(v.length, 2), v.toCPointer());
+		glUniform2iv(location, NativeMath.idiv(v.length, 2), v.toCPointer());
 	}
 
 	public function uniform3f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat) {
@@ -849,7 +845,7 @@ class GLContext {
 	}
 
 	public function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
-		glUniform3fv(location, cpp.NativeMath.idiv(v.length, 3), v.toCPointer());
+		glUniform3fv(location, NativeMath.idiv(v.length, 3), v.toCPointer());
 	}
 
 	public function uniform3i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint) {
@@ -857,7 +853,7 @@ class GLContext {
 	}
 
 	public function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
-		glUniform3iv(location, cpp.NativeMath.idiv(v.length, 3), v.toCPointer());
+		glUniform3iv(location, NativeMath.idiv(v.length, 3), v.toCPointer());
 	}
 
 	public function uniform4f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
@@ -865,7 +861,7 @@ class GLContext {
 	}
 
 	public function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
-		glUniform4fv(location, cpp.NativeMath.idiv(v.length, 4), v.toCPointer());
+		glUniform4fv(location, NativeMath.idiv(v.length, 4), v.toCPointer());
 	}
 
 	public function uniform4i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint, w:GLint) {
@@ -873,19 +869,19 @@ class GLContext {
 	}
 
 	public function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
-		glUniform4iv(location, cpp.NativeMath.idiv(v.length, 4), v.toCPointer());
+		glUniform4iv(location, NativeMath.idiv(v.length, 4), v.toCPointer());
 	}
 
 	public function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		glUniformMatrix2fv(location, cpp.NativeMath.idiv(value.length, 4), transpose, value.toCPointer());
+		glUniformMatrix2fv(location, NativeMath.idiv(value.length, 4), transpose, value.toCPointer());
 	}
 
 	public function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		glUniformMatrix3fv(location, cpp.NativeMath.idiv(value.length, 9), transpose, value.toCPointer());
+		glUniformMatrix3fv(location, NativeMath.idiv(value.length, 9), transpose, value.toCPointer());
 	}
 
 	public function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		glUniformMatrix4fv(location, cpp.NativeMath.idiv(value.length, 16), transpose, value.toCPointer());
+		glUniformMatrix4fv(location, NativeMath.idiv(value.length, 16), transpose, value.toCPointer());
 	}
 
 	public function useProgram(?program:GLProgram) {
@@ -930,7 +926,7 @@ class GLContext {
 	}
 
 	public function vertexAttribPointer(index:GLuint, size:GLint, type:DataType, normalized:Bool, stride:GLsizei, offset:GLintptr) {
-		var offsetAsPointer: cpp.ConstStar<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
+		var offsetAsPointer: ConstStar<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
 		glVertexAttribPointer(index, size, type, normalized, stride, offsetAsPointer);
 	}
 
@@ -970,8 +966,8 @@ class GLContext {
 	}
 
 	inline function getString(pname: GLenum): String {
-		var result: cpp.RawConstPointer<GLubyte> = glGetString(pname);
-		var cStr: cpp.ConstCharStar = untyped __cpp__('reinterpret_cast<const char*>({0})', result);
+		var result: RawConstPointer<GLubyte> = glGetString(pname);
+		var cStr: ConstCharStar = untyped __cpp__('reinterpret_cast<const char*>({0})', result);
 		return cStr.toString();
 	}
 

@@ -11,318 +11,316 @@ import gluon.webgl.native.ES2Context.*;
 
 class GLContext {
 
-	final initialFramebuffer: GLFramebuffer;
+	final defaultFramebuffer: GLFramebuffer;
 
 	#if windows
 	
 	// initialize GLEW on platforms that require it
 	static var glewInitialized = false;
-	static function initGlew(): Bool {
-		var success: Bool = false;
-		untyped __cpp__('
-			glewExperimental = GL_TRUE;
-			{0} = glewInit() == GLEW_OK; 
-		', success);
-		return success;
-	}
-
-	public function new() {
+	/**
+		@throws String
+	**/
+	static function initGlew() {
 		if (!glewInitialized) {
-			glewInitialized = initGlew();
-			if (!glewInitialized) {
-				trace("Failed to initialize GLEW");
+			var success: Bool = false;
+			untyped __cpp__('
+				glewExperimental = GL_TRUE;
+				{0} = glewInit() == GLEW_OK; 
+			', success);
+
+			if (!success) {
+				throw 'Failed to initialize GLEW';
 			}
+
+			glewInitialized = success;
 		}
-
-		initialFramebuffer = this.getParameter(FRAMEBUFFER_BINDING);
 	}
-
 	#else
 
-	public function new() {
-		initialFramebuffer = this.getParameter(FRAMEBUFFER_BINDING);
+	public inline function new() {
+		#if windows
+		initGlew();
+		#end
+
+		var initialFramebuffer = this.getParameter(FRAMEBUFFER_BINDING);
+		defaultFramebuffer = initialFramebuffer != null ? initialFramebuffer : new GLFramebuffer(this, 0);
 	}
 
 	#end
 
-	public function getContextAttributes():GLContextAttributes {
+	public inline function getContextAttributes():GLContextAttributes {
 		// @! could use `eglQueryContext`
 		return null;
 	}
 
-	var _supportedExtensionsCache: Null<Array<String>> = null;
-	public function getSupportedExtensions():Array<String> {
-		if (_supportedExtensionsCache == null) {
-			var extensions = getString(EXTENSIONS);
-			// remove GL_ prefix
-			_supportedExtensionsCache = extensions.split(' ').map(name -> name.substr(3));
-		}
-
-		return _supportedExtensionsCache.copy();
+	
+	public inline function getSupportedExtensions():Array<String> {
+		var extensions = getString(EXTENSIONS);
+		return extensions.split(' ').map(name -> name.substr(3));
 	}
 
-	public function getExtension<T>(name: Extension<T>):T {
+	public inline function getExtension<T>(name: Extension<T>):T {
 		var isSupported = getSupportedExtensions().indexOf(name) != -1;
 		return isSupported ? cast {} : null;
 	}
 
-	public function isContextLost():Bool {
+	public inline function isContextLost():Bool {
 		return false;
 	}
 
-	public function activeTexture(unit:TextureUnit) {
+	public inline function activeTexture(unit:TextureUnit) {
 		glActiveTexture(unit);
 	}
 
-	public function attachShader(program:GLProgram, shader:GLShader) {
+	public inline function attachShader(program:GLProgram, shader:GLShader) {
 		glAttachShader(program.handle, shader.handle);
 	}
 
-	public function bindAttribLocation(program:GLProgram, index:GLuint, name:String) {
+	public inline function bindAttribLocation(program:GLProgram, index:GLuint, name:String) {
 		var nameCharStar = ConstCharStar.fromString(name);
 		glBindAttribLocation(program.handle, index, nameCharStar);
 	}
 
-	public function bindBuffer(target:BufferTarget, ?buffer:GLBuffer) {
+	public inline function bindBuffer(target:BufferTarget, ?buffer:GLBuffer) {
 		var ref = buffer != null ? buffer.handle : 0;
 		glBindBuffer(target, ref);
 	}
 
-	public function bindFramebuffer(target:FramebufferTarget, ?framebuffer:GLFramebuffer) {
-		var ref = framebuffer != null ? framebuffer.handle : initialFramebuffer.handle;
+	public inline function bindFramebuffer(target:FramebufferTarget, ?framebuffer:GLFramebuffer) {
+		var ref = framebuffer != null ? framebuffer.handle : defaultFramebuffer.handle;
 		glBindFramebuffer(target, ref);
 	}
 
-	public function bindRenderbuffer(target:RenderbufferTarget, ?renderbuffer:GLRenderbuffer) {
+	public inline function bindRenderbuffer(target:RenderbufferTarget, ?renderbuffer:GLRenderbuffer) {
 		var ref = renderbuffer != null ? renderbuffer.handle : 0;
 		glBindRenderbuffer(target, ref);
 	}
 
-	public function bindTexture(target:TextureTarget, ?texture:GLTexture) {
+	public inline function bindTexture(target:TextureTarget, ?texture:GLTexture) {
 		var ref = texture != null ? texture.handle : 0;
 		glBindTexture(target, ref);
 	}
 
-	public function blendColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
+	public inline function blendColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
 		glBlendColor(red, green, blue, alpha);
 	}
 
-	public function blendEquation(mode:BlendEquation) {
+	public inline function blendEquation(mode:BlendEquation) {
 		glBlendEquation(mode);
 	}
 
-	public function blendEquationSeparate(modeRGB:BlendEquation, modeAlpha:BlendEquation) {
+	public inline function blendEquationSeparate(modeRGB:BlendEquation, modeAlpha:BlendEquation) {
 		glBlendEquationSeparate(modeRGB, modeAlpha);
 	}
 
-	public function blendFunc(sfactor:BlendFactor, dfactor:BlendFactor) {
+	public inline function blendFunc(sfactor:BlendFactor, dfactor:BlendFactor) {
 		glBlendFunc(sfactor, dfactor);
 	}
 
-	public function blendFuncSeparate(srcRGB:BlendFactor, dstRGB:BlendFactor, srcAlpha:BlendFactor, dstAlpha:BlendFactor) {
+	public inline function blendFuncSeparate(srcRGB:BlendFactor, dstRGB:BlendFactor, srcAlpha:BlendFactor, dstAlpha:BlendFactor) {
 		glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 	}
 
-	public function bufferData(target:BufferTarget, data:BufferSource, usage:BufferUsage) {
+	public inline function bufferData(target:BufferTarget, data:BufferSource, usage:BufferUsage) {
 		glBufferData(target, data.byteLength, cast data.toCPointer(), usage);
 	}
 
-	public function bufferDataOfSize(target:BufferTarget, size:Int, usage:BufferUsage) {
+	public inline function bufferDataOfSize(target:BufferTarget, size:Int, usage:BufferUsage) {
 		glBufferData(target, size, null, usage);
 	}
 
-	public function bufferSubData(target:BufferTarget, offset:GLintptr, data:BufferSource) {
+	public inline function bufferSubData(target:BufferTarget, offset:GLintptr, data:BufferSource) {
 		glBufferSubData(target, offset, data.byteLength, cast data.toCPointer());
 	}
 
-	public function checkFramebufferStatus(target:FramebufferTarget):FramebufferStatus {
+	public inline function checkFramebufferStatus(target:FramebufferTarget):FramebufferStatus {
 		return glCheckFramebufferStatus(target);
 	}
 
-	public function clear(mask:ClearBufferMask) {
+	public inline function clear(mask:ClearBufferMask) {
 		glClear(mask);
 	}
 
-	public function clearColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
+	public inline function clearColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
 		glClearColor(red, green, blue, alpha);
 	}
 
-	public function clearDepth(depth:GLclampf) {
+	public inline function clearDepth(depth:GLclampf) {
 		glClearDepthf(depth);
 	}
 
-	public function clearStencil(s:GLint) {
+	public inline function clearStencil(s:GLint) {
 		glClearStencil(s);
 	}
 
-	public function colorMask(red:Bool, green:Bool, blue:Bool, alpha:Bool) {
+	public inline function colorMask(red:Bool, green:Bool, blue:Bool, alpha:Bool) {
 		glColorMask(red, green, blue, alpha);
 	}
 
-	public function compileShader(shader:GLShader) {
+	public inline function compileShader(shader:GLShader) {
 		glCompileShader(shader.handle);
 	}
 
-	public function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
+	public inline function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
 		var ptr: Star<UInt8> = data != null ? data.toCPointer() : null;
 		glCompressedTexImage2D(target, level, internalformat, width, height, border, data.byteLength, cast ptr);
 	}
 
-	public function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView) {
+	public inline function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView) {
 		var ptr: Star<UInt8> = data != null ? data.toCPointer() : null;
 		glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.byteLength, cast ptr);
 	}
 
-	public function copyTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, x:GLint, y:GLint, width:GLsizei, height:GLsizei, border:GLint) {
+	public inline function copyTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, x:GLint, y:GLint, width:GLsizei, height:GLsizei, border:GLint) {
 		glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
 	}
 
-	public function copyTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
+	public inline function copyTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
 		glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 	}
 
-	public function createBuffer():GLBuffer {
+	public inline function createBuffer():GLBuffer {
 		var ref: GLuint = 0;
 		glGenBuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLBuffer(this, ref) : null;
 	}
 
-	public function createFramebuffer():GLFramebuffer {
+	public inline function createFramebuffer():GLFramebuffer {
 		var ref: GLuint = 0;
 		glGenFramebuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLFramebuffer(this, ref) : null;
 	}
 
-	public function createProgram():GLProgram {
+	public inline function createProgram():GLProgram {
 		var ref = glCreateProgram();
 		return ref != 0 ? new GLProgram(this, ref) : null;
 	}
 
-	public function createRenderbuffer():GLRenderbuffer {
+	public inline function createRenderbuffer():GLRenderbuffer {
 		var ref: GLuint = 0;
 		glGenRenderbuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLRenderbuffer(this, ref) : null;
 	}
 
-	public function createShader(type:ShaderType):GLShader {
+	public inline function createShader(type:ShaderType):GLShader {
 		var ref = glCreateShader(type);
 		return ref != 0 ? new GLShader(this, ref) : null;
 	}
 
-	public function createTexture():GLTexture {
+	public inline function createTexture():GLTexture {
 		var ref: GLuint = 0;
 		glGenTextures(1, Native.addressOf(ref));
 		return ref != 0 ? new GLTexture(this, ref) : null;
 	}
 
-	public function cullFace(mode:CullFaceMode) {
+	public inline function cullFace(mode:CullFaceMode) {
 		glCullFace(mode);
 	}
 
-	public function deleteBuffer(?buffer:GLBuffer) {
+	public inline function deleteBuffer(?buffer:GLBuffer) {
 		if (buffer != null) {
 			glDeleteBuffers(1, Native.addressOf(buffer.handle));
 		}
 	}
 
-	public function deleteFramebuffer(?framebuffer:GLFramebuffer) {
+	public inline function deleteFramebuffer(?framebuffer:GLFramebuffer) {
 		if (framebuffer != null) {
 			glDeleteFramebuffers(1, Native.addressOf(framebuffer.handle));
 		}
 	}
 
-	public function deleteProgram(?program:GLProgram) {
+	public inline function deleteProgram(?program:GLProgram) {
 		if (program != null) {
 			glDeleteProgram(program.handle);
 		}
 	}
 
-	public function deleteRenderbuffer(?renderbuffer:GLRenderbuffer) {
+	public inline function deleteRenderbuffer(?renderbuffer:GLRenderbuffer) {
 		if (renderbuffer != null) {
 			glDeleteRenderbuffers(1, Native.addressOf(renderbuffer.handle));
 		}
 	}
 
-	public function deleteShader(?shader:GLShader) {
+	public inline function deleteShader(?shader:GLShader) {
 		if (shader != null) {
 			glDeleteShader(shader.handle);
 		}
 	}
 
-	public function deleteTexture(?texture:GLTexture) {
+	public inline function deleteTexture(?texture:GLTexture) {
 		if (texture != null) {
 			glDeleteTextures(1, Native.addressOf(texture.handle));
 		}
 	}
 
-	public function depthFunc(func:ComparisonFunction) {
+	public inline function depthFunc(func:ComparisonFunction) {
 		glDepthFunc(func);
 	}
 
-	public function depthMask(flag:Bool) {
+	public inline function depthMask(flag:Bool) {
 		glDepthMask(flag);
 	}
 
-	public function depthRange(zNear:GLclampf, zFar:GLclampf) {
+	public inline function depthRange(zNear:GLclampf, zFar:GLclampf) {
 		glDepthRangef(zNear, zFar);
 	}
 
-	public function detachShader(program:GLProgram, shader:GLShader) {
+	public inline function detachShader(program:GLProgram, shader:GLShader) {
 		glDetachShader(program.handle, shader.handle);
 	}
 
-	public function disable(cap:Capability) {
+	public inline function disable(cap:Capability) {
 		glDisable(cap);
 	}
 
-	public function disableVertexAttribArray(index:GLuint) {
+	public inline function disableVertexAttribArray(index:GLuint) {
 		glDisableVertexAttribArray(index);
 	}
 
-	public function drawArrays(mode:DrawMode, first:GLint, count:GLsizei) {
+	public inline function drawArrays(mode:DrawMode, first:GLint, count:GLsizei) {
 		glDrawArrays(mode, first, count);
 	}
 
-	public function drawElements(mode:DrawMode, count:GLsizei, type:DataType, offset:GLintptr) {
+	public inline function drawElements(mode:DrawMode, count:GLsizei, type:DataType, offset:GLintptr) {
 		var offsetAsPointer: ConstStar<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
 		glDrawElements(mode, count, type, offsetAsPointer);
 	}
 
-	public function enable(cap:Capability) {
+	public inline function enable(cap:Capability) {
 		glEnable(cap);
 	}
 
-	public function enableVertexAttribArray(index:GLuint) {
+	public inline function enableVertexAttribArray(index:GLuint) {
 		glEnableVertexAttribArray(index);
 	}
 
-	public function finish() {
+	public inline function finish() {
 		glFinish();
 	}
 
-	public function flush() {
+	public inline function flush() {
 		glFlush();
 	}
 
-	public function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, ?renderbuffer:GLRenderbuffer) {
+	public inline function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, ?renderbuffer:GLRenderbuffer) {
 		var ref = renderbuffer != null ? renderbuffer.handle : 0;
 		glFramebufferRenderbuffer(target, attachment, renderbuffertarget, ref);
 	}
 
-	public function framebufferTexture2D(target:FramebufferTarget, attachment:FramebufferAttachement, textarget:TextureTarget, texture:GLTexture, level:GLint) {
+	public inline function framebufferTexture2D(target:FramebufferTarget, attachment:FramebufferAttachement, textarget:TextureTarget, texture:GLTexture, level:GLint) {
 		var ref = texture != null ? texture.handle : 0;
 		glFramebufferTexture2D(target, attachment, textarget, ref, level);
 	}
 
-	public function frontFace(mode:FrontFaceDirection) {
+	public inline function frontFace(mode:FrontFaceDirection) {
 		glFrontFace(mode);
 	}
 
-	public function generateMipmap(target:TextureTarget) {
+	public inline function generateMipmap(target:TextureTarget) {
 		glGenerateMipmap(target);
 	}
 
-	public function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
+	public inline function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
 		final maxNameLength = getProgramParameter(program, ACTIVE_ATTRIBUTE_MAX_LENGTH);
 
 		var nameLength: GLsizei = 0;
@@ -352,7 +350,7 @@ class GLContext {
 		};
 	}
 
-	public function getActiveUniform(program:GLProgram, index:GLuint):GLActiveInfo {
+	public inline function getActiveUniform(program:GLProgram, index:GLuint):GLActiveInfo {
 		final maxNameLength = getProgramParameter(program, ACTIVE_UNIFORM_MAX_LENGTH);
 
 		var nameLength: GLsizei = 0;
@@ -381,17 +379,17 @@ class GLContext {
 		};
 	}
 
-	public function getAttachedShaders(program:GLProgram):Array<GLShader> {
+	public inline function getAttachedShaders(program:GLProgram):Array<GLShader> {
 		// return glGetAttachedShaders(program);
 		throw 'todo - getAttachedShaders';
 	}
 
-	public function getAttribLocation(program:GLProgram, name:String):GLint {
+	public inline function getAttribLocation(program:GLProgram, name:String):GLint {
 		var nameCharStar = ConstCharStar.fromString(name);
 		return glGetAttribLocation(program.handle, nameCharStar);
 	}
 
-	public function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T {
+	public inline function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T {
 		// return glGetBufferParameter(target, pname);
 		throw 'todo - getBufferParameter';
 	}
@@ -502,7 +500,7 @@ class GLContext {
 	}
 
 
-	public function getError():ErrorCode {
+	public inline function getError():ErrorCode {
 		return glGetError();
 	}
 
@@ -525,13 +523,13 @@ class GLContext {
 		}
 	}
 
-	public function getProgramParameter<T>(program:GLProgram, pname:ProgramParameter<T>):T {
+	public inline function getProgramParameter<T>(program:GLProgram, pname:ProgramParameter<T>):T {
 		var ref: GLint = 0;
 		glGetProgramiv(program.handle, pname, Native.addressOf(ref));
 		return cast ref;
 	}
 
-	public function getProgramInfoLog(program:GLProgram):String {
+	public inline function getProgramInfoLog(program:GLProgram):String {
 		var maxInfoLogLength: GLint = getProgramParameter(program, INFO_LOG_LENGTH);
 		var returnedStringLength: GLsizei = 0;
 
@@ -545,7 +543,7 @@ class GLContext {
 		return cStr.toString();
 	}
 
-	public function getRenderbufferParameter<T>(target:RenderbufferTarget, pname:RenderbufferParameter<T>):T {
+	public inline function getRenderbufferParameter<T>(target:RenderbufferTarget, pname:RenderbufferParameter<T>):T {
 		// return glGetRenderbufferParameter(target, pname);
 		throw 'todo - getRenderbufferParameter';
 	}
@@ -562,12 +560,12 @@ class GLContext {
 		}
 	}
 
-	public function getShaderPrecisionFormat(shadertype:ShaderType, precisiontype:PrecisionType):GLShaderPrecisionFormat {
+	public inline function getShaderPrecisionFormat(shadertype:ShaderType, precisiontype:PrecisionType):GLShaderPrecisionFormat {
 		// return glGetShaderPrecisionFormat(shadertype, precisiontype);
 		throw 'todo - getShaderPrecisionFormat';
 	}
 
-	public function getShaderInfoLog(shader:GLShader):String {
+	public inline function getShaderInfoLog(shader:GLShader):String {
 		var maxInfoLogLength: GLint = getShaderParameter(shader, INFO_LOG_LENGTH);
 		var returnedStringLength: GLsizei = 0;
 
@@ -581,7 +579,7 @@ class GLContext {
 		return cStr.toString();
 	}
 
-	public function getShaderSource(shader:GLShader):String {
+	public inline function getShaderSource(shader:GLShader):String {
 		var maxSourceLength: GLint = getShaderParameter(shader, SHADER_SOURCE_LENGTH);
 		var returnedStringLength: GLsizei = 0;
 		
@@ -676,278 +674,278 @@ class GLContext {
 		}
 	}
 
-	public function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
+	public inline function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
 		var nameCharStar = ConstCharStar.fromString(name);
 		return glGetUniformLocation(program.handle, nameCharStar);
 	}
 
-	public function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T {
+	public inline function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T {
 		// return glGetVertexAttrib(index, pname);
 		throw 'todo - getVertexAttrib';
 	}
 
-	public function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr {
+	public inline function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr {
 		// return glGetVertexAttribOffset(index, pname);
 		throw 'todo - getVertexAttrib';
 	}
 
-	public function hint(target:HintTarget, mode:HintMode) {
+	public inline function hint(target:HintTarget, mode:HintMode) {
 		glHint(target, mode);
 	}
 
-	public function isEnabled(cap:Capability):Bool {
+	public inline function isEnabled(cap:Capability):Bool {
 		return glIsEnabled(cap);
 	}
 	
-	public function isBuffer(?buffer:GLBuffer):Bool {
+	public inline function isBuffer(?buffer:GLBuffer):Bool {
 		return buffer != null ? glIsBuffer(buffer.handle) : false;
 	}
 
-	public function isFramebuffer(?framebuffer:GLFramebuffer):Bool {
+	public inline function isFramebuffer(?framebuffer:GLFramebuffer):Bool {
 		return framebuffer != null ? glIsFramebuffer(framebuffer.handle) : false;
 	}
 
-	public function isProgram(?program:GLProgram):Bool {
+	public inline function isProgram(?program:GLProgram):Bool {
 		return program != null ? glIsProgram(program.handle) : false;
 	}
 
-	public function isRenderbuffer(?renderbuffer:GLRenderbuffer):Bool {
+	public inline function isRenderbuffer(?renderbuffer:GLRenderbuffer):Bool {
 		return renderbuffer != null ? glIsRenderbuffer(renderbuffer.handle) : false;
 	}
 
-	public function isShader(?shader:GLShader):Bool {
+	public inline function isShader(?shader:GLShader):Bool {
 		return shader != null ? glIsShader(shader.handle) : false;
 	}
 
-	public function isTexture(?texture:GLTexture):Bool {
+	public inline function isTexture(?texture:GLTexture):Bool {
 		return texture != null ? glIsTexture(texture.handle) : false;
 	}
 
-	public function lineWidth(width:GLfloat) {
+	public inline function lineWidth(width:GLfloat) {
 		glLineWidth(width);
 	}
 
-	public function linkProgram(program:GLProgram) {
+	public inline function linkProgram(program:GLProgram) {
 		glLinkProgram(program.handle);
 	}
 
-	public function pixelStorei<T>(pname:PixelStoreParameter<T>, param:T) {
+	public inline function pixelStorei<T>(pname:PixelStoreParameter<T>, param:T) {
 		glPixelStorei(pname, cast param);
 	}
 
-	public function polygonOffset(factor:GLfloat, units:GLfloat) {
+	public inline function polygonOffset(factor:GLfloat, units:GLfloat) {
 		glPolygonOffset(factor, units);
 	}
 
-	public function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
+	public inline function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 		var ptr: Star<UInt8> = pixels != null ? pixels.toCPointer() : null;
 		glReadPixels(x, y, width, height, format, type, cast ptr);
 	}
 
-	public function renderbufferStorage(target:RenderbufferTarget, internalformat:RenderbufferFormat, width:GLsizei, height:GLsizei) {
+	public inline function renderbufferStorage(target:RenderbufferTarget, internalformat:RenderbufferFormat, width:GLsizei, height:GLsizei) {
 		glRenderbufferStorage(target, internalformat, width, height);
 	}
 
-	public function sampleCoverage(value:GLclampf, invert:Bool) {
+	public inline function sampleCoverage(value:GLclampf, invert:Bool) {
 		glSampleCoverage(value, invert);
 	}
 
-	public function scissor(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
+	public inline function scissor(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
 		glScissor(x, y, width, height);
 	}
 
-	public function shaderSource(shader:GLShader, source:String) {
+	public inline function shaderSource(shader:GLShader, source:String) {
 		var sourceCharStar = ConstCharStar.fromString(source);
 		// here we assume hxcpp strings are null terminated!
 		glShaderSource(shader.handle, 1, Native.addressOf(sourceCharStar), 0);
 	}
 
-	public function stencilFunc(func:ComparisonFunction, ref:GLint, mask:GLuint) {
+	public inline function stencilFunc(func:ComparisonFunction, ref:GLint, mask:GLuint) {
 		glStencilFunc(func, ref, mask);
 	}
 
-	public function stencilFuncSeparate(face:CullFaceMode, func:ComparisonFunction, ref:GLint, mask:GLuint) {
+	public inline function stencilFuncSeparate(face:CullFaceMode, func:ComparisonFunction, ref:GLint, mask:GLuint) {
 		glStencilFuncSeparate(face, func, ref, mask);
 	}
 
-	public function stencilMask(mask:GLuint) {
+	public inline function stencilMask(mask:GLuint) {
 		glStencilMask(mask);
 	}
 
-	public function stencilMaskSeparate(face:CullFaceMode, mask:GLuint) {
+	public inline function stencilMaskSeparate(face:CullFaceMode, mask:GLuint) {
 		glStencilMaskSeparate(face, mask);
 	}
 
-	public function stencilOp(fail:Operation, zfail:Operation, zpass:Operation) {
+	public inline function stencilOp(fail:Operation, zfail:Operation, zpass:Operation) {
 		glStencilOp(fail, zfail, zpass);
 	}
 
-	public function stencilOpSeparate(face:CullFaceMode, fail:Operation, zfail:Operation, zpass:Operation) {
+	public inline function stencilOpSeparate(face:CullFaceMode, fail:Operation, zfail:Operation, zpass:Operation) {
 		glStencilOpSeparate(face, fail, zfail, zpass);
 	}
 
-	public function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
+	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 		var ptr: Star<UInt8> = pixels != null ? pixels.toCPointer() : null;
 		glTexImage2D(target, level, internalformat, width, height, border, format, type, cast ptr);
 	}
 
-	public function texImage2DPtr(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:RawConstPointer<cpp.Void>) {
+	public inline function texImage2DPtr(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:RawConstPointer<cpp.Void>) {
 		glTexImage2D(target, level, internalformat, width, height, border, format, type, cast pixels);
 	}
 
-	public function texParameterf<T:GLfloat>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
+	public inline function texParameterf<T:GLfloat>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
 		glTexParameterf(target, pname, param);
 	}
 
-	public function texParameteri<T:GLint>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
+	public inline function texParameteri<T:GLint>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
 		glTexParameteri(target, pname, param);
 	}
 
-	public function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
+	public inline function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 		var ptr: Star<UInt8> = pixels != null ? pixels.toCPointer() : null;
 		glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, cast ptr);
 	}
 
-	public function uniform1f(location:GLUniformLocation, x:GLfloat) {
+	public inline function uniform1f(location:GLUniformLocation, x:GLfloat) {
 		glUniform1f(location, x);
 	}
 
-	public function uniform1fv(location:GLUniformLocation, v:GLFloat32Array) {
+	public inline function uniform1fv(location:GLUniformLocation, v:GLFloat32Array) {
 		glUniform1fv(location, v.length, v.toCPointer());
 	}
 
-	public function uniform1i(location:GLUniformLocation, x:GLint) {
+	public inline function uniform1i(location:GLUniformLocation, x:GLint) {
 		glUniform1i(location, x);
 	}
 
-	public function uniform1iv(location:GLUniformLocation, v:GLInt32Array) {
+	public inline function uniform1iv(location:GLUniformLocation, v:GLInt32Array) {
 		glUniform1iv(location, v.length, v.toCPointer());
 	}
 
-	public function uniform2f(location:GLUniformLocation, x:GLfloat, y:GLfloat) {
+	public inline function uniform2f(location:GLUniformLocation, x:GLfloat, y:GLfloat) {
 		glUniform2f(location, x, y);
 	}
 
-	public function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
+	public inline function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
 		glUniform2fv(location, NativeMath.idiv(v.length, 2), v.toCPointer());
 	}
 
-	public function uniform2i(location:GLUniformLocation, x:GLint, y:GLint) {
+	public inline function uniform2i(location:GLUniformLocation, x:GLint, y:GLint) {
 		glUniform2i(location, x, y);
 	}
 
-	public function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
+	public inline function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
 		glUniform2iv(location, NativeMath.idiv(v.length, 2), v.toCPointer());
 	}
 
-	public function uniform3f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat) {
+	public inline function uniform3f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat) {
 		glUniform3f(location, x, y, z);
 	}
 
-	public function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
+	public inline function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
 		glUniform3fv(location, NativeMath.idiv(v.length, 3), v.toCPointer());
 	}
 
-	public function uniform3i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint) {
+	public inline function uniform3i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint) {
 		glUniform3i(location, x, y, z);
 	}
 
-	public function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
+	public inline function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
 		glUniform3iv(location, NativeMath.idiv(v.length, 3), v.toCPointer());
 	}
 
-	public function uniform4f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
+	public inline function uniform4f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
 		glUniform4f(location, x, y, z, w);
 	}
 
-	public function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
+	public inline function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
 		glUniform4fv(location, NativeMath.idiv(v.length, 4), v.toCPointer());
 	}
 
-	public function uniform4i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint, w:GLint) {
+	public inline function uniform4i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint, w:GLint) {
 		glUniform4i(location, x, y, z, w);
 	}
 
-	public function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
+	public inline function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
 		glUniform4iv(location, NativeMath.idiv(v.length, 4), v.toCPointer());
 	}
 
-	public function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
+	public inline function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
 		glUniformMatrix2fv(location, NativeMath.idiv(value.length, 4), transpose, value.toCPointer());
 	}
 
-	public function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
+	public inline function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
 		glUniformMatrix3fv(location, NativeMath.idiv(value.length, 9), transpose, value.toCPointer());
 	}
 
-	public function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
+	public inline function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
 		glUniformMatrix4fv(location, NativeMath.idiv(value.length, 16), transpose, value.toCPointer());
 	}
 
-	public function useProgram(?program:GLProgram) {
+	public inline function useProgram(?program:GLProgram) {
 		var ref = program != null ? program.handle : 0;
 		glUseProgram(ref);
 	}
 
-	public function validateProgram(program:GLProgram) {
+	public inline function validateProgram(program:GLProgram) {
 		glValidateProgram(program.handle);
 	}
 
-	public function vertexAttrib1f(index:GLuint, x:GLfloat) {
+	public inline function vertexAttrib1f(index:GLuint, x:GLfloat) {
 		glVertexAttrib1f(index, x);
 	}
 
-	public function vertexAttrib1fv(index:GLuint, values:GLFloat32Array) {
+	public inline function vertexAttrib1fv(index:GLuint, values:GLFloat32Array) {
 		glVertexAttrib1fv(index, values.toCPointer());
 	}
 
-	public function vertexAttrib2f(index:GLuint, x:GLfloat, y:GLfloat) {
+	public inline function vertexAttrib2f(index:GLuint, x:GLfloat, y:GLfloat) {
 		glVertexAttrib2f(index, x, y);
 	}
 
-	public function vertexAttrib2fv(index:GLuint, values:GLFloat32Array) {
+	public inline function vertexAttrib2fv(index:GLuint, values:GLFloat32Array) {
 		glVertexAttrib2fv(index, values.toCPointer());
 	}
 
-	public function vertexAttrib3f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat) {
+	public inline function vertexAttrib3f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat) {
 		glVertexAttrib3f(index, x, y, z);
 	}
 
-	public function vertexAttrib3fv(index:GLuint, values:GLFloat32Array) {
+	public inline function vertexAttrib3fv(index:GLuint, values:GLFloat32Array) {
 		glVertexAttrib3fv(index, values.toCPointer());
 	}
 
-	public function vertexAttrib4f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
+	public inline function vertexAttrib4f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
 		glVertexAttrib4f(index, x, y, z, w);
 	}
 
-	public function vertexAttrib4fv(index:GLuint, values:GLFloat32Array) {
+	public inline function vertexAttrib4fv(index:GLuint, values:GLFloat32Array) {
 		glVertexAttrib4fv(index, values.toCPointer());
 	}
 
-	public function vertexAttribPointer(index:GLuint, size:GLint, type:DataType, normalized:Bool, stride:GLsizei, offset:GLintptr) {
+	public inline function vertexAttribPointer(index:GLuint, size:GLint, type:DataType, normalized:Bool, stride:GLsizei, offset:GLintptr) {
 		var offsetAsPointer: ConstStar<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
 		glVertexAttribPointer(index, size, type, normalized, stride, offsetAsPointer);
 	}
 
-	public function viewport(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
+	public inline function viewport(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
 		glViewport(x, y, width, height);
 	}
 
 	// internal utility methods
-	function getFloat32Array(pname: GLenum, n: Int) {
+	inline function getFloat32Array(pname: GLenum, n: Int) {
 		var temp = new Float32Array(n);
 		glGetFloatv(pname, temp.toCPointer());
 		return new Float32Array(temp);
 	}
 
-	function getInt32Array(pname: GLenum, n: Int) {
+	inline function getInt32Array(pname: GLenum, n: Int) {
 		var temp = new Int32Array(n);
 		glGetIntegerv(pname, temp.toCPointer());
 		return new Int32Array(temp);
 	}
 
-	function getGLbooleanArray(pname: GLenum, n: Int) {
+	inline function getGLbooleanArray(pname: GLenum, n: Int) {
 		var temp = new Uint8Array(n);
 		glGetBooleanv(pname, temp.toCPointer());
 		return new Uint8Array(temp);

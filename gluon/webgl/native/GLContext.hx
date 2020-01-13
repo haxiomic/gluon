@@ -323,7 +323,7 @@ class GLContext {
 		glGenerateMipmap(target);
 	}
 
-	public inline function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
+	public function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
 		final maxNameLength = getProgramParameter(program, ACTIVE_ATTRIBUTE_MAX_LENGTH);
 
 		var nameLength: GLsizei = 0;
@@ -353,7 +353,7 @@ class GLContext {
 		};
 	}
 
-	public inline function getActiveUniform(program:GLProgram, index:GLuint):GLActiveInfo {
+	public function getActiveUniform(program:GLProgram, index:GLuint):GLActiveInfo {
 		final maxNameLength = getProgramParameter(program, ACTIVE_UNIFORM_MAX_LENGTH);
 
 		var nameLength: GLsizei = 0;
@@ -538,7 +538,7 @@ class GLContext {
 		return cast ref;
 	}
 
-	public inline function getProgramInfoLog(program:GLProgram):String {
+	public function getProgramInfoLog(program:GLProgram):String {
 		var maxInfoLogLength: GLint = getProgramParameter(program, INFO_LOG_LENGTH);
 		var returnedStringLength: GLsizei = 0;
 
@@ -581,7 +581,7 @@ class GLContext {
 		}
 	}
 
-	public inline function getShaderInfoLog(shader:GLShader):String {
+	public function getShaderInfoLog(shader:GLShader):String {
 		var maxInfoLogLength: GLint = getShaderParameter(shader, INFO_LOG_LENGTH);
 		var returnedStringLength: GLsizei = 0;
 
@@ -595,7 +595,7 @@ class GLContext {
 		return cStr.toString();
 	}
 
-	public inline function getShaderSource(shader:GLShader):String {
+	public function getShaderSource(shader:GLShader):String {
 		var maxSourceLength: GLint = getShaderParameter(shader, SHADER_SOURCE_LENGTH);
 		var returnedStringLength: GLsizei = 0;
 		
@@ -792,7 +792,8 @@ class GLContext {
 		glScissor(x, y, width, height);
 	}
 
-	public inline function shaderSource(shader:GLShader, source:String) {
+	@:analyzer(no_optimize)
+	public function shaderSource(shader:GLShader, source:String) {
 		var sourceCharStar = ConstCharStar.fromString(source);
 		// here we assume hxcpp strings are null terminated!
 		glShaderSource(shader.handle, 1, Native.addressOf(sourceCharStar), 0);

@@ -15,7 +15,8 @@
 
 ### Project State
 
-- This project is ready to use with the js and hxcpp targets and is used in production projects, however a small number of GL reflection methods are not yet implemented
+- This project is ready to use with the js and hxcpp targets and is used in production projects
+- It's likely to undergo minor changes as I work towards releasing it
 
 ### Design Goals
 - Dependency free and minimalistic

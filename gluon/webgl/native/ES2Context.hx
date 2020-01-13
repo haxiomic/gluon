@@ -8,7 +8,9 @@ import gluon.webgl.GLContext;
 @:native('')
 @:include('./native.h')
 @:unreflective
-#if !display @:build(gluon.webgl.native.ES2Context.ES2ContextMacro.addBuildConfig()) #end
+#if !display
+@:build(gluon.webgl.native.ES2Context.ES2ContextMacro.addBuildConfig())
+#end
 extern class ES2Context {
 
     @:native('glActiveTexture')static function glActiveTexture(texture: GLenum): Void;

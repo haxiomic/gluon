@@ -9,8 +9,12 @@ typedef GLContextAttributes = {
     var preserveDrawingBuffer:Bool;
 
     // webgl-specific
-    #if js
-    var ?powerPreference: js.html.webgl.PowerPreference;
     var ?failIfMajorPerformanceCaveat: Bool;
-    #end
+    var ?powerPreference: PowerPreference;
 };
+
+@:enum abstract PowerPreference(String) from String to String {
+    var DEFAULT = 'default';
+    var LOW_POWER = 'low-power';
+    var HIGH_PERFORMANCE = 'high-performance';
+}

@@ -13,7 +13,7 @@
 # -D annotate-source
 
 # disable debug macos in generated c++
--D no-debug
+# -D no-debug
 
 # objective-c++ compatible output (in .mm files)
 -D objc
@@ -27,3 +27,5 @@
 # -D OBJC_ARC=1
 
 -cpp bin
+
+-debug

@@ -37,7 +37,7 @@ LDFLAGS+= -framework Cocoa
 
 # > embedded haxe example
 CXXFLAGS+= -I../bin/include
-LDFLAGS += ../bin/libExample.a
+LDFLAGS += ../bin/libExample-debug.a
 
 # > include hxcpp libs
 HXCPP := $(shell haxelib config)/hxcpp/4,0,52

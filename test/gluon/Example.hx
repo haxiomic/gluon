@@ -1,5 +1,5 @@
 import gluon.es2.GLContext;
-import gluon.es2.native.ES2Context;
+import gluon.es2.native.GLContext;
 
 class Example {
 
@@ -11,7 +11,7 @@ class Example {
 
     @:keep
     static public function init() {
-        gl = new ES2Context();
+        gl = new GLContext();
     }
 
     @:keep

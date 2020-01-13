@@ -1,6 +1,6 @@
 package gluon.es2.native;
 
-@:allow(gluon.es2.native.ES2Context)
+@:allow(gluon.es2.native.GLContext)
 final class GLFramebuffer extends GLObject {
 
     @:noCompletion

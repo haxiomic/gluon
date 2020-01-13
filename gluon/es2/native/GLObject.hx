@@ -3,13 +3,13 @@ package gluon.es2.native;
 import cpp.NativeGc;
 import gluon.es2.GLContext.GLuint;
 
-@:allow(gluon.es2.native.ES2Context)
+@:allow(gluon.es2.native.GLContext)
 class GLObject {
 
-    final context: ES2Context;
+    final context: GLContext;
     var handle: GLuint;
 
-    function new(context: ES2Context, handle: GLuint) {
+    function new(context: GLContext, handle: GLuint) {
         this.context = context;
         this.handle = handle;
         NativeGc.addFinalizable(this, false);

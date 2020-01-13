@@ -34,9 +34,9 @@ import cpp.RawPointer;
 ")
 
 #end
-@:build(gluon.es2.native.ES2Context.Macro.addBuildConfig())
+@:build(gluon.es2.native.GLContext.Macro.addBuildConfig())
 @:unreflective
-class ES2Context {
+class GLContext {
 
 	final initialFramebuffer: GLFramebuffer;
 

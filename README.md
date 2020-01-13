@@ -12,8 +12,9 @@
 
 	Which means fewer trips to the OpenGL specification :)
 - A TypedArray implementation designed for parity with JavaScript's TypedArrays
+- On hxcpp, GPU resources are not freed with garbage collection, you must do this manually with the gl.delete* methods. This is best practice for browser WebGL too because the [GC cannot properly estimate memory pressure of GPU objects](https://stackoverflow.com/a/31250301/4038621)
 
-### State
+### Project State
 
 - This project is ready to use with the js and hxcpp targets and is used in production projects, however a small number of GL reflection methods are not yet implemented
 

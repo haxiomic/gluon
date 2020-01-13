@@ -19,10 +19,3 @@
 
 ### Design Goals
 - Dependency free and minimalistic
-
-### Versions
-Gluon aims to execute with parity across platforms, consequently, it's usually bounded by the WebGL feature set (which tracks OpenGL ES closely)
-
-| Gluon     | WebGL     | OpenGL |
-|-----------|-----------|--------|
-| es2       | WebGL 1.0 | ES 2.0 |

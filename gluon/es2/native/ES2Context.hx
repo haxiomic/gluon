@@ -38,6 +38,8 @@ import cpp.RawPointer;
 @:unreflective
 class ES2Context {
 
+	final initialFramebuffer: GLFramebuffer;
+
 	#if windows
 	
 	// initialize GLEW on platforms that require it
@@ -58,11 +60,15 @@ class ES2Context {
 				trace("Failed to initialize GLEW");
 			}
 		}
+
+		initialFramebuffer = this.getParameter(FRAMEBUFFER_BINDING);
 	}
 
 	#else
 
-	public function new() { }
+	public function new() {
+		initialFramebuffer = this.getParameter(FRAMEBUFFER_BINDING);
+	}
 
 	#end
 
@@ -96,28 +102,32 @@ class ES2Context {
 	}
 
 	public function attachShader(program:GLProgram, shader:GLShader) {
-		untyped __global__.glAttachShader(program, shader);
+		untyped __global__.glAttachShader(program.handle, shader.handle);
 	}
 
 	public function bindAttribLocation(program:GLProgram, index:GLuint, name:String) {
 		var nameCharStar = ConstCharStar.fromString(name);
-		untyped __global__.glBindAttribLocation(program, index, nameCharStar);
+		untyped __global__.glBindAttribLocation(program.handle, index, nameCharStar);
 	}
 
-	public function bindBuffer(target:BufferTarget, buffer:GLBuffer) {
-		untyped __global__.glBindBuffer(target, buffer);
+	public function bindBuffer(target:BufferTarget, ?buffer:GLBuffer) {
+		var ref = buffer != null ? buffer.handle : 0;
+		untyped __global__.glBindBuffer(target, ref);
 	}
 
-	public function bindFramebuffer(target:FramebufferTarget, framebuffer:GLFramebuffer) {
-		untyped __global__.glBindFramebuffer(target, framebuffer);
+	public function bindFramebuffer(target:FramebufferTarget, ?framebuffer:GLFramebuffer) {
+		var ref = framebuffer != null ? framebuffer.handle : initialFramebuffer.handle;
+		untyped __global__.glBindFramebuffer(target, ref);
 	}
 
-	public function bindRenderbuffer(target:RenderbufferTarget, renderbuffer:GLRenderbuffer) {
-		untyped __global__.glBindRenderbuffer(target, renderbuffer);
+	public function bindRenderbuffer(target:RenderbufferTarget, ?renderbuffer:GLRenderbuffer) {
+		var ref = renderbuffer != null ? renderbuffer.handle : 0;
+		untyped __global__.glBindRenderbuffer(target, ref);
 	}
 
-	public function bindTexture(target:TextureTarget, texture:GLTexture) {
-		untyped __global__.glBindTexture(target, texture);
+	public function bindTexture(target:TextureTarget, ?texture:GLTexture) {
+		var ref = texture != null ? texture.handle : 0;
+		untyped __global__.glBindTexture(target, ref);
 	}
 
 	public function blendColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
@@ -177,7 +187,7 @@ class ES2Context {
 	}
 
 	public function compileShader(shader:GLShader) {
-		untyped __global__.glCompileShader(shader);
+		untyped __global__.glCompileShader(shader.handle);
 	}
 
 	public function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
@@ -201,61 +211,75 @@ class ES2Context {
 	public function createBuffer():GLBuffer {
 		var ref: GLuint = 0;
 		untyped __global__.glGenBuffers(1, Native.addressOf(ref));
-		return ref;
+		return ref != 0 ? new GLBuffer(this, ref) : null;
 	}
 
 	public function createFramebuffer():GLFramebuffer {
 		var ref: GLuint = 0;
 		untyped __global__.glGenFramebuffers(1, Native.addressOf(ref));
-		return ref;
+		return ref != 0 ? new GLFramebuffer(this, ref) : null;
 	}
 
 	public function createProgram():GLProgram {
-		return untyped __global__.glCreateProgram();
+		var ref = untyped __global__.glCreateProgram();
+		return ref != 0 ? new GLProgram(this, ref) : null;
 	}
 
 	public function createRenderbuffer():GLRenderbuffer {
 		var ref: GLuint = 0;
 		untyped __global__.glGenRenderbuffers(1, Native.addressOf(ref));
-		return ref;
+		return ref != 0 ? new GLRenderbuffer(this, ref) : null;
 	}
 
 	public function createShader(type:ShaderType):GLShader {
-		return untyped __global__.glCreateShader(type);
+		var ref = untyped __global__.glCreateShader(type);
+		return ref != 0 ? new GLShader(this, ref) : null;
 	}
 
 	public function createTexture():GLTexture {
 		var ref: GLuint = 0;
 		untyped __global__.glGenTextures(1, Native.addressOf(ref));
-		return ref;
+		return ref != 0 ? new GLTexture(this, ref) : null;
 	}
 
 	public function cullFace(mode:CullFaceMode) {
 		untyped __global__.glCullFace(mode);
 	}
 
-	public function deleteBuffer(buffer:GLBuffer) {
-		untyped __global__.glDeleteBuffers(1, Native.addressOf(buffer));
+	public function deleteBuffer(?buffer:GLBuffer) {
+		if (buffer != null) {
+			untyped __global__.glDeleteBuffers(1, Native.addressOf(buffer.handle));
+		}
 	}
 
-	public function deleteFramebuffer(framebuffer:GLFramebuffer) {
-		untyped __global__.glDeleteFramebuffers(1, Native.addressOf(framebuffer));
+	public function deleteFramebuffer(?framebuffer:GLFramebuffer) {
+		if (framebuffer != null) {
+			untyped __global__.glDeleteFramebuffers(1, Native.addressOf(framebuffer.handle));
+		}
 	}
 
-	public function deleteProgram(program:GLProgram) {
-		untyped __global__.glDeleteProgram(program);
+	public function deleteProgram(?program:GLProgram) {
+		if (program != null) {
+			untyped __global__.glDeleteProgram(program.handle);
+		}
 	}
 
-	public function deleteRenderbuffer(renderbuffer:GLRenderbuffer) {
-		untyped __global__.glDeleteRenderbuffers(1, Native.addressOf(renderbuffer));
+	public function deleteRenderbuffer(?renderbuffer:GLRenderbuffer) {
+		if (renderbuffer != null) {
+			untyped __global__.glDeleteRenderbuffers(1, Native.addressOf(renderbuffer.handle));
+		}
 	}
 
-	public function deleteShader(shader:GLShader) {
-		untyped __global__.glDeleteShader(shader);
+	public function deleteShader(?shader:GLShader) {
+		if (shader != null) {
+			untyped __global__.glDeleteShader(shader.handle);
+		}
 	}
 
-	public function deleteTexture(texture:GLTexture) {
-		untyped __global__.glDeleteTextures(1, Native.addressOf(texture));
+	public function deleteTexture(?texture:GLTexture) {
+		if (texture != null) {
+			untyped __global__.glDeleteTextures(1, Native.addressOf(texture.handle));
+		}
 	}
 
 	public function depthFunc(func:ComparisonFunction) {
@@ -271,7 +295,7 @@ class ES2Context {
 	}
 
 	public function detachShader(program:GLProgram, shader:GLShader) {
-		untyped __global__.glDetachShader(program, shader);
+		untyped __global__.glDetachShader(program.handle, shader.handle);
 	}
 
 	public function disable(cap:Capability) {
@@ -307,12 +331,14 @@ class ES2Context {
 		untyped __global__.glFlush();
 	}
 
-	public function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, renderbuffer:GLRenderbuffer) {
-		untyped __global__.glFramebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
+	public function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, ?renderbuffer:GLRenderbuffer) {
+		var ref = renderbuffer != null ? renderbuffer.handle : 0;
+		untyped __global__.glFramebufferRenderbuffer(target, attachment, renderbuffertarget, ref);
 	}
 
 	public function framebufferTexture2D(target:FramebufferTarget, attachment:FramebufferAttachement, textarget:TextureTarget, texture:GLTexture, level:GLint) {
-		untyped __global__.glFramebufferTexture2D(target, attachment, textarget, texture, level);
+		var ref = texture != null ? texture.handle : 0;
+		untyped __global__.glFramebufferTexture2D(target, attachment, textarget, ref, level);
 	}
 
 	public function frontFace(mode:FrontFaceDirection) {
@@ -324,7 +350,7 @@ class ES2Context {
 	}
 
 	public function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
-		final maxNameLength = this.getProgramParameter(program, ACTIVE_ATTRIBUTE_MAX_LENGTH);
+		final maxNameLength = getProgramParameter(program, ACTIVE_ATTRIBUTE_MAX_LENGTH);
 
 		var nameLength: GLsizei = 0;
 		var size: GLint = 0;
@@ -335,7 +361,7 @@ class ES2Context {
 		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
 		untyped __global__.glGetActiveAttrib(
-			program,
+			program.handle,
 			index,
 			maxNameLength,
 			Native.addressOf(nameLength),
@@ -354,7 +380,7 @@ class ES2Context {
 	}
 
 	public function getActiveUniform(program:GLProgram, index:GLuint):GLActiveInfo {
-		final maxNameLength = this.getProgramParameter(program, ACTIVE_UNIFORM_MAX_LENGTH);
+		final maxNameLength = getProgramParameter(program, ACTIVE_UNIFORM_MAX_LENGTH);
 
 		var nameLength: GLsizei = 0;
 		var size: GLint = 0;
@@ -364,7 +390,7 @@ class ES2Context {
 		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
 		untyped __global__.glGetActiveUniform(
-			program,
+			program.handle,
 			index,
 			maxNameLength,
 			Native.addressOf(nameLength),
@@ -389,7 +415,7 @@ class ES2Context {
 
 	public function getAttribLocation(program:GLProgram, name:String):GLint {
 		var nameCharStar = ConstCharStar.fromString(name);
-		return untyped __global__.glGetAttribLocation(program, nameCharStar);
+		return untyped __global__.glGetAttribLocation(program.handle, nameCharStar);
 	}
 
 	public function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T {
@@ -463,20 +489,27 @@ class ES2Context {
 				//"The core WebGL specification does not define any supported compressed texture formats" (supported via extensions)
 				return new Uint32Array(0);
 
+			// GLObject Types
+
 			case Parameter.ARRAY_BUFFER_BINDING, Parameter.ELEMENT_ARRAY_BUFFER_BINDING:
-				return getInt32(pname);
+				var ref = getInt32(pname);
+				return ref != 0 ? new GLBuffer(this, ref) : null;
 
 			case Parameter.FRAMEBUFFER_BINDING:
-				return getInt32(pname);
+				var ref = getInt32(pname);
+				return ref != 0 ? new GLFramebuffer(this, ref) : null;
 
 			case Parameter.CURRENT_PROGRAM:
-				return getInt32(pname);
+				var ref = getInt32(pname);
+				return ref != 0 ? new GLProgram(this, ref) : null;
 
 			case Parameter.RENDERBUFFER_BINDING:
-				return getInt32(pname);
+				var ref = getInt32(pname);
+				return ref != 0 ? new GLRenderbuffer(this, ref) : null;
 
 			case Parameter.TEXTURE_BINDING_2D, Parameter.TEXTURE_BINDING_CUBE_MAP:
-				return getInt32(pname);
+				var ref = getInt32(pname);
+				return ref != 0 ? new GLTexture(this, ref) : null;
 
 			// case UNPACK_COLORSPACE_CONVERSION_WEBGL:
 			// 	args.GetReturnValue().Set(args.Holder()->GetHiddenValue(v8::String::NewFromUtf8(isolate, "UNPACK_COLORSPACE_CONVERSION_WEBGL")));
@@ -503,13 +536,26 @@ class ES2Context {
 	public function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>):T {
 		var ref: GLint = 0;
 		untyped __global__.glGetFramebufferAttachmentParameteriv(target, attachment, pname, Native.addressOf(ref));
-		return (ref: Dynamic);
+		switch pname {
+			case FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:
+				return cast ref;
+			case FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL, FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
+				return cast ref;
+			case FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
+				if (untyped __global__.glIsRenderbuffer(ref)) {
+					return cast new GLRenderbuffer(this, ref);
+				} else if (untyped __global__.glIsTexture(ref)) {
+					return cast new GLTexture(this, ref);
+				} else {
+					return null;
+				}
+		}
 	}
 
 	public function getProgramParameter<T>(program:GLProgram, pname:ProgramParameter<T>):T {
 		var ref: GLint = 0;
-		untyped __global__.glGetProgramiv(program, pname, Native.addressOf(ref));
-		return (ref: Dynamic);
+		untyped __global__.glGetProgramiv(program.handle, pname, Native.addressOf(ref));
+		return cast ref;
 	}
 
 	public function getProgramInfoLog(program:GLProgram):String {
@@ -520,7 +566,7 @@ class ES2Context {
 		var infoLogBufferPtr = infoLogBuffer.toCPointer();
 		var infoLogPointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
 
-		untyped __global__.glGetProgramInfoLog(program, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
+		untyped __global__.glGetProgramInfoLog(program.handle, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
 
 		var cStr: cpp.ConstCharStar = cast infoLogPointer;
 		return cStr.toString();
@@ -535,10 +581,10 @@ class ES2Context {
 		var result: GLint = 0;
 		switch pname {
 			case ShaderParameter.COMPILE_STATUS, ShaderParameter.DELETE_STATUS:
-				untyped __global__.glGetShaderiv(shader, pname, Native.addressOf(result));
+				untyped __global__.glGetShaderiv(shader.handle, pname, Native.addressOf(result));
 				return result != 0;
 			case ShaderParameter.SHADER_TYPE:
-				untyped __global__.glGetShaderiv(shader, pname, Native.addressOf(result));
+				untyped __global__.glGetShaderiv(shader.handle, pname, Native.addressOf(result));
 				return result;
 		}
 	}
@@ -556,7 +602,7 @@ class ES2Context {
 		var infoLogBufferPtr = infoLogBuffer.toCPointer();
 		var infoLogPointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
 
-		untyped __global__.glGetShaderInfoLog(shader, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
+		untyped __global__.glGetShaderInfoLog(shader.handle, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
 
 		var cStr: cpp.ConstCharStar = cast infoLogPointer;
 		return cStr.toString();
@@ -570,7 +616,7 @@ class ES2Context {
 		var sourceBufferPtr = sourceBuffer.toCPointer();
 		var sourcePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', sourceBufferPtr);
 
-		untyped __global__.glGetShaderSource(shader, maxSourceLength, Native.addressOf(returnedStringLength), sourcePointer);
+		untyped __global__.glGetShaderSource(shader.handle, maxSourceLength, Native.addressOf(returnedStringLength), sourcePointer);
 		
 		var cStr: cpp.ConstCharStar = cast sourcePointer;
 		return cStr.toString();
@@ -595,13 +641,13 @@ class ES2Context {
 
 		inline function getUniformFloat32Array(n: Int) {
 			var temp = new Float32Array(n);
-			untyped __global__.glGetUniformfv(program, location, temp.toCPointer());
+			untyped __global__.glGetUniformfv(program.handle, location, temp.toCPointer());
 			return new Float32Array(temp);
 		}
 
 		inline function getUniformInt32Array(n: Int) {
 			var temp = new Int32Array(n);
-			untyped __global__.glGetUniformiv(program, location, temp.toCPointer());
+			untyped __global__.glGetUniformiv(program.handle, location, temp.toCPointer());
 			return new Int32Array(temp);
 		}
 
@@ -659,7 +705,7 @@ class ES2Context {
 
 	public function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
 		var nameCharStar = ConstCharStar.fromString(name);
-		return untyped __global__.glGetUniformLocation(program, nameCharStar);
+		return untyped __global__.glGetUniformLocation(program.handle, nameCharStar);
 	}
 
 	public function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T {
@@ -676,32 +722,32 @@ class ES2Context {
 		untyped __global__.glHint(target, mode);
 	}
 
-	public function isBuffer(buffer:GLBuffer):Bool {
-		return untyped __global__.glIsBuffer(buffer);
-	}
-
 	public function isEnabled(cap:Capability):Bool {
 		return untyped __global__.glIsEnabled(cap);
 	}
-
-	public function isFramebuffer(framebuffer:GLFramebuffer):Bool {
-		return untyped __global__.glIsFramebuffer(framebuffer);
+	
+	public function isBuffer(?buffer:GLBuffer):Bool {
+		return buffer != null ? untyped __global__.glIsBuffer(buffer.handle) : false;
 	}
 
-	public function isProgram(program:GLProgram):Bool {
-		return untyped __global__.glIsProgram(program);
+	public function isFramebuffer(?framebuffer:GLFramebuffer):Bool {
+		return framebuffer != null ? untyped __global__.glIsFramebuffer(framebuffer.handle) : false;
 	}
 
-	public function isRenderbuffer(renderbuffer:GLRenderbuffer):Bool {
-		return untyped __global__.glIsRenderbuffer(renderbuffer);
+	public function isProgram(?program:GLProgram):Bool {
+		return program != null ? untyped __global__.glIsProgram(program.handle) : false;
 	}
 
-	public function isShader(shader:GLShader):Bool {
-		return untyped __global__.glIsShader(shader);
+	public function isRenderbuffer(?renderbuffer:GLRenderbuffer):Bool {
+		return renderbuffer != null ? untyped __global__.glIsRenderbuffer(renderbuffer.handle) : false;
 	}
 
-	public function isTexture(texture:GLTexture):Bool {
-		return untyped __global__.glIsTexture(texture);
+	public function isShader(?shader:GLShader):Bool {
+		return shader != null ? untyped __global__.glIsShader(shader.handle) : false;
+	}
+
+	public function isTexture(?texture:GLTexture):Bool {
+		return texture != null ? untyped __global__.glIsTexture(texture.handle) : false;
 	}
 
 	public function lineWidth(width:GLfloat) {
@@ -709,7 +755,7 @@ class ES2Context {
 	}
 
 	public function linkProgram(program:GLProgram) {
-		untyped __global__.glLinkProgram(program);
+		untyped __global__.glLinkProgram(program.handle);
 	}
 
 	public function pixelStorei<T>(pname:PixelStoreParameter<T>, param:T) {
@@ -740,7 +786,7 @@ class ES2Context {
 	public function shaderSource(shader:GLShader, source:String) {
 		var sourceCharStar = ConstCharStar.fromString(source);
 		// here we assume hxcpp strings are null terminated!
-		untyped __global__.glShaderSource(shader, 1, Native.addressOf(sourceCharStar), 0);
+		untyped __global__.glShaderSource(shader.handle, 1, Native.addressOf(sourceCharStar), 0);
 	}
 
 	public function stencilFunc(func:ComparisonFunction, ref:GLint, mask:GLuint) {
@@ -865,12 +911,13 @@ class ES2Context {
 		untyped __global__.glUniformMatrix4fv(location, cpp.NativeMath.idiv(value.length, 16), transpose, value.toCPointer());
 	}
 
-	public function useProgram(program:GLProgram) {
-		untyped __global__.glUseProgram(program);
+	public function useProgram(?program:GLProgram) {
+		var ref = program != null ? program.handle : 0;
+		untyped __global__.glUseProgram(ref);
 	}
 
 	public function validateProgram(program:GLProgram) {
-		untyped __global__.glValidateProgram(program);
+		untyped __global__.glValidateProgram(program.handle);
 	}
 
 	public function vertexAttrib1f(index:GLuint, x:GLfloat) {

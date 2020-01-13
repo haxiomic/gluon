@@ -108,16 +108,16 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function bindAttribLocation(program:GLProgram, index:GLuint, name:String)
 		this.bindAttribLocation(program, index, name);
 
-	public inline function bindBuffer(target:BufferTarget, buffer:GLBuffer)
+	public inline function bindBuffer(target:BufferTarget, ?buffer:GLBuffer)
 		this.bindBuffer(target, buffer);
 
-	public inline function bindFramebuffer(target:FramebufferTarget, framebuffer:GLFramebuffer)
+	public inline function bindFramebuffer(target:FramebufferTarget, ?framebuffer:GLFramebuffer)
 		this.bindFramebuffer(target, framebuffer);
 
-	public inline function bindRenderbuffer(target:RenderbufferTarget, renderbuffer:GLRenderbuffer)
+	public inline function bindRenderbuffer(target:RenderbufferTarget, ?renderbuffer:GLRenderbuffer)
 		this.bindRenderbuffer(target, renderbuffer);
 
-	public inline function bindTexture(target:TextureTarget, texture:GLTexture)
+	public inline function bindTexture(target:TextureTarget, ?texture:GLTexture)
 		this.bindTexture(target, texture);
 
 	public inline function blendColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf)
@@ -203,22 +203,22 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function cullFace(mode:CullFaceMode)
 		this.cullFace(mode);
 
-	public inline function deleteBuffer(buffer:GLBuffer)
+	public inline function deleteBuffer(?buffer:GLBuffer)
 		this.deleteBuffer(buffer);
 
-	public inline function deleteFramebuffer(framebuffer:GLFramebuffer)
+	public inline function deleteFramebuffer(?framebuffer:GLFramebuffer)
 		this.deleteFramebuffer(framebuffer);
 
-	public inline function deleteProgram(program:GLProgram)
+	public inline function deleteProgram(?program:GLProgram)
 		this.deleteProgram(program);
 
-	public inline function deleteRenderbuffer(renderbuffer:GLRenderbuffer)
+	public inline function deleteRenderbuffer(?renderbuffer:GLRenderbuffer)
 		this.deleteRenderbuffer(renderbuffer);
 
-	public inline function deleteShader(shader:GLShader)
+	public inline function deleteShader(?shader:GLShader)
 		this.deleteShader(shader);
 
-	public inline function deleteTexture(texture:GLTexture)
+	public inline function deleteTexture(?texture:GLTexture)
 		this.deleteTexture(texture);
 
 	public inline function depthFunc(func:ComparisonFunction):Void
@@ -257,10 +257,10 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function flush()
 		this.flush();
 
-	public inline function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, renderbuffer:GLRenderbuffer)
+	public inline function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, ?renderbuffer:GLRenderbuffer)
 		this.framebufferRenderbuffer(target, attachment, renderbuffertarget, renderbuffer);
 
-	public inline function framebufferTexture2D(target:FramebufferTarget, attachment:FramebufferAttachement, textarget:TextureTarget, texture:GLTexture, level:GLint)
+	public inline function framebufferTexture2D(target:FramebufferTarget, attachment:FramebufferAttachement, textarget:TextureTarget, ?texture:GLTexture, level:GLint)
 		this.framebufferTexture2D(target, attachment, textarget, texture, level);
 
 	public inline function frontFace(mode:FrontFaceDirection)
@@ -332,25 +332,25 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function hint(target:HintTarget, mode:HintMode)
 		this.hint(target, mode);
 
-	public inline function isBuffer(buffer:GLBuffer):Bool
-		return this.isBuffer(buffer);
-
 	public inline function isEnabled(cap:Capability):Bool
 		return this.isEnabled(cap);
 
-	public inline function isFramebuffer(framebuffer:GLFramebuffer):Bool
+	public inline function isBuffer(?buffer:GLBuffer):Bool
+		return this.isBuffer(buffer);
+
+	public inline function isFramebuffer(?framebuffer:GLFramebuffer):Bool
 		return this.isFramebuffer(framebuffer);
 
-	public inline function isProgram(program:GLProgram):Bool
+	public inline function isProgram(?program:GLProgram):Bool
 		return this.isProgram(program);
 
-	public inline function isRenderbuffer(renderbuffer:GLRenderbuffer):Bool
+	public inline function isRenderbuffer(?renderbuffer:GLRenderbuffer):Bool
 		return this.isRenderbuffer(renderbuffer);
 
-	public inline function isShader(shader:GLShader):Bool
+	public inline function isShader(?shader:GLShader):Bool
 		return this.isShader(shader);
 
-	public inline function isTexture(texture:GLTexture):Bool
+	public inline function isTexture(?texture:GLTexture):Bool
 		return this.isTexture(texture);
 
 	public inline function lineWidth(width:GLfloat)
@@ -482,7 +482,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array)
 		this.uniformMatrix4fv(location, transpose, value);
 
-	public inline function useProgram(program:GLProgram)
+	public inline function useProgram(?program:GLProgram)
 		this.useProgram(program);
 
 	public inline function validateProgram(program:GLProgram)

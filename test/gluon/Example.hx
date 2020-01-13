@@ -1,5 +1,4 @@
 import gluon.webgl.GLContext;
-import gluon.webgl.native.GLContext;
 
 class Example {
 
@@ -11,7 +10,7 @@ class Example {
 
     @:keep
     static public function init() {
-        gl = new GLContext();
+        gl = new gluon.webgl.native.GLContext();
     }
 
     @:keep

@@ -1,7 +1,5 @@
 package gluon.webgl.native;
 
-#if !macro
-
 import gluon.webgl.GLContext;
 import typedarray.Uint32Array;
 import typedarray.Int32Array;
@@ -11,31 +9,10 @@ import typedarray.BufferSource;
 import cpp.RawConstPointer;
 import cpp.Native;
 import cpp.ConstCharStar;
+import cpp.CastCharStar;
 import cpp.RawPointer;
+import gluon.webgl.native.ES2Context.*;
 
-#if windows
-
-@:cppFileCode("
-#include <GL/glew.h>
-")
-
-#elseif macos
-
-@:cppFileCode("
-#include <OpenGL/gl3.h>
-#include <OpenGL/gl3ext.h>
-")
-
-#else
-
-@:cppFileCode("
-#define GL_GLEXT_PROTOTYPES
-#include <GLES2/gl2.h>
-")
-
-#end
-@:build(gluon.webgl.native.GLContext.Macro.addBuildConfig())
-@:unreflective
 class GLContext {
 
 	final initialFramebuffer: GLFramebuffer;
@@ -73,8 +50,8 @@ class GLContext {
 	#end
 
 	public function getContextAttributes():GLContextAttributes {
-		throw 'todo - getContextAttributes';
-		return untyped __global__.glGetContextAttributes();
+		// @! could use `eglQueryContext`
+		return null;
 	}
 
 	var _supportedExtensionsCache: Null<Array<String>> = null;
@@ -98,255 +75,255 @@ class GLContext {
 	}
 
 	public function activeTexture(unit:TextureUnit) {
-		untyped __global__.glActiveTexture(unit);
+		glActiveTexture(unit);
 	}
 
 	public function attachShader(program:GLProgram, shader:GLShader) {
-		untyped __global__.glAttachShader(program.handle, shader.handle);
+		glAttachShader(program.handle, shader.handle);
 	}
 
 	public function bindAttribLocation(program:GLProgram, index:GLuint, name:String) {
 		var nameCharStar = ConstCharStar.fromString(name);
-		untyped __global__.glBindAttribLocation(program.handle, index, nameCharStar);
+		glBindAttribLocation(program.handle, index, nameCharStar);
 	}
 
 	public function bindBuffer(target:BufferTarget, ?buffer:GLBuffer) {
 		var ref = buffer != null ? buffer.handle : 0;
-		untyped __global__.glBindBuffer(target, ref);
+		glBindBuffer(target, ref);
 	}
 
 	public function bindFramebuffer(target:FramebufferTarget, ?framebuffer:GLFramebuffer) {
 		var ref = framebuffer != null ? framebuffer.handle : initialFramebuffer.handle;
-		untyped __global__.glBindFramebuffer(target, ref);
+		glBindFramebuffer(target, ref);
 	}
 
 	public function bindRenderbuffer(target:RenderbufferTarget, ?renderbuffer:GLRenderbuffer) {
 		var ref = renderbuffer != null ? renderbuffer.handle : 0;
-		untyped __global__.glBindRenderbuffer(target, ref);
+		glBindRenderbuffer(target, ref);
 	}
 
 	public function bindTexture(target:TextureTarget, ?texture:GLTexture) {
 		var ref = texture != null ? texture.handle : 0;
-		untyped __global__.glBindTexture(target, ref);
+		glBindTexture(target, ref);
 	}
 
 	public function blendColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
-		untyped __global__.glBlendColor(red, green, blue, alpha);
+		glBlendColor(red, green, blue, alpha);
 	}
 
 	public function blendEquation(mode:BlendEquation) {
-		untyped __global__.glBlendEquation(mode);
+		glBlendEquation(mode);
 	}
 
 	public function blendEquationSeparate(modeRGB:BlendEquation, modeAlpha:BlendEquation) {
-		untyped __global__.glBlendEquationSeparate(modeRGB, modeAlpha);
+		glBlendEquationSeparate(modeRGB, modeAlpha);
 	}
 
 	public function blendFunc(sfactor:BlendFactor, dfactor:BlendFactor) {
-		untyped __global__.glBlendFunc(sfactor, dfactor);
+		glBlendFunc(sfactor, dfactor);
 	}
 
 	public function blendFuncSeparate(srcRGB:BlendFactor, dstRGB:BlendFactor, srcAlpha:BlendFactor, dstAlpha:BlendFactor) {
-		untyped __global__.glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+		glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 	}
 
 	public function bufferData(target:BufferTarget, data:BufferSource, usage:BufferUsage) {
-		untyped __global__.glBufferData(target, data.byteLength, data.toCPointer(), usage);
+		glBufferData(target, data.byteLength, cast data.toCPointer(), usage);
 	}
 
 	public function bufferDataOfSize(target:BufferTarget, size:Int, usage:BufferUsage) {
-		untyped __global__.glBufferData(target, size, 0, usage);
+		glBufferData(target, size, null, usage);
 	}
 
 	public function bufferSubData(target:BufferTarget, offset:GLintptr, data:BufferSource) {
-		untyped __global__.glBufferSubData(target, offset, data.byteLength, data.toCPointer());
+		glBufferSubData(target, offset, data.byteLength, cast data.toCPointer());
 	}
 
 	public function checkFramebufferStatus(target:FramebufferTarget):FramebufferStatus {
-		return untyped __global__.glCheckFramebufferStatus(target);
+		return glCheckFramebufferStatus(target);
 	}
 
 	public function clear(mask:ClearBufferMask) {
-		untyped __global__.glClear(mask);
+		glClear(mask);
 	}
 
 	public function clearColor(red:GLclampf, green:GLclampf, blue:GLclampf, alpha:GLclampf) {
-		untyped __global__.glClearColor(red, green, blue, alpha);
+		glClearColor(red, green, blue, alpha);
 	}
 
 	public function clearDepth(depth:GLclampf) {
-		untyped __global__.glClearDepthf(depth);
+		glClearDepthf(depth);
 	}
 
 	public function clearStencil(s:GLint) {
-		untyped __global__.glClearStencil(s);
+		glClearStencil(s);
 	}
 
 	public function colorMask(red:Bool, green:Bool, blue:Bool, alpha:Bool) {
-		untyped __global__.glColorMask(red, green, blue, alpha);
+		glColorMask(red, green, blue, alpha);
 	}
 
 	public function compileShader(shader:GLShader) {
-		untyped __global__.glCompileShader(shader.handle);
+		glCompileShader(shader.handle);
 	}
 
 	public function compressedTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, width:GLsizei, height:GLsizei, border:GLint, data:GLArrayBufferView) {
 		var ptr: cpp.Star<cpp.UInt8> = data != null ? data.toCPointer() : null;
-		untyped __global__.glCompressedTexImage2D(target, level, internalformat, width, height, border, data.byteLength, ptr);
+		glCompressedTexImage2D(target, level, internalformat, width, height, border, data.byteLength, cast ptr);
 	}
 
 	public function compressedTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, data:GLArrayBufferView) {
 		var ptr: cpp.Star<cpp.UInt8> = data != null ? data.toCPointer() : null;
-		untyped __global__.glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.byteLength, ptr);
+		glCompressedTexSubImage2D(target, level, xoffset, yoffset, width, height, format, data.byteLength, cast ptr);
 	}
 
 	public function copyTexImage2D(target:TextureTarget, level:GLint, internalformat:PixelFormat, x:GLint, y:GLint, width:GLsizei, height:GLsizei, border:GLint) {
-		untyped __global__.glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
+		glCopyTexImage2D(target, level, internalformat, x, y, width, height, border);
 	}
 
 	public function copyTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
-		untyped __global__.glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
+		glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 	}
 
 	public function createBuffer():GLBuffer {
 		var ref: GLuint = 0;
-		untyped __global__.glGenBuffers(1, Native.addressOf(ref));
+		glGenBuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLBuffer(this, ref) : null;
 	}
 
 	public function createFramebuffer():GLFramebuffer {
 		var ref: GLuint = 0;
-		untyped __global__.glGenFramebuffers(1, Native.addressOf(ref));
+		glGenFramebuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLFramebuffer(this, ref) : null;
 	}
 
 	public function createProgram():GLProgram {
-		var ref = untyped __global__.glCreateProgram();
+		var ref = glCreateProgram();
 		return ref != 0 ? new GLProgram(this, ref) : null;
 	}
 
 	public function createRenderbuffer():GLRenderbuffer {
 		var ref: GLuint = 0;
-		untyped __global__.glGenRenderbuffers(1, Native.addressOf(ref));
+		glGenRenderbuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLRenderbuffer(this, ref) : null;
 	}
 
 	public function createShader(type:ShaderType):GLShader {
-		var ref = untyped __global__.glCreateShader(type);
+		var ref = glCreateShader(type);
 		return ref != 0 ? new GLShader(this, ref) : null;
 	}
 
 	public function createTexture():GLTexture {
 		var ref: GLuint = 0;
-		untyped __global__.glGenTextures(1, Native.addressOf(ref));
+		glGenTextures(1, Native.addressOf(ref));
 		return ref != 0 ? new GLTexture(this, ref) : null;
 	}
 
 	public function cullFace(mode:CullFaceMode) {
-		untyped __global__.glCullFace(mode);
+		glCullFace(mode);
 	}
 
 	public function deleteBuffer(?buffer:GLBuffer) {
 		if (buffer != null) {
-			untyped __global__.glDeleteBuffers(1, Native.addressOf(buffer.handle));
+			glDeleteBuffers(1, Native.addressOf(buffer.handle));
 		}
 	}
 
 	public function deleteFramebuffer(?framebuffer:GLFramebuffer) {
 		if (framebuffer != null) {
-			untyped __global__.glDeleteFramebuffers(1, Native.addressOf(framebuffer.handle));
+			glDeleteFramebuffers(1, Native.addressOf(framebuffer.handle));
 		}
 	}
 
 	public function deleteProgram(?program:GLProgram) {
 		if (program != null) {
-			untyped __global__.glDeleteProgram(program.handle);
+			glDeleteProgram(program.handle);
 		}
 	}
 
 	public function deleteRenderbuffer(?renderbuffer:GLRenderbuffer) {
 		if (renderbuffer != null) {
-			untyped __global__.glDeleteRenderbuffers(1, Native.addressOf(renderbuffer.handle));
+			glDeleteRenderbuffers(1, Native.addressOf(renderbuffer.handle));
 		}
 	}
 
 	public function deleteShader(?shader:GLShader) {
 		if (shader != null) {
-			untyped __global__.glDeleteShader(shader.handle);
+			glDeleteShader(shader.handle);
 		}
 	}
 
 	public function deleteTexture(?texture:GLTexture) {
 		if (texture != null) {
-			untyped __global__.glDeleteTextures(1, Native.addressOf(texture.handle));
+			glDeleteTextures(1, Native.addressOf(texture.handle));
 		}
 	}
 
 	public function depthFunc(func:ComparisonFunction) {
-		untyped __global__.glDepthFunc(func);
+		glDepthFunc(func);
 	}
 
 	public function depthMask(flag:Bool) {
-		untyped __global__.glDepthMask(flag);
+		glDepthMask(flag);
 	}
 
 	public function depthRange(zNear:GLclampf, zFar:GLclampf) {
-		untyped __global__.glDepthRangef(zNear, zFar);
+		glDepthRangef(zNear, zFar);
 	}
 
 	public function detachShader(program:GLProgram, shader:GLShader) {
-		untyped __global__.glDetachShader(program.handle, shader.handle);
+		glDetachShader(program.handle, shader.handle);
 	}
 
 	public function disable(cap:Capability) {
-		untyped __global__.glDisable(cap);
+		glDisable(cap);
 	}
 
 	public function disableVertexAttribArray(index:GLuint) {
-		untyped __global__.glDisableVertexAttribArray(index);
+		glDisableVertexAttribArray(index);
 	}
 
 	public function drawArrays(mode:DrawMode, first:GLint, count:GLsizei) {
-		untyped __global__.glDrawArrays(mode, first, count);
+		glDrawArrays(mode, first, count);
 	}
 
 	public function drawElements(mode:DrawMode, count:GLsizei, type:DataType, offset:GLintptr) {
-		var offsetAsPointer: cpp.RawConstPointer<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
-		untyped __global__.glDrawElements(mode, count, type, offsetAsPointer);
+		var offsetAsPointer: cpp.ConstStar<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
+		glDrawElements(mode, count, type, offsetAsPointer);
 	}
 
 	public function enable(cap:Capability) {
-		untyped __global__.glEnable(cap);
+		glEnable(cap);
 	}
 
 	public function enableVertexAttribArray(index:GLuint) {
-		untyped __global__.glEnableVertexAttribArray(index);
+		glEnableVertexAttribArray(index);
 	}
 
 	public function finish() {
-		untyped __global__.glFinish();
+		glFinish();
 	}
 
 	public function flush() {
-		untyped __global__.glFlush();
+		glFlush();
 	}
 
 	public function framebufferRenderbuffer(target:FramebufferTarget, attachment:FramebufferAttachement, renderbuffertarget:RenderbufferTarget, ?renderbuffer:GLRenderbuffer) {
 		var ref = renderbuffer != null ? renderbuffer.handle : 0;
-		untyped __global__.glFramebufferRenderbuffer(target, attachment, renderbuffertarget, ref);
+		glFramebufferRenderbuffer(target, attachment, renderbuffertarget, ref);
 	}
 
 	public function framebufferTexture2D(target:FramebufferTarget, attachment:FramebufferAttachement, textarget:TextureTarget, texture:GLTexture, level:GLint) {
 		var ref = texture != null ? texture.handle : 0;
-		untyped __global__.glFramebufferTexture2D(target, attachment, textarget, ref, level);
+		glFramebufferTexture2D(target, attachment, textarget, ref, level);
 	}
 
 	public function frontFace(mode:FrontFaceDirection) {
-		untyped __global__.glFrontFace(mode);
+		glFrontFace(mode);
 	}
 
 	public function generateMipmap(target:TextureTarget) {
-		untyped __global__.glGenerateMipmap(target);
+		glGenerateMipmap(target);
 	}
 
 	public function getActiveAttrib(program:GLProgram, index:GLuint):GLActiveInfo {
@@ -358,9 +335,9 @@ class GLContext {
 
 		var nameBuffer = new Uint8Array(maxNameLength);
 		var nameBufferPtr = nameBuffer.toCPointer();
-		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
+		var namePointer: cpp.CastCharStar = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
-		untyped __global__.glGetActiveAttrib(
+		glGetActiveAttrib(
 			program.handle,
 			index,
 			maxNameLength,
@@ -387,9 +364,9 @@ class GLContext {
 		var type: GLenum = 0;
 		var nameBuffer = new Uint8Array(maxNameLength);
 		var nameBufferPtr = nameBuffer.toCPointer();
-		var namePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
+		var namePointer: CastCharStar = untyped __cpp__('reinterpret_cast<char*>({0})', nameBufferPtr);
 
-		untyped __global__.glGetActiveUniform(
+		glGetActiveUniform(
 			program.handle,
 			index,
 			maxNameLength,
@@ -409,17 +386,17 @@ class GLContext {
 	}
 
 	public function getAttachedShaders(program:GLProgram):Array<GLShader> {
-		// return untyped __global__.glGetAttachedShaders(program);
+		// return glGetAttachedShaders(program);
 		throw 'todo - getAttachedShaders';
 	}
 
 	public function getAttribLocation(program:GLProgram, name:String):GLint {
 		var nameCharStar = ConstCharStar.fromString(name);
-		return untyped __global__.glGetAttribLocation(program.handle, nameCharStar);
+		return glGetAttribLocation(program.handle, nameCharStar);
 	}
 
 	public function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T {
-		// return untyped __global__.glGetBufferParameter(target, pname);
+		// return glGetBufferParameter(target, pname);
 		throw 'todo - getBufferParameter';
 	}
 
@@ -530,21 +507,21 @@ class GLContext {
 
 
 	public function getError():ErrorCode {
-		return untyped __global__.glGetError();
+		return glGetError();
 	}
 
 	public function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>):T {
 		var ref: GLint = 0;
-		untyped __global__.glGetFramebufferAttachmentParameteriv(target, attachment, pname, Native.addressOf(ref));
+		glGetFramebufferAttachmentParameteriv(target, attachment, pname, Native.addressOf(ref));
 		switch pname {
 			case FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:
 				return cast ref;
 			case FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL, FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
 				return cast ref;
 			case FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
-				if (untyped __global__.glIsRenderbuffer(ref)) {
+				if (glIsRenderbuffer(ref)) {
 					return cast new GLRenderbuffer(this, ref);
-				} else if (untyped __global__.glIsTexture(ref)) {
+				} else if (glIsTexture(ref)) {
 					return cast new GLTexture(this, ref);
 				} else {
 					return null;
@@ -554,7 +531,7 @@ class GLContext {
 
 	public function getProgramParameter<T>(program:GLProgram, pname:ProgramParameter<T>):T {
 		var ref: GLint = 0;
-		untyped __global__.glGetProgramiv(program.handle, pname, Native.addressOf(ref));
+		glGetProgramiv(program.handle, pname, Native.addressOf(ref));
 		return cast ref;
 	}
 
@@ -564,16 +541,16 @@ class GLContext {
 
 		var infoLogBuffer = new Uint8Array(maxInfoLogLength);
 		var infoLogBufferPtr = infoLogBuffer.toCPointer();
-		var infoLogPointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
+		var infoLogPointer: CastCharStar = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
 
-		untyped __global__.glGetProgramInfoLog(program.handle, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
+		glGetProgramInfoLog(program.handle, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
 
 		var cStr: cpp.ConstCharStar = cast infoLogPointer;
 		return cStr.toString();
 	}
 
 	public function getRenderbufferParameter<T>(target:RenderbufferTarget, pname:RenderbufferParameter<T>):T {
-		// return untyped __global__.glGetRenderbufferParameter(target, pname);
+		// return glGetRenderbufferParameter(target, pname);
 		throw 'todo - getRenderbufferParameter';
 	}
 
@@ -581,16 +558,16 @@ class GLContext {
 		var result: GLint = 0;
 		switch pname {
 			case ShaderParameter.COMPILE_STATUS, ShaderParameter.DELETE_STATUS:
-				untyped __global__.glGetShaderiv(shader.handle, pname, Native.addressOf(result));
+				glGetShaderiv(shader.handle, pname, Native.addressOf(result));
 				return result != 0;
 			case ShaderParameter.SHADER_TYPE:
-				untyped __global__.glGetShaderiv(shader.handle, pname, Native.addressOf(result));
+				glGetShaderiv(shader.handle, pname, Native.addressOf(result));
 				return result;
 		}
 	}
 
 	public function getShaderPrecisionFormat(shadertype:ShaderType, precisiontype:PrecisionType):GLShaderPrecisionFormat {
-		// return untyped __global__.glGetShaderPrecisionFormat(shadertype, precisiontype);
+		// return glGetShaderPrecisionFormat(shadertype, precisiontype);
 		throw 'todo - getShaderPrecisionFormat';
 	}
 
@@ -600,9 +577,9 @@ class GLContext {
 
 		var infoLogBuffer = new Uint8Array(maxInfoLogLength);
 		var infoLogBufferPtr = infoLogBuffer.toCPointer();
-		var infoLogPointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
+		var infoLogPointer: CastCharStar = untyped __cpp__('reinterpret_cast<char*>({0})', infoLogBufferPtr);
 
-		untyped __global__.glGetShaderInfoLog(shader.handle, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
+		glGetShaderInfoLog(shader.handle, maxInfoLogLength, Native.addressOf(returnedStringLength), infoLogPointer);
 
 		var cStr: cpp.ConstCharStar = cast infoLogPointer;
 		return cStr.toString();
@@ -614,9 +591,9 @@ class GLContext {
 		
 		var sourceBuffer = new Uint8Array(maxSourceLength);
 		var sourceBufferPtr = sourceBuffer.toCPointer();
-		var sourcePointer: RawPointer<cpp.Char> = untyped __cpp__('reinterpret_cast<char*>({0})', sourceBufferPtr);
+		var sourcePointer: CastCharStar = untyped __cpp__('reinterpret_cast<char*>({0})', sourceBufferPtr);
 
-		untyped __global__.glGetShaderSource(shader.handle, maxSourceLength, Native.addressOf(returnedStringLength), sourcePointer);
+		glGetShaderSource(shader.handle, maxSourceLength, Native.addressOf(returnedStringLength), sourcePointer);
 		
 		var cStr: cpp.ConstCharStar = cast sourcePointer;
 		return cStr.toString();
@@ -627,11 +604,11 @@ class GLContext {
 			// float parameters
 			case TextureParameter.TEXTURE_MAX_ANISOTROPY_EXT:
 				var ref: GLfloat = 0;
-				untyped __global__.glGetTexParameterfv(target, pname, Native.addressOf(ref));
+				glGetTexParameterfv(target, pname, Native.addressOf(ref));
 				return (ref: Dynamic);
 			default:
 				var ref: GLint = 0;
-				untyped __global__.glGetTexParameteriv(target, pname, Native.addressOf(ref));
+				glGetTexParameteriv(target, pname, Native.addressOf(ref));
 				return (ref: Dynamic);
 		}
 	}
@@ -641,13 +618,13 @@ class GLContext {
 
 		inline function getUniformFloat32Array(n: Int) {
 			var temp = new Float32Array(n);
-			untyped __global__.glGetUniformfv(program.handle, location, temp.toCPointer());
+			glGetUniformfv(program.handle, location, temp.toCPointer());
 			return new Float32Array(temp);
 		}
 
 		inline function getUniformInt32Array(n: Int) {
 			var temp = new Int32Array(n);
-			untyped __global__.glGetUniformiv(program.handle, location, temp.toCPointer());
+			glGetUniformiv(program.handle, location, temp.toCPointer());
 			return new Int32Array(temp);
 		}
 
@@ -705,278 +682,278 @@ class GLContext {
 
 	public function getUniformLocation(program:GLProgram, name:String):GLUniformLocation {
 		var nameCharStar = ConstCharStar.fromString(name);
-		return untyped __global__.glGetUniformLocation(program.handle, nameCharStar);
+		return glGetUniformLocation(program.handle, nameCharStar);
 	}
 
 	public function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T {
-		// return untyped __global__.glGetVertexAttrib(index, pname);
+		// return glGetVertexAttrib(index, pname);
 		throw 'todo - getVertexAttrib';
 	}
 
 	public function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr {
-		// return untyped __global__.glGetVertexAttribOffset(index, pname);
+		// return glGetVertexAttribOffset(index, pname);
 		throw 'todo - getVertexAttrib';
 	}
 
 	public function hint(target:HintTarget, mode:HintMode) {
-		untyped __global__.glHint(target, mode);
+		glHint(target, mode);
 	}
 
 	public function isEnabled(cap:Capability):Bool {
-		return untyped __global__.glIsEnabled(cap);
+		return glIsEnabled(cap);
 	}
 	
 	public function isBuffer(?buffer:GLBuffer):Bool {
-		return buffer != null ? untyped __global__.glIsBuffer(buffer.handle) : false;
+		return buffer != null ? glIsBuffer(buffer.handle) : false;
 	}
 
 	public function isFramebuffer(?framebuffer:GLFramebuffer):Bool {
-		return framebuffer != null ? untyped __global__.glIsFramebuffer(framebuffer.handle) : false;
+		return framebuffer != null ? glIsFramebuffer(framebuffer.handle) : false;
 	}
 
 	public function isProgram(?program:GLProgram):Bool {
-		return program != null ? untyped __global__.glIsProgram(program.handle) : false;
+		return program != null ? glIsProgram(program.handle) : false;
 	}
 
 	public function isRenderbuffer(?renderbuffer:GLRenderbuffer):Bool {
-		return renderbuffer != null ? untyped __global__.glIsRenderbuffer(renderbuffer.handle) : false;
+		return renderbuffer != null ? glIsRenderbuffer(renderbuffer.handle) : false;
 	}
 
 	public function isShader(?shader:GLShader):Bool {
-		return shader != null ? untyped __global__.glIsShader(shader.handle) : false;
+		return shader != null ? glIsShader(shader.handle) : false;
 	}
 
 	public function isTexture(?texture:GLTexture):Bool {
-		return texture != null ? untyped __global__.glIsTexture(texture.handle) : false;
+		return texture != null ? glIsTexture(texture.handle) : false;
 	}
 
 	public function lineWidth(width:GLfloat) {
-		untyped __global__.glLineWidth(width);
+		glLineWidth(width);
 	}
 
 	public function linkProgram(program:GLProgram) {
-		untyped __global__.glLinkProgram(program.handle);
+		glLinkProgram(program.handle);
 	}
 
 	public function pixelStorei<T>(pname:PixelStoreParameter<T>, param:T) {
-		untyped __global__.glPixelStorei(pname, param);
+		glPixelStorei(pname, cast param);
 	}
 
 	public function polygonOffset(factor:GLfloat, units:GLfloat) {
-		untyped __global__.glPolygonOffset(factor, units);
+		glPolygonOffset(factor, units);
 	}
 
 	public function readPixels(x:GLint, y:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
-		untyped __global__.glReadPixels(x, y, width, height, format, type, ptr);
+		glReadPixels(x, y, width, height, format, type, cast ptr);
 	}
 
 	public function renderbufferStorage(target:RenderbufferTarget, internalformat:RenderbufferFormat, width:GLsizei, height:GLsizei) {
-		untyped __global__.glRenderbufferStorage(target, internalformat, width, height);
+		glRenderbufferStorage(target, internalformat, width, height);
 	}
 
 	public function sampleCoverage(value:GLclampf, invert:Bool) {
-		untyped __global__.glSampleCoverage(value, invert);
+		glSampleCoverage(value, invert);
 	}
 
 	public function scissor(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
-		untyped __global__.glScissor(x, y, width, height);
+		glScissor(x, y, width, height);
 	}
 
 	public function shaderSource(shader:GLShader, source:String) {
 		var sourceCharStar = ConstCharStar.fromString(source);
 		// here we assume hxcpp strings are null terminated!
-		untyped __global__.glShaderSource(shader.handle, 1, Native.addressOf(sourceCharStar), 0);
+		glShaderSource(shader.handle, 1, Native.addressOf(sourceCharStar), 0);
 	}
 
 	public function stencilFunc(func:ComparisonFunction, ref:GLint, mask:GLuint) {
-		untyped __global__.glStencilFunc(func, ref, mask);
+		glStencilFunc(func, ref, mask);
 	}
 
 	public function stencilFuncSeparate(face:CullFaceMode, func:ComparisonFunction, ref:GLint, mask:GLuint) {
-		untyped __global__.glStencilFuncSeparate(face, func, ref, mask);
+		glStencilFuncSeparate(face, func, ref, mask);
 	}
 
 	public function stencilMask(mask:GLuint) {
-		untyped __global__.glStencilMask(mask);
+		glStencilMask(mask);
 	}
 
 	public function stencilMaskSeparate(face:CullFaceMode, mask:GLuint) {
-		untyped __global__.glStencilMaskSeparate(face, mask);
+		glStencilMaskSeparate(face, mask);
 	}
 
 	public function stencilOp(fail:Operation, zfail:Operation, zpass:Operation) {
-		untyped __global__.glStencilOp(fail, zfail, zpass);
+		glStencilOp(fail, zfail, zpass);
 	}
 
 	public function stencilOpSeparate(face:CullFaceMode, fail:Operation, zfail:Operation, zpass:Operation) {
-		untyped __global__.glStencilOpSeparate(face, fail, zfail, zpass);
+		glStencilOpSeparate(face, fail, zfail, zpass);
 	}
 
 	public function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
-		untyped __global__.glTexImage2D(target, level, internalformat, width, height, border, format, type, ptr);
+		glTexImage2D(target, level, internalformat, width, height, border, format, type, cast ptr);
 	}
 
 	public function texImage2DPtr(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:cpp.RawConstPointer<cpp.Void>) {
-		untyped __global__.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
+		glTexImage2D(target, level, internalformat, width, height, border, format, type, cast pixels);
 	}
 
 	public function texParameterf<T:GLfloat>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
-		untyped __global__.glTexParameterf(target, pname, param);
+		glTexParameterf(target, pname, param);
 	}
 
 	public function texParameteri<T:GLint>(target:TextureTarget, pname:TextureParameter<T>, param:T) {
-		untyped __global__.glTexParameteri(target, pname, param);
+		glTexParameteri(target, pname, param);
 	}
 
 	public function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView) {
 		var ptr: cpp.Star<cpp.UInt8> = pixels != null ? pixels.toCPointer() : null;
-		untyped __global__.glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, ptr);
+		glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, cast ptr);
 	}
 
 	public function uniform1f(location:GLUniformLocation, x:GLfloat) {
-		untyped __global__.glUniform1f(location, x);
+		glUniform1f(location, x);
 	}
 
 	public function uniform1fv(location:GLUniformLocation, v:GLFloat32Array) {
-		untyped __global__.glUniform1fv(location, v.length, v.toCPointer());
+		glUniform1fv(location, v.length, v.toCPointer());
 	}
 
 	public function uniform1i(location:GLUniformLocation, x:GLint) {
-		untyped __global__.glUniform1i(location, x);
+		glUniform1i(location, x);
 	}
 
 	public function uniform1iv(location:GLUniformLocation, v:GLInt32Array) {
-		untyped __global__.glUniform1iv(location, v.length, v.toCPointer());
+		glUniform1iv(location, v.length, v.toCPointer());
 	}
 
 	public function uniform2f(location:GLUniformLocation, x:GLfloat, y:GLfloat) {
-		untyped __global__.glUniform2f(location, x, y);
+		glUniform2f(location, x, y);
 	}
 
 	public function uniform2fv(location:GLUniformLocation, v:GLFloat32Array) {
-		untyped __global__.glUniform2fv(location, cpp.NativeMath.idiv(v.length, 2), v.toCPointer());
+		glUniform2fv(location, cpp.NativeMath.idiv(v.length, 2), v.toCPointer());
 	}
 
 	public function uniform2i(location:GLUniformLocation, x:GLint, y:GLint) {
-		untyped __global__.glUniform2i(location, x, y);
+		glUniform2i(location, x, y);
 	}
 
 	public function uniform2iv(location:GLUniformLocation, v:GLInt32Array) {
-		untyped __global__.glUniform2iv(location, cpp.NativeMath.idiv(v.length, 2), v.toCPointer());
+		glUniform2iv(location, cpp.NativeMath.idiv(v.length, 2), v.toCPointer());
 	}
 
 	public function uniform3f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat) {
-		untyped __global__.glUniform3f(location, x, y, z);
+		glUniform3f(location, x, y, z);
 	}
 
 	public function uniform3fv(location:GLUniformLocation, v:GLFloat32Array) {
-		untyped __global__.glUniform3fv(location, cpp.NativeMath.idiv(v.length, 3), v.toCPointer());
+		glUniform3fv(location, cpp.NativeMath.idiv(v.length, 3), v.toCPointer());
 	}
 
 	public function uniform3i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint) {
-		untyped __global__.glUniform3i(location, x, y, z);
+		glUniform3i(location, x, y, z);
 	}
 
 	public function uniform3iv(location:GLUniformLocation, v:GLInt32Array) {
-		untyped __global__.glUniform3iv(location, cpp.NativeMath.idiv(v.length, 3), v.toCPointer());
+		glUniform3iv(location, cpp.NativeMath.idiv(v.length, 3), v.toCPointer());
 	}
 
 	public function uniform4f(location:GLUniformLocation, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
-		untyped __global__.glUniform4f(location, x, y, z, w);
+		glUniform4f(location, x, y, z, w);
 	}
 
 	public function uniform4fv(location:GLUniformLocation, v:GLFloat32Array) {
-		untyped __global__.glUniform4fv(location, cpp.NativeMath.idiv(v.length, 4), v.toCPointer());
+		glUniform4fv(location, cpp.NativeMath.idiv(v.length, 4), v.toCPointer());
 	}
 
 	public function uniform4i(location:GLUniformLocation, x:GLint, y:GLint, z:GLint, w:GLint) {
-		untyped __global__.glUniform4i(location, x, y, z, w);
+		glUniform4i(location, x, y, z, w);
 	}
 
 	public function uniform4iv(location:GLUniformLocation, v:GLInt32Array) {
-		untyped __global__.glUniform4iv(location, cpp.NativeMath.idiv(v.length, 4), v.toCPointer());
+		glUniform4iv(location, cpp.NativeMath.idiv(v.length, 4), v.toCPointer());
 	}
 
 	public function uniformMatrix2fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		untyped __global__.glUniformMatrix2fv(location, cpp.NativeMath.idiv(value.length, 4), transpose, value.toCPointer());
+		glUniformMatrix2fv(location, cpp.NativeMath.idiv(value.length, 4), transpose, value.toCPointer());
 	}
 
 	public function uniformMatrix3fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		untyped __global__.glUniformMatrix3fv(location, cpp.NativeMath.idiv(value.length, 9), transpose, value.toCPointer());
+		glUniformMatrix3fv(location, cpp.NativeMath.idiv(value.length, 9), transpose, value.toCPointer());
 	}
 
 	public function uniformMatrix4fv(location:GLUniformLocation, transpose:Bool, value:GLFloat32Array) {
-		untyped __global__.glUniformMatrix4fv(location, cpp.NativeMath.idiv(value.length, 16), transpose, value.toCPointer());
+		glUniformMatrix4fv(location, cpp.NativeMath.idiv(value.length, 16), transpose, value.toCPointer());
 	}
 
 	public function useProgram(?program:GLProgram) {
 		var ref = program != null ? program.handle : 0;
-		untyped __global__.glUseProgram(ref);
+		glUseProgram(ref);
 	}
 
 	public function validateProgram(program:GLProgram) {
-		untyped __global__.glValidateProgram(program.handle);
+		glValidateProgram(program.handle);
 	}
 
 	public function vertexAttrib1f(index:GLuint, x:GLfloat) {
-		untyped __global__.glVertexAttrib1f(index, x);
+		glVertexAttrib1f(index, x);
 	}
 
 	public function vertexAttrib1fv(index:GLuint, values:GLFloat32Array) {
-		untyped __global__.glVertexAttrib1fv(index, values.toCPointer());
+		glVertexAttrib1fv(index, values.toCPointer());
 	}
 
 	public function vertexAttrib2f(index:GLuint, x:GLfloat, y:GLfloat) {
-		untyped __global__.glVertexAttrib2f(index, x, y);
+		glVertexAttrib2f(index, x, y);
 	}
 
 	public function vertexAttrib2fv(index:GLuint, values:GLFloat32Array) {
-		untyped __global__.glVertexAttrib2fv(index, values.toCPointer());
+		glVertexAttrib2fv(index, values.toCPointer());
 	}
 
 	public function vertexAttrib3f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat) {
-		untyped __global__.glVertexAttrib3f(index, x, y, z);
+		glVertexAttrib3f(index, x, y, z);
 	}
 
 	public function vertexAttrib3fv(index:GLuint, values:GLFloat32Array) {
-		untyped __global__.glVertexAttrib3fv(index, values.toCPointer());
+		glVertexAttrib3fv(index, values.toCPointer());
 	}
 
 	public function vertexAttrib4f(index:GLuint, x:GLfloat, y:GLfloat, z:GLfloat, w:GLfloat) {
-		untyped __global__.glVertexAttrib4f(index, x, y, z, w);
+		glVertexAttrib4f(index, x, y, z, w);
 	}
 
 	public function vertexAttrib4fv(index:GLuint, values:GLFloat32Array) {
-		untyped __global__.glVertexAttrib4fv(index, values.toCPointer());
+		glVertexAttrib4fv(index, values.toCPointer());
 	}
 
 	public function vertexAttribPointer(index:GLuint, size:GLint, type:DataType, normalized:Bool, stride:GLsizei, offset:GLintptr) {
-		var offsetAsPointer: cpp.RawConstPointer<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
-		untyped __global__.glVertexAttribPointer(index, size, type, normalized, stride, offsetAsPointer);
+		var offsetAsPointer: cpp.ConstStar<cpp.Void> = untyped __cpp__('reinterpret_cast<void*>({0})', offset);
+		glVertexAttribPointer(index, size, type, normalized, stride, offsetAsPointer);
 	}
 
 	public function viewport(x:GLint, y:GLint, width:GLsizei, height:GLsizei) {
-		untyped __global__.glViewport(x, y, width, height);
+		glViewport(x, y, width, height);
 	}
 
 	// internal utility methods
 	function getFloat32Array(pname: GLenum, n: Int) {
 		var temp = new Float32Array(n);
-		untyped __global__.glGetFloatv(pname, temp.toCPointer());
+		glGetFloatv(pname, temp.toCPointer());
 		return new Float32Array(temp);
 	}
 
 	function getInt32Array(pname: GLenum, n: Int) {
 		var temp = new Int32Array(n);
-		untyped __global__.glGetIntegerv(pname, temp.toCPointer());
+		glGetIntegerv(pname, temp.toCPointer());
 		return new Int32Array(temp);
 	}
 
 	function getGLbooleanArray(pname: GLenum, n: Int) {
 		var temp = new Uint8Array(n);
-		untyped __global__.glGetBooleanv(pname, temp.toCPointer());
+		glGetBooleanv(pname, temp.toCPointer());
 		return new Uint8Array(temp);
 	}
 
@@ -993,7 +970,7 @@ class GLContext {
 	}
 
 	inline function getString(pname: GLenum): String {
-		var result: cpp.RawConstPointer<GLubyte> = untyped __global__.glGetString(pname);
+		var result: cpp.RawConstPointer<GLubyte> = glGetString(pname);
 		var cStr: cpp.ConstCharStar = untyped __cpp__('reinterpret_cast<const char*>({0})', result);
 		return cStr.toString();
 	}
@@ -1307,52 +1284,3 @@ class GLContext {
 	static public inline final DEPTH_STENCIL_ATTACHMENT = 0x821A;
 
 }
-
-#else
-// #macro
-
-import haxe.macro.Context;
-import haxe.io.Path;
-
-class Macro {
-
-	static function addBuildConfig() {
-		var classPosInfo = Context.getPosInfos(Context.currentPos());
-		var classFilePath = Path.isAbsolute(classPosInfo.file) ? classPosInfo.file : Path.join([Sys.getCwd(), classPosInfo.file]);
-		var classDir = Path.directory(classFilePath);
-
-		var buildXml = '
-		<target id="haxe">
-			<section if="macos">
-				<vflag name="-framework" value="OpenGL" />
-			</section>
-			<section if="windows">
-				<lib name="opengl32.lib" />
-			</section>
-			<section if="linux">
-				<lib name="-lGL" />
-			</section>
-			<section if="android">
-				<lib name="-lGLESv2" unless="static_link" />
-			</section>
-		</target>
-
-		<files id="haxe">
-			<compilerflag value="-I$classDir/include" />
-
-			<compilerflag value="-DGLEW_STATIC" />
-			<file name="$classDir/glew.c" if="windows">
-				<depend name="$classDir/include/GL/glew.h"/>
-			</file>
-		</files>
-		';
-		
-		// add @:buildXml
-		Context.getLocalClass().get().meta.add(':buildXml', [macro $v{buildXml}], Context.currentPos());
-
-		return Context.getBuildFields();
-	}
-
-}
-
-#end

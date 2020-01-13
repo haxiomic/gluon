@@ -324,7 +324,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function getUniformLocation(program:GLProgram, name:String):GLUniformLocation
 		return this.getUniformLocation(program, name);
 
-	public inline function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T
+	public inline function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):Null<T>
 		return this.getVertexAttrib(index, pname);
 
 	public inline function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr

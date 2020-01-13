@@ -383,8 +383,13 @@ class GLContext {
 	}
 
 	public inline function getAttachedShaders(program:GLProgram):Array<GLShader> {
-		// return glGetAttachedShaders(program);
-		throw 'todo - getAttachedShaders';
+		var attachedShaderCount = getProgramParameter(program, ATTACHED_SHADERS);
+		var shaderRefs = new Uint8Array(attachedShaderCount);
+		glGetAttachedShaders(program.handle, attachedShaderCount, null, shaderRefs.toCPointer());
+		return [
+			for (ref in shaderRefs)
+				new GLShader(this, ref)
+		];
 	}
 
 	public inline function getAttribLocation(program:GLProgram, name:String):GLint {
@@ -393,8 +398,9 @@ class GLContext {
 	}
 
 	public inline function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T {
-		// return glGetBufferParameter(target, pname);
-		throw 'todo - getBufferParameter';
+		var result: GLint = 0;
+		glGetBufferParameteriv(target, pname, Native.addressOf(result));
+		return cast result;
 	}
 
 	public function getParameter<T>(pname:Parameter<T>): Null<T> {
@@ -511,15 +517,15 @@ class GLContext {
 		var ref: GLint = 0;
 		glGetFramebufferAttachmentParameteriv(target, attachment, pname, Native.addressOf(ref));
 		switch pname {
-			case FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:
-				return cast ref;
-			case FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL, FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
-				return cast ref;
-			case FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
+			case FramebufferAttachmentParameter.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE:
+				return ref;
+			case FramebufferAttachmentParameter.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL, FramebufferAttachmentParameter.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE:
+				return ref;
+			case FramebufferAttachmentParameter.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME:
 				if (glIsRenderbuffer(ref)) {
-					return cast new GLRenderbuffer(this, ref);
+					return new GLRenderbuffer(this, ref);
 				} else if (glIsTexture(ref)) {
-					return cast new GLTexture(this, ref);
+					return new GLTexture(this, ref);
 				} else {
 					return null;
 				}
@@ -547,8 +553,9 @@ class GLContext {
 	}
 
 	public inline function getRenderbufferParameter<T>(target:RenderbufferTarget, pname:RenderbufferParameter<T>):T {
-		// return glGetRenderbufferParameter(target, pname);
-		throw 'todo - getRenderbufferParameter';
+		var result: GLint = 0;
+		glGetRenderbufferParameteriv(target, pname, Native.addressOf(result));
+		return cast result;
 	}
 
 	public function getShaderParameter<T>(shader:GLShader, pname:ShaderParameter<T>):T {
@@ -564,8 +571,14 @@ class GLContext {
 	}
 
 	public inline function getShaderPrecisionFormat(shadertype:ShaderType, precisiontype:PrecisionType):GLShaderPrecisionFormat {
-		// return glGetShaderPrecisionFormat(shadertype, precisiontype);
-		throw 'todo - getShaderPrecisionFormat';
+		var minMaxRange = new Int32Array(2);
+		var precision: GLint = 0;
+		glGetShaderPrecisionFormat(shadertype, precisiontype, minMaxRange.toCPointer(), Native.addressOf(precision));
+		return @:fixed {
+			rangeMin: minMaxRange[0],
+			rangeMax: minMaxRange[1],
+			precision: precision,
+		}
 	}
 
 	public inline function getShaderInfoLog(shader:GLShader):String {
@@ -682,14 +695,36 @@ class GLContext {
 		return glGetUniformLocation(program.handle, nameCharStar);
 	}
 
-	public inline function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>):T {
-		// return glGetVertexAttrib(index, pname);
-		throw 'todo - getVertexAttrib';
+	public function getVertexAttrib<T>(index:GLuint, pname:VertexAttributeParameter<T>): Null<T> {
+		switch (pname) {
+			case VertexAttributeParameter.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING:
+				var ref: GLuint = 0;
+				glGetVertexAttribiv(index, pname, Native.addressOf(ref));
+				return ref != 0 ? new GLBuffer(this, ref) : null;
+			case VertexAttributeParameter.VERTEX_ATTRIB_ARRAY_ENABLED, VertexAttributeParameter.VERTEX_ATTRIB_ARRAY_NORMALIZED:
+				var result: GLuint = 0;
+				glGetVertexAttribiv(index, pname, Native.addressOf(result));
+				return result != 0;
+			case VertexAttributeParameter.VERTEX_ATTRIB_ARRAY_SIZE, VertexAttributeParameter.VERTEX_ATTRIB_ARRAY_STRIDE:
+				var result: GLuint = 0;
+				glGetVertexAttribiv(index, pname, Native.addressOf(result));
+				return result;
+			case VertexAttributeParameter.VERTEX_ATTRIB_ARRAY_TYPE:
+				var result: GLuint = 0;
+				glGetVertexAttribiv(index, pname, Native.addressOf(result));
+				return result;
+			case VertexAttributeParameter.CURRENT_VERTEX_ATTRIB:
+				var temp = new Float32Array(4);
+				glGetVertexAttribfv(index, pname, temp.toCPointer());
+				return temp;
+		}
+		return null;
 	}
 
 	public inline function getVertexAttribOffset(index:GLuint, pname:VertexAttributeOffsetParameter):GLsizeiptr {
-		// return glGetVertexAttribOffset(index, pname);
-		throw 'todo - getVertexAttrib';
+		var pointer: GLsizeiptr = 0;
+		glGetVertexAttribPointerv(index, pname, cast Native.addressOf(pointer));
+		return pointer;
 	}
 
 	public inline function hint(target:HintTarget, mode:HintMode) {

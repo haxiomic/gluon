@@ -1,5 +1,5 @@
-import gluon.es2.GLContext;
-import gluon.es2.native.GLContext;
+import gluon.webgl.GLContext;
+import gluon.webgl.native.GLContext;
 
 class Example {
 

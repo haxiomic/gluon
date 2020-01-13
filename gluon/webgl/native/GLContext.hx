@@ -222,37 +222,43 @@ class GLContext {
 
 	public inline function deleteBuffer(?buffer:GLBuffer) {
 		if (buffer != null) {
-			glDeleteBuffers(1, Native.addressOf(buffer.handle));
+			if (buffer.handle != 0) glDeleteBuffers(1, Native.addressOf(buffer.handle));
+			buffer.handle = 0;
 		}
 	}
 
 	public inline function deleteFramebuffer(?framebuffer:GLFramebuffer) {
 		if (framebuffer != null) {
-			glDeleteFramebuffers(1, Native.addressOf(framebuffer.handle));
+			if (framebuffer.handle != 0) glDeleteFramebuffers(1, Native.addressOf(framebuffer.handle));
+			framebuffer.handle = 0;
 		}
 	}
 
 	public inline function deleteProgram(?program:GLProgram) {
 		if (program != null) {
-			glDeleteProgram(program.handle);
+			if (program.handle != 0) glDeleteProgram(program.handle);
+			program.handle = 0;
 		}
 	}
 
 	public inline function deleteRenderbuffer(?renderbuffer:GLRenderbuffer) {
 		if (renderbuffer != null) {
-			glDeleteRenderbuffers(1, Native.addressOf(renderbuffer.handle));
+			if (renderbuffer.handle != 0) glDeleteRenderbuffers(1, Native.addressOf(renderbuffer.handle));
+			renderbuffer.handle = 0;
 		}
 	}
 
 	public inline function deleteShader(?shader:GLShader) {
 		if (shader != null) {
-			glDeleteShader(shader.handle);
+			if (shader.handle != 0) glDeleteShader(shader.handle);
+			shader.handle = 0;
 		}
 	}
 
 	public inline function deleteTexture(?texture:GLTexture) {
 		if (texture != null) {
-			glDeleteTextures(1, Native.addressOf(texture.handle));
+			if (texture.handle != 0) glDeleteTextures(1, Native.addressOf(texture.handle));
+			texture.handle = 0;
 		}
 	}
 

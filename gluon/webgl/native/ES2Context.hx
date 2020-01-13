@@ -111,7 +111,7 @@ extern class ES2Context {
     @:native('glSampleCoverage')static function glSampleCoverage(value: GLfloat, invert: Bool): Void;
     @:native('glScissor')static function glScissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei): Void;
     @:native('glShaderBinary')static function glShaderBinary(count: GLsizei, shaders: ConstStar<GLuint>, binaryformat: GLenum, binary: ConstStar<cpp.Void>, length: GLsizei): Void;
-    @:native('glShaderSource')static function glShaderSource(shader: GLuint, count: GLsizei, string: ConstCharStar, length: ConstStar<GLint>): Void;
+    @:native('glShaderSource')static function glShaderSource(shader: GLuint, count: GLsizei, string: ConstStar<ConstCharStar>, length: ConstStar<GLint>): Void;
     @:native('glStencilFunc')static function glStencilFunc(func: GLenum, ref: GLint, mask: GLuint): Void;
     @:native('glStencilFuncSeparate')static function glStencilFuncSeparate(face: GLenum, func: GLenum, ref: GLint, mask: GLuint): Void;
     @:native('glStencilMask')static function glStencilMask(mask: GLuint): Void;

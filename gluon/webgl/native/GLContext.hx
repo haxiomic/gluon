@@ -9,6 +9,7 @@ import typedarray.Uint8Array;
 import typedarray.BufferSource;
 import gluon.webgl.native.ES2Context.*;
 
+@:nullSafety
 class GLContext {
 
 	final defaultFramebuffer: GLFramebuffer;
@@ -42,13 +43,15 @@ class GLContext {
 		initGlew();
 		#end
 
-		var initialFramebuffer = this.getParameter(FRAMEBUFFER_BINDING);
-		defaultFramebuffer = initialFramebuffer != null ? initialFramebuffer : new GLFramebuffer(this, 0);
+		var temp = new Int32Array(1);
+		glGetIntegerv(FRAMEBUFFER_BINDING, temp.toCPointer());
+		var initialFramebufferRef = temp[0];
+		defaultFramebuffer = new GLFramebuffer(this, initialFramebufferRef);
 	}
 
 	#end
 
-	public inline function getContextAttributes():GLContextAttributes {
+	public inline function getContextAttributes(): Null<GLContextAttributes> {
 		// @! could use `eglQueryContext`
 		return null;
 	}
@@ -59,7 +62,7 @@ class GLContext {
 		return extensions.split(' ').map(name -> name.substr(3));
 	}
 
-	public inline function getExtension<T>(name: Extension<T>):T {
+	public inline function getExtension<T>(name: Extension<T>): Null<T> {
 		var isSupported = getSupportedExtensions().indexOf(name) != -1;
 		return isSupported ? cast {} : null;
 	}
@@ -179,35 +182,35 @@ class GLContext {
 		glCopyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 	}
 
-	public inline function createBuffer():GLBuffer {
+	public inline function createBuffer():Null<GLBuffer> {
 		var ref: GLuint = 0;
 		glGenBuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLBuffer(this, ref) : null;
 	}
 
-	public inline function createFramebuffer():GLFramebuffer {
+	public inline function createFramebuffer():Null<GLFramebuffer> {
 		var ref: GLuint = 0;
 		glGenFramebuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLFramebuffer(this, ref) : null;
 	}
 
-	public inline function createProgram():GLProgram {
+	public inline function createProgram():Null<GLProgram> {
 		var ref = glCreateProgram();
 		return ref != 0 ? new GLProgram(this, ref) : null;
 	}
 
-	public inline function createRenderbuffer():GLRenderbuffer {
+	public inline function createRenderbuffer():Null<GLRenderbuffer> {
 		var ref: GLuint = 0;
 		glGenRenderbuffers(1, Native.addressOf(ref));
 		return ref != 0 ? new GLRenderbuffer(this, ref) : null;
 	}
 
-	public inline function createShader(type:ShaderType):GLShader {
+	public inline function createShader(type:ShaderType):Null<GLShader> {
 		var ref = glCreateShader(type);
 		return ref != 0 ? new GLShader(this, ref) : null;
 	}
 
-	public inline function createTexture():GLTexture {
+	public inline function createTexture():Null<GLTexture> {
 		var ref: GLuint = 0;
 		glGenTextures(1, Native.addressOf(ref));
 		return ref != 0 ? new GLTexture(this, ref) : null;
@@ -394,7 +397,7 @@ class GLContext {
 		throw 'todo - getBufferParameter';
 	}
 
-	public function getParameter<T>(pname:Parameter<T>):T {
+	public function getParameter<T>(pname:Parameter<T>): Null<T> {
 		switch (pname) {
 			case Parameter.RENDERER, Parameter.SHADING_LANGUAGE_VERSION, Parameter.VENDOR, Parameter.VERSION:
 				return getString(pname);
@@ -504,7 +507,7 @@ class GLContext {
 		return glGetError();
 	}
 
-	public function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>):T {
+	public function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>): Null<T> {
 		var ref: GLint = 0;
 		glGetFramebufferAttachmentParameteriv(target, attachment, pname, Native.addressOf(ref));
 		switch pname {

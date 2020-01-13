@@ -85,15 +85,16 @@ private typedef InternalConstGLContext =
 @:build(gluon.webgl.GLContextDebug.addErrorChecking())
 #end
 #end
+@:nullSafety
 abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContext {
 
-	public inline function getContextAttributes():GLContextAttributes
+	public inline function getContextAttributes():Null<GLContextAttributes>
 		return this.getContextAttributes();
 
 	public inline function getSupportedExtensions():Array<String>
 		return this.getSupportedExtensions();
 
-	public inline function getExtension<T>(name: Extension<T>):T
+	public inline function getExtension<T>(name: Extension<T>):Null<T>
 		return this.getExtension((name: String));
 
 	public inline function isContextLost():Bool
@@ -182,22 +183,22 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function copyTexSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, x:GLint, y:GLint, width:GLsizei, height:GLsizei)
 		this.copyTexSubImage2D(target, level, xoffset, yoffset, x, y, width, height);
 
-	public inline function createBuffer():GLBuffer
+	public inline function createBuffer():Null<GLBuffer>
 		return this.createBuffer();
 
-	public inline function createFramebuffer():GLFramebuffer
+	public inline function createFramebuffer():Null<GLFramebuffer>
 		return this.createFramebuffer();
 
-	public inline function createProgram():GLProgram
+	public inline function createProgram():Null<GLProgram>
 		return this.createProgram();
 
-	public inline function createRenderbuffer():GLRenderbuffer
+	public inline function createRenderbuffer():Null<GLRenderbuffer>
 		return this.createRenderbuffer();
 
-	public inline function createShader(type:ShaderType):GLShader
+	public inline function createShader(type:ShaderType):Null<GLShader>
 		return this.createShader(type);
 
-	public inline function createTexture():GLTexture
+	public inline function createTexture():Null<GLTexture>
 		return this.createTexture();
 
 	public inline function cullFace(mode:CullFaceMode)
@@ -284,13 +285,13 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function getBufferParameter<T>(target:BufferTarget, pname:BufferParameter<T>):T
 		return this.getBufferParameter(target, pname);
 
-	public inline function getParameter<T>(pname:Parameter<T>):T
+	public inline function getParameter<T>(pname:Parameter<T>):Null<T>
 	    return this.getParameter(pname);
 
 	public inline function getError():ErrorCode
 	    return this.getError();
 
-	public inline function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>):T
+	public inline function getFramebufferAttachmentParameter<T>(target:FramebufferTarget, attachment:FramebufferAttachement, pname:FramebufferAttachmentParameter<T>):Null<T>
 		return this.getFramebufferAttachmentParameter(target, attachment, pname);
 
 	public inline function getProgramParameter<T>(program:GLProgram, pname:ProgramParameter<T>):T

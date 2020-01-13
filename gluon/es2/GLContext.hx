@@ -96,6 +96,9 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function getExtension<T>(name: Extension<T>):T
 		return this.getExtension((name: String));
 
+	public inline function isContextLost():Bool
+		return this.isContextLost();
+
 	public inline function activeTexture(unit:TextureUnit)
 		this.activeTexture(unit);
 

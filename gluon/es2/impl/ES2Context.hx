@@ -87,6 +87,10 @@ class ES2Context {
 		return isSupported ? cast {} : null;
 	}
 
+	public function isContextLost():Bool {
+		return false;
+	}
+
 	public function activeTexture(unit:TextureUnit) {
 		untyped __global__.glActiveTexture(unit);
 	}

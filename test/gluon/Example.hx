@@ -11,6 +11,12 @@ class Example {
     @:keep
     static public function init() {
         gl = new gluon.webgl.native.GLContext();
+
+        gl.bindFramebuffer(FRAMEBUFFER, null);
+        gl.bindBuffer(ARRAY_BUFFER, null);
+
+        trace(gl.getShaderPrecisionFormat(FRAGMENT_SHADER, LOW_INT));
+        trace('getVertexAttribOffset', gl.getVertexAttribOffset(0, VERTEX_ATTRIB_ARRAY_POINTER));
     }
 
     @:keep

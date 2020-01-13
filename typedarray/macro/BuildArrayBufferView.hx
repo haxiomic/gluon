@@ -43,7 +43,7 @@ class BuildArrayBufferView {
 				- (copyFromArray: ArrayLike<$ArrayTypeT>)
 				- (buffer: ArrayBuffer, byteOffset: Int, byteLength: Int)
 			**/
-			@:pure public inline function new(
+			@:pure public function new(
 				?length: Int,
 
 				?copyFromArray: ArrayLike<$ArrayTypeT>,

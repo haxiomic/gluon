@@ -42,7 +42,7 @@ class ArrayBufferViewBase implements ArrayBufferView {
 		- (arrayBufferView: ArrayBufferView)
 		- (buffer: ArrayBuffer, byteOffset: Int, byteLength: Int)
 	**/
-	inline function new(
+	function new(
 		BYTES_PER_ELEMENT: Int,
 
 		?length: Int,

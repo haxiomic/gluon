@@ -40,9 +40,9 @@ CXXFLAGS+= -I../bin/include
 LDFLAGS += ../bin/libExample.a
 
 # > include hxcpp libs
-HXCPP := $(shell haxelib config)/hxcpp/4,0,8
+HXCPP := $(shell haxelib config)/hxcpp/4,0,52
 CXXFLAGS+= -I$(HXCPP)/include
-LDFLAGS += $(HXCPP)/lib/Mac64/libregexp.a $(HXCPP)/lib/Mac64/libstd.a $(HXCPP)/lib/Mac64/libzlib.a 
+# LDFLAGS += $(HXCPP)/lib/Mac64/libregexp.a $(HXCPP)/lib/Mac64/libstd.a $(HXCPP)/lib/Mac64/libzlib.a 
 
 
 $(EXECUTABLE): $(OBJECTS)	$(OUT_GLES2_LIBS)

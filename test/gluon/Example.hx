@@ -1,5 +1,5 @@
 import gluon.es2.GLContext;
-import gluon.es2.impl.ES2Context;
+import gluon.es2.native.ES2Context;
 
 class Example {
 

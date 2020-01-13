@@ -1,4 +1,4 @@
-package gluon.es2.impl;
+package gluon.es2.native;
 
 #if !macro
 
@@ -34,7 +34,7 @@ import cpp.RawPointer;
 ")
 
 #end
-@:build(gluon.es2.impl.ES2Context.Macro.addBuildConfig())
+@:build(gluon.es2.native.ES2Context.Macro.addBuildConfig())
 @:unreflective
 class ES2Context {
 

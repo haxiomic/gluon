@@ -6,7 +6,7 @@ import cpp.*;
 import gluon.webgl.GLContext;
 
 @:native('')
-@:include('./native.h')
+@:include('./ES2Context.h')
 @:unreflective
 #if !display
 @:build(gluon.webgl.native.ES2Context.ES2ContextMacro.addBuildConfig())

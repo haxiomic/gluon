@@ -13,8 +13,12 @@ typedef GLContextAttributes = {
     var ?powerPreference: PowerPreference;
 };
 
+#if js
+typedef PowerPreference = js.html.webgl.PowerPreference;
+#else
 @:enum abstract PowerPreference(String) from String to String {
     var DEFAULT = 'default';
     var LOW_POWER = 'low-power';
     var HIGH_PERFORMANCE = 'high-performance';
 }
+#end

@@ -85,7 +85,7 @@ private typedef InternalConstGLContext =
 @:build(gluon.webgl.GLContextDebug.addErrorChecking())
 #end
 #end
-@:nullSafety
+// @:nullSafety (cannot enable null safety because webgl externs are missing nullablity in certain cases)
 abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContext {
 
 	public inline function getContextAttributes():Null<GLContextAttributes>

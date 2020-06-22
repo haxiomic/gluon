@@ -5,12 +5,38 @@ package typedarray;
 
 	https://heycam.github.io/webidl/#BufferSource
 **/
+abstract BufferSource(BufferSourceType) from BufferSourceType {
 
-@:forward
-abstract BufferSource(ArrayBuffer) to ArrayBuffer from ArrayBuffer {
+	public var byteLength(get, never): Int;
 
-	@:from public static inline function fromBufferView(view: ArrayBufferView) {
-		return cast view.buffer;
+	inline function get_byteLength(): Int {
+		return switch this {
+			case Buffer(buffer): buffer.byteLength;
+			case BufferView(bufferView): bufferView.byteLength;
+		}
 	}
 
+	#if cpp
+	@:pure
+	public inline function toCPointer(): cpp.Star<cpp.UInt8> {
+		return switch this {
+			case Buffer(buffer): buffer.toCPointer();
+			case BufferView(bufferView): bufferView.toCPointer();
+		}
+	}
+	#end
+
+	@:from public static inline function fromBuffer(buffer: ArrayBuffer): BufferSource {
+		return Buffer(buffer);
+	}
+
+	@:from public static inline function fromBufferView(bufferView: ArrayBufferView): BufferSource {
+		return BufferView(bufferView);
+	}
+
+}
+
+private enum BufferSourceType {
+	Buffer(buffer: ArrayBuffer);
+	BufferView(bufferView: ArrayBufferView);
 }

@@ -9,6 +9,7 @@ abstract BufferSource(BufferSourceType) from BufferSourceType {
 
 	public var byteLength(get, never): Int;
 
+	@:pure
 	inline function get_byteLength(): Int {
 		return switch this {
 			case Buffer(buffer): buffer.byteLength;
@@ -26,11 +27,11 @@ abstract BufferSource(BufferSourceType) from BufferSourceType {
 	}
 	#end
 
-	@:from public static inline function fromBuffer(buffer: ArrayBuffer): BufferSource {
+	@:from @:pure public static inline function fromBuffer(buffer: ArrayBuffer): BufferSource {
 		return Buffer(buffer);
 	}
 
-	@:from public static inline function fromBufferView(bufferView: ArrayBufferView): BufferSource {
+	@:from @:pure public static inline function fromBufferView(bufferView: ArrayBufferView): BufferSource {
 		return BufferView(bufferView);
 	}
 

@@ -1,5 +1,9 @@
-[Sample code to use with a native macOS window](https://github.com/haxiomic/gluon/issues/6#issuecomment-645260480)
+# Examples
 
+## GLFW
+[Sample code linked in this comment](https://github.com/haxiomic/gluon/issues/6#issuecomment-645260480)
+
+## Projects that use gluon
 **@nanjizal's kitGL and Trilateral**
 
 You can find some helpers I have created for use with Gluon, created with the help of haxiomic. 

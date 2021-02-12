@@ -16,6 +16,7 @@ private typedef ArrayType = cpp.Float32;
 private typedef ArrayType = Float;
 #end
 
+@:transitive
 @:nullSafety
 @:forward
 #if !macro
@@ -29,6 +30,7 @@ abstract Float32Array(Float32ArrayImpl)
 	// typed filled by macro
 }
 
+@:transitive
 @:noCompletion
 @:nullSafety
 class Float32ArrayImpl extends ArrayBufferViewBase {

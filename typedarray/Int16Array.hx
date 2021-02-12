@@ -16,7 +16,7 @@ private typedef Int16 = cpp.Int16;
 private typedef Int16 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro
@@ -30,6 +30,7 @@ abstract Int16Array(Int16ArrayImpl)
 	// typed filled by macro
 }
 
+@:transitive
 @:noCompletion
 @:nullSafety
 class Int16ArrayImpl extends ArrayBufferViewBase {

@@ -16,7 +16,7 @@ private typedef Int32 = cpp.Int32;
 private typedef Int32 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro
@@ -30,6 +30,7 @@ abstract Int32Array(Int32ArrayImpl)
 	// typed filled by macro
 }
 
+@:transitive
 @:noCompletion
 @:nullSafety
 class Int32ArrayImpl extends ArrayBufferViewBase {

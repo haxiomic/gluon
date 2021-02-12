@@ -16,7 +16,7 @@ private typedef UInt16 = cpp.UInt16;
 private typedef UInt16 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro
@@ -30,6 +30,7 @@ abstract Uint16Array(Uint16ArrayImpl)
 	// typed filled by macro
 }
 
+@:transitive
 @:noCompletion
 @:nullSafety
 class Uint16ArrayImpl extends ArrayBufferViewBase {

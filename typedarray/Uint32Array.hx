@@ -16,7 +16,7 @@ private typedef UInt32 = cpp.UInt32;
 private typedef UInt32 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro
@@ -30,6 +30,7 @@ abstract Uint32Array(Uint32ArrayImpl)
 	// typed filled by macro
 }
 
+@:transitive
 @:noCompletion
 @:nullSafety
 class Uint32ArrayImpl extends ArrayBufferViewBase {

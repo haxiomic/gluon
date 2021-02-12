@@ -399,7 +399,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function stencilOpSeparate(face:CullFaceMode, fail:Operation, zfail:Operation, zpass:Operation)
 		this.stencilOpSeparate(face, fail, zfail, zpass);
 
-	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView)
+	public inline function texImage2D(target:TextureTarget, level:GLint, internalformat:GLint, width:GLsizei, height:GLsizei, border:GLint, format:PixelFormat, type:PixelDataType, ?pixels:GLArrayBufferView)
 		this.texImage2D(target, level, internalformat, width, height, border, format, type, pixels);
 
 	#if cpp
@@ -418,7 +418,7 @@ abstract GLContext(InternalGLContext) from InternalGLContext to InternalGLContex
 	public inline function texParameteri<T:GLint>(target:TextureTarget, pname:TextureParameter<T>, param:T)
 		this.texParameteri(target, pname, param);
 
-	public inline function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, pixels:GLArrayBufferView)
+	public inline function texSubImage2D(target:TextureTarget, level:GLint, xoffset:GLint, yoffset:GLint, width:GLsizei, height:GLsizei, format:PixelFormat, type:PixelDataType, ?pixels:GLArrayBufferView)
 		this.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
 
 	#if js

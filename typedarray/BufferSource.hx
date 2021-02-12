@@ -1,5 +1,16 @@
 package typedarray;
 
+#if js
+abstract BufferSource(Dynamic) from ArrayBuffer from ArrayBufferView to ArrayBuffer to ArrayBufferView {
+
+	public var byteLength(get, never): Int;
+
+	@:pure
+	inline function get_byteLength(): Int
+		return this.byteLength;
+
+}
+#else
 /**
 	"The BufferSource typedef is used to represent objects that are either themselves an ArrayBuffer or which provide a view on to an ArrayBuffer."
 
@@ -17,7 +28,6 @@ abstract BufferSource(BufferSourceType) from BufferSourceType {
 		}
 	}
 
-	#if cpp
 	@:pure
 	public inline function toCPointer(): cpp.Star<cpp.UInt8> {
 		return switch this {
@@ -25,7 +35,6 @@ abstract BufferSource(BufferSourceType) from BufferSourceType {
 			case BufferView(bufferView): bufferView.toCPointer();
 		}
 	}
-	#end
 
 	@:from @:pure public static inline function fromBuffer(buffer: ArrayBuffer): BufferSource {
 		return Buffer(buffer);
@@ -41,3 +50,4 @@ private enum BufferSourceType {
 	Buffer(buffer: ArrayBuffer);
 	BufferView(bufferView: ArrayBufferView);
 }
+#end

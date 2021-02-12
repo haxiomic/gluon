@@ -16,7 +16,7 @@ private typedef UInt8 = cpp.UInt8;
 private typedef UInt8 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro
@@ -30,6 +30,7 @@ abstract Uint8ClampedArray(Uint8ClampedArrayImpl)
 	// typed filled by macro
 }
 
+@:transitive
 @:noCompletion
 @:nullSafety
 class Uint8ClampedArrayImpl extends ArrayBufferViewBase {

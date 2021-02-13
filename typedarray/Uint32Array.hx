@@ -30,7 +30,6 @@ abstract Uint32Array(Uint32ArrayImpl)
 	// typed filled by macro
 }
 
-@:transitive
 @:noCompletion
 @:nullSafety
 class Uint32ArrayImpl extends ArrayBufferViewBase {

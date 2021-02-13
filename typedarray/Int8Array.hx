@@ -30,7 +30,6 @@ abstract Int8Array(Int8ArrayImpl)
 	// typed filled by macro
 }
 
-@:transitive
 @:noCompletion
 @:nullSafety
 class Int8ArrayImpl extends ArrayBufferViewBase {

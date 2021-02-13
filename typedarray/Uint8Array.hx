@@ -30,7 +30,6 @@ abstract Uint8Array(Uint8ArrayImpl)
 	// typed filled by macro
 }
 
-@:transitive
 @:noCompletion
 @:nullSafety
 class Uint8ArrayImpl extends ArrayBufferViewBase {

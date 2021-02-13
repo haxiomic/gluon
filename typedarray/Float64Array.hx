@@ -30,7 +30,6 @@ abstract Float64Array(Float64ArrayImpl)
 	// typed filled by macro
 }
 
-@:transitive
 @:noCompletion
 @:nullSafety
 class Float64ArrayImpl extends ArrayBufferViewBase {

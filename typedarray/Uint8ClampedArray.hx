@@ -30,7 +30,6 @@ abstract Uint8ClampedArray(Uint8ClampedArrayImpl)
 	// typed filled by macro
 }
 
-@:transitive
 @:noCompletion
 @:nullSafety
 class Uint8ClampedArrayImpl extends ArrayBufferViewBase {

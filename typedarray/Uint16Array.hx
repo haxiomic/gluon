@@ -16,7 +16,7 @@ private typedef UInt16 = cpp.UInt16;
 private typedef UInt16 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro

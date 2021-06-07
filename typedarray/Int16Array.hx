@@ -16,7 +16,7 @@ private typedef Int16 = cpp.Int16;
 private typedef Int16 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro

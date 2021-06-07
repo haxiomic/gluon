@@ -16,7 +16,7 @@ private typedef UInt32 = cpp.UInt32;
 private typedef UInt32 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro

@@ -16,7 +16,7 @@ private typedef UInt8 = cpp.UInt8;
 private typedef UInt8 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro

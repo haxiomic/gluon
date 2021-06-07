@@ -16,6 +16,7 @@ private typedef ArrayType = cpp.Float32;
 private typedef ArrayType = Float;
 #end
 
+@:transitive
 @:nullSafety
 @:forward
 #if !macro

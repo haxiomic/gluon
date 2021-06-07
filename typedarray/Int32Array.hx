@@ -16,7 +16,7 @@ private typedef Int32 = cpp.Int32;
 private typedef Int32 = Int;
 #end
 
-
+@:transitive
 @:nullSafety
 @:forward
 #if !macro
